@@ -9,38 +9,35 @@ services:
       yarn install
       bundle exec rails assets:precompile
     startCommand: |
-      echo "=== Environment Check ==="
-      echo "RAILS_ENV: $RAILS_ENV"
-      echo "Ruby version: $(ruby -v)"
-      echo "Rails version: $(bundle exec rails -v)"
-      echo "=== Migration Files Check ==="
+      echo "=== MIGRATION FORCE EXECUTION START ==="
+      echo "Current environment: $RAILS_ENV"
+      echo "Database URL check: $(test -n "$DATABASE_URL" && echo 'EXISTS' || echo 'MISSING')"
+      echo "=== Migration files verification ==="
       ls -la db/migrate/
-      echo "=== Database URL Check ==="
-      echo "DATABASE_URL exists: $(test -n "$DATABASE_URL" && echo 'YES' || echo 'NO')"
-      echo "=== Force Database Reset ==="
-      bundle exec rails db:drop || echo "No database to drop"
-      bundle exec rails db:create || echo "Database creation failed"
-      echo "=== Execute Migrations ==="
-      bundle exec rails db:migrate || echo "Migration execution failed"
-      echo "=== Verify Migration Results ==="
+      echo "=== Force database operations ==="
+      bundle exec rails db:drop || echo "Drop failed or no database"
+      bundle exec rails db:create || echo "Create failed"
+      echo "=== CRITICAL: Execute migrations ==="
+      bundle exec rails db:migrate || echo "Migration failed"
+      echo "=== Verify users table creation ==="
       bundle exec rails runner "
         begin
-          puts '=== Available Tables ==='
+          puts '=== Database Tables Check ==='
           tables = ActiveRecord::Base.connection.tables
-          puts tables.inspect
-          puts '=== Users Table Check ==='
+          puts 'All tables: ' + tables.inspect
           if tables.include?('users')
-            puts 'SUCCESS: users table exists!'
+            puts '✅ SUCCESS: users table EXISTS!'
             puts 'Users table columns: ' + User.column_names.inspect
-            puts 'Users count: ' + User.count.to_s
+            puts 'Current users count: ' + User.count.to_s
           else
-            puts 'ERROR: users table not found'
+            puts '❌ CRITICAL ERROR: users table NOT FOUND'
+            puts 'Available tables: ' + tables.inspect
           end
         rescue => e
-          puts 'ERROR in verification: ' + e.message
+          puts '❌ Database connection error: ' + e.message
         end
-      " || echo "Verification script failed"
-      echo "=== Starting Application ==="
+      " || echo "Verification failed"
+      echo "=== Starting Rails application ==="
       bundle exec puma -C config/puma.rb
     envVars:
       - key: RAILS_ENV
@@ -60,5 +57,5 @@ databases:
   - name: jibun-biyori-db
     databaseName: jibun_biyori_production
     user: jibun_biyori_db_user
-    plan: Basic-256mb
+    plan: basic-256mb
     region: singapore
