@@ -9,35 +9,56 @@ services:
       yarn install
       bundle exec rails assets:precompile
     startCommand: |
-      echo "=== MIGRATION FORCE EXECUTION START ==="
-      echo "Current environment: $RAILS_ENV"
-      echo "Database URL check: $(test -n "$DATABASE_URL" && echo 'EXISTS' || echo 'MISSING')"
-      echo "=== Migration files verification ==="
-      ls -la db/migrate/
-      echo "=== Force database operations ==="
-      bundle exec rails db:drop || echo "Drop failed or no database"
-      bundle exec rails db:create || echo "Create failed"
-      echo "=== CRITICAL: Execute migrations ==="
-      bundle exec rails db:migrate || echo "Migration failed"
-      echo "=== Verify users table creation ==="
+      echo "========================================="
+      echo "FORCE MIGRATION EXECUTION - FINAL VERSION"
+      echo "========================================="
+      echo "Environment: $RAILS_ENV"
+      echo "Database URL: $(echo $DATABASE_URL | cut -c1-20)..."
+      echo "Ruby version: $(ruby -v)"
+      echo "Rails version: $(bundle exec rails -v)"
+      echo "========================================="
+      echo "Migration files check:"
+      ls -la db/migrate/ || echo "No migration directory"
+      echo "========================================="
+      echo "STEP 1: Drop existing database"
+      bundle exec rails db:drop 2>/dev/null || echo "No database to drop"
+      echo "STEP 2: Create new database"
+      bundle exec rails db:create || (echo "Database creation failed" && exit 1)
+      echo "STEP 3: Execute migrations with verbose output"
+      bundle exec rails db:migrate --verbose || (echo "Migration failed" && exit 1)
+      echo "STEP 4: Verify users table creation"
       bundle exec rails runner "
         begin
-          puts '=== Database Tables Check ==='
-          tables = ActiveRecord::Base.connection.tables
-          puts 'All tables: ' + tables.inspect
+          puts '========================================='
+          puts 'DATABASE VERIFICATION'
+          puts '========================================='
+          connection = ActiveRecord::Base.connection
+          tables = connection.tables
+          puts 'All tables in database:'
+          tables.each { |table| puts '  - ' + table }
+          puts '========================================='
           if tables.include?('users')
             puts '✅ SUCCESS: users table EXISTS!'
-            puts 'Users table columns: ' + User.column_names.inspect
+            puts 'Users table structure:'
+            User.columns.each do |column|
+              puts '  - ' + column.name + ' (' + column.type.to_s + ')'
+            end
             puts 'Current users count: ' + User.count.to_s
+            puts '✅ MIGRATION SUCCESSFUL!'
           else
             puts '❌ CRITICAL ERROR: users table NOT FOUND'
-            puts 'Available tables: ' + tables.inspect
+            puts 'This should not happen. Check migration files.'
+            exit 1
           end
         rescue => e
-          puts '❌ Database connection error: ' + e.message
+          puts '❌ DATABASE ERROR: ' + e.message
+          puts e.backtrace.first(5).join(\"\n\")
+          exit 1
         end
-      " || echo "Verification failed"
-      echo "=== Starting Rails application ==="
+      "
+      echo "========================================="
+      echo "STEP 5: Starting Rails application"
+      echo "========================================="
       bundle exec puma -C config/puma.rb
     envVars:
       - key: RAILS_ENV
