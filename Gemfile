@@ -32,7 +32,7 @@ gem "puma", "~> 6.0"
 # gem "puma", ">= 5.0"
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
-# gem "importmap-rails"
+gem "importmap-rails"
 
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 # gem "turbo-rails"
@@ -66,6 +66,7 @@ group :development, :test do
   # gem "debug", platforms: %i[ mri windows ]
   gem "sqlite3", "~> 1.6"
   # テストフレームワーク
+  gem 'rails-controller-testing', '~> 1.0.1' 
   gem 'rspec-rails', '~> 6.0'
   gem 'factory_bot_rails'
   gem 'faker'
