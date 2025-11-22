@@ -2,26 +2,45 @@ services:
   - type: web
     name: jibun-biyori
     env: ruby
-    region: Singapore (Southeast Asia)
+    region: singapore
     plan: free
     buildCommand: |
       bundle install
       yarn install
       bundle exec rails assets:precompile
     startCommand: |
-      echo "=== Database Setup Start ==="
+      echo "=== Environment Check ==="
       echo "RAILS_ENV: $RAILS_ENV"
-      echo "DATABASE_URL: $DATABASE_URL"
+      echo "Ruby version: $(ruby -v)"
+      echo "Rails version: $(bundle exec rails -v)"
+      echo "=== Migration Files Check ==="
+      ls -la db/migrate/
+      echo "=== Database URL Check ==="
+      echo "DATABASE_URL exists: $(test -n "$DATABASE_URL" && echo 'YES' || echo 'NO')"
       echo "=== Force Database Reset ==="
       bundle exec rails db:drop || echo "No database to drop"
-      bundle exec rails db:create
-      echo "=== Running Migrations ==="
-      bundle exec rails db:migrate
-      echo "=== Verify Tables ==="
-      bundle exec rails runner "puts ActiveRecord::Base.connection.tables.inspect" || echo "Cannot list tables"
-      echo "=== Check Users Table ==="
-      bundle exec rails runner "puts User.table_exists? ? 'Users table EXISTS' : 'Users table MISSING'" || echo "Cannot check User table"
-      echo "=== Starting Server ==="
+      bundle exec rails db:create || echo "Database creation failed"
+      echo "=== Execute Migrations ==="
+      bundle exec rails db:migrate || echo "Migration execution failed"
+      echo "=== Verify Migration Results ==="
+      bundle exec rails runner "
+        begin
+          puts '=== Available Tables ==='
+          tables = ActiveRecord::Base.connection.tables
+          puts tables.inspect
+          puts '=== Users Table Check ==='
+          if tables.include?('users')
+            puts 'SUCCESS: users table exists!'
+            puts 'Users table columns: ' + User.column_names.inspect
+            puts 'Users count: ' + User.count.to_s
+          else
+            puts 'ERROR: users table not found'
+          end
+        rescue => e
+          puts 'ERROR in verification: ' + e.message
+        end
+      " || echo "Verification script failed"
+      echo "=== Starting Application ==="
       bundle exec puma -C config/puma.rb
     envVars:
       - key: RAILS_ENV
@@ -42,4 +61,4 @@ databases:
     databaseName: jibun_biyori_production
     user: jibun_biyori_db_user
     plan: Basic-256mb
-    region: oregon
+    region: singapore
