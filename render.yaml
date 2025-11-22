@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: jibun-biyori
+    env: ruby
+    region: oregon
+    plan: free
+    buildCommand: |
+      bundle install
+      yarn install
+      bundle exec rails assets:precompile
+    startCommand: |
+      bundle exec rails db:migrate
+      bundle exec puma -C config/puma.rb
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: SECRET_KEY_BASE
+        generateValue: true
+      - key: RAILS_MASTER_KEY
+        sync: false
+    
+  - type: pgsql
+    name: jibun-biyori-db
+    databaseName: your_app_production
+    user: your_app_user
+    plan: free
+    region: oregon
+
+envVarGroups:
+  - name: database
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: jibun-biyori-db
+          property: connectionString
