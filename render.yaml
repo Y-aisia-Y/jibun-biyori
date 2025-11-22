@@ -9,6 +9,7 @@ services:
       yarn install
       bundle exec rails assets:precompile
     startCommand: |
+      bundle exec rails db:create || echo "Database already exists"
       bundle exec rails db:migrate
       bundle exec puma -C config/puma.rb
     envVars:
@@ -28,6 +29,6 @@ services:
 databases:
   - name: jibun-biyori-db
     databaseName: jibun_biyori_production
-    user: jibun_biyori_user
+    user: jibun_biyori_db_user
     plan: free
     region: oregon
