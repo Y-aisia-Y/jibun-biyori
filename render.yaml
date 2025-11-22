@@ -2,7 +2,7 @@ services:
   - type: web
     name: jibun-biyori
     env: ruby
-    region: oregon
+    region: Singapore (Southeast Asia)
     plan: free
     buildCommand: |
       bundle install
@@ -10,11 +10,17 @@ services:
       bundle exec rails assets:precompile
     startCommand: |
       echo "=== Database Setup Start ==="
-      bundle exec rails db:create || echo "Database already exists"
+      echo "RAILS_ENV: $RAILS_ENV"
+      echo "DATABASE_URL: $DATABASE_URL"
+      echo "=== Force Database Reset ==="
+      bundle exec rails db:drop || echo "No database to drop"
+      bundle exec rails db:create
       echo "=== Running Migrations ==="
       bundle exec rails db:migrate
-      echo "=== Migration Status ==="
-      bundle exec rails db:migrate:status || echo "Cannot check status"
+      echo "=== Verify Tables ==="
+      bundle exec rails runner "puts ActiveRecord::Base.connection.tables.inspect" || echo "Cannot list tables"
+      echo "=== Check Users Table ==="
+      bundle exec rails runner "puts User.table_exists? ? 'Users table EXISTS' : 'Users table MISSING'" || echo "Cannot check User table"
       echo "=== Starting Server ==="
       bundle exec puma -C config/puma.rb
     envVars:
