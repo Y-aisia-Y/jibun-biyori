@@ -13,6 +13,8 @@ services:
       bundle exec rails db:create || echo "Database already exists"
       echo "=== Running Migrations ==="
       bundle exec rails db:migrate
+      echo "=== Migration Status ==="
+      bundle exec rails db:migrate:status || echo "Cannot check status"
       echo "=== Starting Server ==="
       bundle exec puma -C config/puma.rb
     envVars:
@@ -28,6 +30,7 @@ services:
         fromDatabase:
           name: jibun-biyori-db
           property: connectionString
+
 databases:
   - name: jibun-biyori-db
     databaseName: jibun_biyori_production
