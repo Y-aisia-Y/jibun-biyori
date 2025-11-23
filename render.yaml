@@ -2,63 +2,12 @@ services:
   - type: web
     name: jibun-biyori
     env: ruby
-    region: singapore
     plan: free
+    region: singapore
     buildCommand: |
       bundle install
-      yarn install
-      bundle exec rails assets:precompile
+      bundle exec rake assets:precompile
     startCommand: |
-      echo "========================================="
-      echo "FORCE MIGRATION EXECUTION - FINAL VERSION"
-      echo "========================================="
-      echo "Environment: $RAILS_ENV"
-      echo "Database URL: $(echo $DATABASE_URL | cut -c1-20)..."
-      echo "Ruby version: $(ruby -v)"
-      echo "Rails version: $(bundle exec rails -v)"
-      echo "========================================="
-      echo "Migration files check:"
-      ls -la db/migrate/ || echo "No migration directory"
-      echo "========================================="
-      echo "STEP 1: Drop existing database"
-      bundle exec rails db:drop 2>/dev/null || echo "No database to drop"
-      echo "STEP 2: Create new database"
-      bundle exec rails db:create || (echo "Database creation failed" && exit 1)
-      echo "STEP 3: Execute migrations with verbose output"
-      bundle exec rails db:migrate --verbose || (echo "Migration failed" && exit 1)
-      echo "STEP 4: Verify users table creation"
-      bundle exec rails runner "
-        begin
-          puts '========================================='
-          puts 'DATABASE VERIFICATION'
-          puts '========================================='
-          connection = ActiveRecord::Base.connection
-          tables = connection.tables
-          puts 'All tables in database:'
-          tables.each { |table| puts '  - ' + table }
-          puts '========================================='
-          if tables.include?('users')
-            puts '✅ SUCCESS: users table EXISTS!'
-            puts 'Users table structure:'
-            User.columns.each do |column|
-              puts '  - ' + column.name + ' (' + column.type.to_s + ')'
-            end
-            puts 'Current users count: ' + User.count.to_s
-            puts '✅ MIGRATION SUCCESSFUL!'
-          else
-            puts '❌ CRITICAL ERROR: users table NOT FOUND'
-            puts 'This should not happen. Check migration files.'
-            exit 1
-          end
-        rescue => e
-          puts '❌ DATABASE ERROR: ' + e.message
-          puts e.backtrace.first(5).join(\"\n\")
-          exit 1
-        end
-      "
-      echo "========================================="
-      echo "STEP 5: Starting Rails application"
-      echo "========================================="
       bundle exec puma -C config/puma.rb
     envVars:
       - key: RAILS_ENV
@@ -74,9 +23,23 @@ services:
           name: jibun-biyori-db
           property: connectionString
 
+  - type: worker
+    name: jibun-biyori-migrate
+    env: ruby
+    plan: free
+    region: singapore
+    startCommand: bundle exec rails db:migrate
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: SECRET_KEY_BASE
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: jibun-biyori-db
+          property: connectionString
+
 databases:
   - name: jibun-biyori-db
-    databaseName: jibun_biyori_production
-    user: jibun_biyori_db_user
     plan: basic-256mb
     region: singapore
