@@ -10,7 +10,55 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_22_135017) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_25_133738) do
+  create_table "activities", force: :cascade do |t|
+    t.integer "record_id", null: false
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["record_id"], name: "index_activities_on_record_id"
+  end
+
+  create_table "record_items", force: :cascade do |t|
+    t.string "name"
+    t.integer "input_type"
+    t.boolean "is_default_visible"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "record_values", force: :cascade do |t|
+    t.integer "record_id", null: false
+    t.integer "record_item_id", null: false
+    t.string "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["record_id"], name: "index_record_values_on_record_id"
+    t.index ["record_item_id"], name: "index_record_values_on_record_item_id"
+  end
+
+  create_table "records", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.date "recorded_date"
+    t.text "diary_memo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_records_on_user_id"
+  end
+
+  create_table "user_record_items", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "record_item_id", null: false
+    t.boolean "is_visible"
+    t.integer "display_order"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["record_item_id"], name: "index_user_record_items_on_record_item_id"
+    t.index ["user_id"], name: "index_user_record_items_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -23,4 +71,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_22_135017) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "activities", "records"
+  add_foreign_key "record_values", "record_items"
+  add_foreign_key "record_values", "records"
+  add_foreign_key "records", "users"
+  add_foreign_key "user_record_items", "record_items"
+  add_foreign_key "user_record_items", "users"
 end
