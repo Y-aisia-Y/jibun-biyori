@@ -1,0 +1,14 @@
+.max-w-2xl.mx-auto.bg-white.p-8.rounded-xl.shadow-2xl.space-y-6
+  h1.text-3xl.font-bold.text-indigo-700.border-b.pb-3.mb-4
+    = @record.recorded_date.strftime('%Y年%m月%d日 の記録')
+
+  .detail-section
+    h2.text-xl.font-semibold.text-gray-800.mb-2
+      | 日記/メモ
+    .bg-gray-50.p-4.rounded-lg.text-gray-700.whitespace-pre-wrap
+      = @record.diary_memo.presence || '（メモはありません）'
+
+  .flex.justify-end.space-x-3.border-t.pt-6.mt-6
+    = link_to '編集', edit_record_path(@record), class: 'px-4 py-2 bg-yellow-500 text-white font-medium rounded-lg shadow-md hover:bg-yellow-600 transition duration-150'
+    = link_to '一覧に戻る', records_path, class: 'px-4 py-2 bg-gray-300 text-gray-800 font-medium rounded-lg shadow-md hover:bg-gray-400 transition duration-150'
+    = link_to '削除', record_path(@record), data: { turbo_method: :delete, turbo_confirm: "この記録を完全に削除してもよろしいですか？" }, class: 'px-4 py-2 bg-red-600 text-white font-medium rounded-lg shadow-md hover:bg-red-700 transition duration-150'

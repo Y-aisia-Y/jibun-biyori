@@ -1,4 +1,30 @@
-.container
-  h1 記録一覧
-  p.text-green-600 ログインが成功し、記録ページが表示されました。
-  p ここに日々の記録とバーチカルカレンダーが表示されます。
+.max-w-4xl.mx-auto
+  .flex.justify-between.items-center.mb-6
+    h1.text-3xl.font-bold.text-gray-800
+      | 記録一覧
+
+    = link_to new_record_path, class: 'px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg shadow-md hover:bg-indigo-700 transition duration-150' do
+      | 新規作成
+
+  - if @records.empty?
+    .text-center.p-10.bg-white.rounded-xl.shadow-inner.mt-8
+      p.text-xl.text-gray-500.mb-4
+        | 記録がありません。
+    .text-center.mt-4
+      = link_to '一覧に戻る', records_path, class: 'text-sm text-gray-500 hover:text-gray-700'
+  - else
+    .space-y-4
+      - @records.each do |record|
+        .bg-white.p-5.rounded-xl.shadow-lg.flex.justify-between.items-center.hover:shadow-xl.transition.duration-200
+          .flex-grow
+            = link_to record_path(record), class: 'text-xl.font-semibold.text-gray-900.hover:text-indigo-600'
+              = record.recorded_date.strftime('%Y年%m月%d日 (%a)')
+            
+            p.text-sm.text-gray-500.mt-1
+              | メモ: 
+              = truncate(record.diary_memo, length: 50, omission: "...")
+          
+          .flex.space-x-2.ml-4
+            = link_to '詳細', record_path(record), class: 'text-sm text-indigo-600 hover:underline'
+            = link_to '編集', edit_record_path(record), class: 'text-sm text-yellow-600 hover:underline'
+            = link_to '削除', record_path(record), data: { turbo_method: :delete, turbo_confirm: "本当にこの記録を削除してもよろしいですか？" }, class: 'text-sm text-red-600 hover:underline'
