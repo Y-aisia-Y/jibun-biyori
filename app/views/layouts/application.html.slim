@@ -9,11 +9,7 @@ html
     = javascript_importmap_tags
   body
     header
-      nav
-        = link_to "TOPへ", root_path
-
         - if user_signed_in?
-          span.current-user ログイン中: #{current_user.email}
           = button_to "ログアウト", destroy_user_session_path, method: :delete
         - else
           = link_to "ログイン", new_user_session_path
