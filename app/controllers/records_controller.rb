@@ -11,28 +11,29 @@ class RecordsController < ApplicationController
   end
 
   def new
-    @record = current_user.records.build(recorded_date: Date.today)
+    @record = current_user.records.new
+    build_record_values
   end
 
   def create
     @record = current_user.records.build(record_params)
-
     if @record.save
       redirect_to @record, notice: '記録を作成しました。'
     else
-      flash.now[:alert] = '記録の作成に失敗しました。入力内容を確認してください。'
+      build_record_values
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
+    build_record_values
   end
 
   def update
     if @record.update(record_params)
       redirect_to @record, notice: '記録を更新しました。'
     else
-      flash.now[:alert] = '記録の更新に失敗しました。入力内容を確認してください。'
+      build_record_values
       render :edit, status: :unprocessable_entity
     end
   end
@@ -47,18 +48,29 @@ class RecordsController < ApplicationController
 
 
   def set_record
-    @record = current_user.records.find_by!(id: params[:id])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to records_url, alert: '指定された記録が見つからないか、アクセス権限がありません。'
+    @record = Record.find(params[:id])
   end
 
   def check_user
     unless @record.user_id == current_user.id
-      redirect_to records_url, alert: '他のユーザーの記録は操作できません。'
+      redirect_to records_path, alert: 'アクセス権限がありません。'
+    end
+  end
+
+  def build_record_values
+    @record_items = RecordItem.all
+    @record_items.each do |item|
+      unless @record.record_values.any? { |v| v.record_item_id == item.id }
+        @record.record_values.build(record_item: item)
+      end
     end
   end
 
   def record_params
-    params.require(:record).permit(:recorded_date, :diary_memo)
+    params.require(:record).permit(
+      :recorded_date, 
+      :diary_memo, 
+      record_values_attributes: [:id, :record_item_id, :value] 
+    )
   end
 end
