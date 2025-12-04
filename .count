@@ -1,0 +1,36 @@
+=> 
+[[32m#<RecordItem:0x00007f9017628730[0m
+  id: [34m[1m1[0m,
+  name: [31m[1m"[0m[31m疲労感[0m[31m[1m"[0m,
+  input_type: [36m[1mnil[0m,
+  is_default_visible: [36m[1mtrue[0m,
+  created_at: Thu, 27 Nov 2025 13:51:29.675505000 UTC +00:00,
+  updated_at: Thu, 27 Nov 2025 13:51:29.675505000 UTC +00:00[32m>[0m,
+ [32m#<RecordItem:0x00007f9016ce1190[0m
+  id: [34m[1m2[0m,
+  name: [31m[1m"[0m[31m意欲[0m[31m[1m"[0m,
+  input_type: [36m[1mnil[0m,
+  is_default_visible: [36m[1mtrue[0m,
+  created_at: Thu, 27 Nov 2025 13:51:29.704580000 UTC +00:00,
+  updated_at: Thu, 27 Nov 2025 13:51:29.704580000 UTC +00:00[32m>[0m,
+ [32m#<RecordItem:0x00007f9016ce1050[0m
+  id: [34m[1m3[0m,
+  name: [31m[1m"[0m[31m睡眠時間[0m[31m[1m"[0m,
+  input_type: [31m[1m"[0m[31mnumeric[0m[31m[1m"[0m,
+  is_default_visible: [36m[1mtrue[0m,
+  created_at: Thu, 27 Nov 2025 13:51:29.722627000 UTC +00:00,
+  updated_at: Thu, 27 Nov 2025 13:51:29.722627000 UTC +00:00[32m>[0m,
+ [32m#<RecordItem:0x00007f9016ce0f10[0m
+  id: [34m[1m4[0m,
+  name: [31m[1m"[0m[31m気分[0m[31m[1m"[0m,
+  input_type: [31m[1m"[0m[31mtext[0m[31m[1m"[0m,
+  is_default_visible: [36m[1mtrue[0m,
+  created_at: Thu, 27 Nov 2025 13:51:29.738292000 UTC +00:00,
+  updated_at: Thu, 27 Nov 2025 13:51:29.738292000 UTC +00:00[32m>[0m,
+ [32m#<RecordItem:0x00007f9016ce0dd0[0m
+  id: [34m[1m5[0m,
+  name: [31m[1m"[0m[31mフリーメモ[0m[31m[1m"[0m,
+  input_type: [31m[1m"[0m[31mcheckbox[0m[31m[1m"[0m,
+  is_default_visible: [36m[1mfalse[0m,
+  created_at: Thu, 27 Nov 2025 13:51:29.751820000 UTC +00:00,
+  updated_at: Thu, 27 Nov 2025 13:51:29.751820000 UTC +00:00[32m>[0m]
