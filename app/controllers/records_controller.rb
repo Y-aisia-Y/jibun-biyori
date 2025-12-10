@@ -11,16 +11,22 @@ class RecordsController < ApplicationController
   end
 
   def new
-    @record = current_user.records.new
-    build_record_values
+    @record = current_user.records.build(recorded_date: Date.current)
+    @record_items = RecordItem.all.order(:display_order)
+    @record_items.each do |item|
+      unless @record.record_values.any? { |v| v.record_item_id == item.id }
+        @record.record_values.build(record_item: item)
+      end
+    end
   end
 
   def create
     @record = current_user.records.build(record_params)
+
     if @record.save
-      redirect_to @record, notice: '記録を作成しました。'
+      redirect_to records_path, success: '記録を作成しました'
     else
-      build_record_values
+      @default_record_items = RecordItem.where(is_default_visible: true).order(:display_order)
       render :new, status: :unprocessable_entity
     end
   end
@@ -68,9 +74,16 @@ class RecordsController < ApplicationController
 
   def record_params
     params.require(:record).permit(
-      :recorded_date, 
-      :diary_memo, 
-      record_values_attributes: [:id, :record_item_id, :value] 
+      :recorded_date,
+      :diary_memo,
+      record_values_attributes: [
+        :id,
+        :record_item_id,
+        :value,
+        :sleep_time,
+        :wake_time,
+        :_destroy
+      ]
     )
   end
 end

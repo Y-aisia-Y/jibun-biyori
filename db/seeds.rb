@@ -7,16 +7,6 @@ TYPES = RecordItem::InputType
 # 初期レコード項目を定義
 initial_items = [
   {
-    name: '疲労感',
-    input_type: TYPES::RATING,
-    is_default_visible: true,
-  },
-  {
-    name: '意欲',
-    input_type: TYPES::RATING,
-    is_default_visible: true,
-  },
-  {
     name: '睡眠時間',
     input_type: TYPES::NUMBER,
     is_default_visible: true,
@@ -27,7 +17,17 @@ initial_items = [
     is_default_visible: true,
   },
   {
-    name: 'フリーメモ',
+    name: '意欲',
+    input_type: TYPES::RATING,
+    is_default_visible: true,
+  },
+  {
+    name: '疲労感',
+    input_type: TYPES::RATING,
+    is_default_visible: true,
+  },
+  {
+    name: 'メモ',
     input_type: TYPES::TEXT,
     is_default_visible: false,
   }

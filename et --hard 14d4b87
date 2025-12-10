@@ -1,0 +1,44 @@
+[33m14d4b87[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeat/09-dynamic-record-fields[m[33m, [m[1;31morigin/feat/09-dynamic-record-fields[m[33m)[m feat: Recordモデルの修正
+[33m9e0442e[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m Merge pull request #31 from Y-aisia-Y/feat/08.5-separated-root
+[33m22725a6[m[33m ([m[1;31morigin/feat/08.5-separated-root[m[33m, [m[1;32mfeat/08.5-separated-root[m[33m)[m feat:トップページのログイン状態による切り替え
+[33mb5b6143[m Merge pull request #30 from Y-aisia-Y/feat/08-record-crud
+[33m3ca8abd[m[33m ([m[1;31morigin/feat/08-record-crud[m[33m, [m[1;32mfeat/08-record-crud[m[33m)[m feat:recordsの CRUD 作成
+[33ma8b9334[m Records機能の実装ほぼ完了（微調整・動作確認前）
+[33me462af7[m Merge pull request #28 from Y-aisia-Y/feat/07-seed-initial-items
+[33mfacea0b[m[33m ([m[1;31morigin/feat/07-seed-initial-items[m[33m, [m[1;32mfeat/07-seed-initial-items[m[33m)[m feat:記録項目の初期データを投入
+[33m8be6ae0[m Merge pull request #27 from Y-aisia-Y/feat/06-create-models
+[33med3fda7[m[33m ([m[1;31morigin/feat/06-create-models[m[33m, [m[1;32mfeat/06-create-models[m[33m)[m feat:主要モデルの作成とアソシエーション定義
+[33mf3cdf4c[m Merge pull request #26 from Y-aisia-Y/feat/05-access-control
+[33mcab24bd[m[33m ([m[1;31morigin/feat/05-access-control[m[33m, [m[1;32mfeat/05-access-control[m[33m)[m feat: ログイン後 Home ページへ遷移するルーティングとアクセス制限の実装
+[33m0d93fb1[m Merge pull request #25 from Y-aisia-Y/feat/04-implement-devise
+[33m8ebd11e[m[33m ([m[1;31morigin/feat/04-implement-devise[m[33m, [m[1;32mfeat/04-implement-devise[m[33m)[m fix: Renderデプロイ時のエラーを修正
+[33m8a2b1f6[m fix: Renderデプロイ時のエラーを修正
+[33mb46582c[m fix: Renderデプロイ時のエラーを修正
+[33m3d1ba4b[m fix: Renderデプロイ時のエラーを修正
+[33mecdf4cb[m fix: Renderデプロイ時のエラーを修正
+[33ma15e930[m fix: Renderデプロイ時のエラーを修正
+[33mec2e676[m fix: Renderデプロイ時のエラーを修正
+[33ma4cbc1e[m fix: Renderデプロイ時のエラーを修正
+[33mee2d7c2[m fix: Renderデプロイ時のエラーを修正
+[33ma738a6c[m fix: Renderデプロイ時のエラーを修正
+[33m227a458[m fix: Renderデプロイ時のエラーを修正
+[33mbe77c92[m fix: Renderデプロイ時のエラーを修正
+[33m09734a3[m fix: Renderデプロイ時のエラーを修正
+[33m7a04eea[m fix: Renderデプロイ時のエラーを修正
+[33me3720db[m feat:Devise導入による認証機能とアクセス制御の実装
+[33m2edc8d4[m Merge pull request #24 from Y-aisia-Y/feat/03-initial-deploy
+[33mb3ae992[m[33m ([m[1;31morigin/feat/03-initial-deploy[m[33m, [m[1;32mfeat/03-initial-deploy[m[33m)[m feat: 本番環境設定の最終調整
+[33m76d29f6[m feat:Renderへの本番デプロイ設定を追加
+[33m4f2fb02[m Merge pull request #23 from Y-aisia-Y/feat/02-top-page
+[33m1cecd26[m[33m ([m[1;31morigin/feat/02-top-page[m[33m, [m[1;32mfeat/02-top-page[m[33m)[m feat:ルートページと基本構成の作成
+[33m004095e[m Merge pull request #22 from Y-aisia-Y/feat/01-initial-setup
+[33m493f654[m[33m ([m[1;31morigin/feat/01-initial-setup[m[33m, [m[1;32mfeat/01-initial-setup[m[33m)[m feat:Railsプロジェクト初期設定 & Gem導入
+[33m9af6f7a[m Merge pull request #16 from Y-aisia-Y/04-issue-estimation
+[33m4177d17[m Merge pull request #3 from Y-aisia-Y/03-er-diagram
+[33m3d1e6d8[m Merge pull request #2 from Y-aisia-Y/02-add-figma-flow
+[33m5dfe39c[m Merge pull request #1 from Y-aisia-Y/01-create-readme
+[33ma11f490[m[33m ([m[1;31morigin/04-issue-estimation[m[33m, [m[1;32m04-issue-estimation[m[33m)[m feature
+[33med61f5b[m[33m ([m[1;31morigin/03-er-diagram[m[33m, [m[1;32m03-er-diagram[m[33m)[m docs:ER diagram
+[33mff7bc61[m[33m ([m[1;31morigin/02-add-figma-flow[m[33m, [m[1;32m02-add-figma-flow[m[33m)[m feature
+[33m8abf228[m[33m ([m[1;31morigin/01-create-readme[m[33m, [m[1;32m01-create-readme[m[33m)[m feat:「じぶん日和」のREADME追加
+[33m8105fe1[m Initial commit

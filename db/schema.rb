@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_04_134924) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_08_051107) do
   create_table "activities", force: :cascade do |t|
     t.integer "record_id", null: false
     t.datetime "start_time"
@@ -27,6 +27,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_04_134924) do
     t.boolean "is_default_visible"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "display_order"
+    t.index ["display_order"], name: "index_record_items_on_display_order"
   end
 
   create_table "record_values", force: :cascade do |t|
@@ -35,6 +37,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_04_134924) do
     t.string "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.time "sleep_time"
+    t.time "wake_time"
     t.index ["record_id"], name: "index_record_values_on_record_id"
     t.index ["record_item_id"], name: "index_record_values_on_record_item_id"
   end
