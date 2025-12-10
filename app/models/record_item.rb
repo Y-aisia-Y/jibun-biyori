@@ -1,16 +1,29 @@
 class RecordItem < ApplicationRecord
-    
-  module InputType
-    # 数値入力
-    NUMBER = 1
-    # 選択肢からの単一選択
-    SELECT = 2
-    # テキスト入力
-    TEXT = 3
-    # 評価スライダー
-    RATING = 4
-  end
-
   has_many :record_values, dependent: :destroy
   has_many :user_record_items, dependent: :destroy
+
+  validates :name, presence: true, uniqueness: true
+  validates :input_type, presence: true
+
+  enum input_type: { 
+    five_step: 0, 
+    numeric: 1, 
+    text: 2, 
+    checkbox: 3, 
+    time_range: 4
+  }
+
+  # デフォルト値
+  def default_value
+    case input_type
+    when 'checkbox' then '0'
+    when 'time_range' then '3'
+    else
+      ''
+    end
+  end
+
+  def time_range?
+    input_type == 'time_range'
+  end
 end
