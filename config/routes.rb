@@ -5,6 +5,10 @@ Rails.application.routes.draw do
 
   resources :records
   
+  resources :records do
+    resources :activities
+  end
+  
   get 'welcome', to: 'welcome#index', as: :welcome
 
   # ログイン済み
