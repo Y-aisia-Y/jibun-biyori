@@ -1,0 +1,28 @@
+- level = mood.rating.to_i
+- mood_map = { 5 => { label: mood.rating_text, icon: '😄', color: 'bg-green-100 text-green-800 border-green-300' },
+               4 => { label: mood.rating_text, icon: '🙂', color: 'bg-lime-100 text-lime-800 border-lime-300' },
+               3 => { label: mood.rating_text, icon: '😐', color: 'bg-yellow-100 text-yellow-800 border-yellow-300' },
+               2 => { label: mood.rating_text, icon: '🙁', color: 'bg-orange-100 text-orange-800 border-orange-300' },
+               1 => { label: mood.rating_text, icon: '😞', color: 'bg-red-100 text-red-800 border-red-300' } }
+- mood_data = mood_map[level]
+
+.mood-card.p-6.rounded-xl.shadow-lg.bg-white.border.border-gray-200
+  .flex.justify-between.items-center.mb-6
+    p.text-gray-600.text-lg.flex.items-center.space-x-2
+      span.text-3xl = mood_data[:icon]
+      span.font-medium.text-gray-800 = mood_data[:label]
+
+  .flex.justify-between.items-center.mb-6
+    p.text-gray-600.text-lg
+      | メモ: 
+      span.font-medium.text-gray-800 = mood.comment
+
+    .actions
+      = link_to '編集',
+        edit_record_mood_path(record),
+        class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      span.mx-2 | |
+      = link_to '削除',
+        record_mood_path(record),
+        data: { turbo_method: :delete, turbo_confirm: 'この気分の記録を削除してもよろしいですか？' },
+        class: "ml-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-600 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
