@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   end
 
   resources :records do
-    resource :mood, only: [:create, :update]
+    resource :mood, only: [:new, :create, :edit, :update, :destroy]
   end
   
   get 'welcome', to: 'welcome#index', as: :welcome
