@@ -8,6 +8,10 @@ Rails.application.routes.draw do
   resources :records do
     resources :activities
   end
+
+  resources :records do
+    resource :mood, only: [:create, :update]
+  end
   
   get 'welcome', to: 'welcome#index', as: :welcome
 
