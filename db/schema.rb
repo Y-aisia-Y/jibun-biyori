@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_13_142926) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_15_132747) do
   create_table "activities", force: :cascade do |t|
     t.integer "record_id", null: false
     t.datetime "start_time"
@@ -43,11 +43,12 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_13_142926) do
   create_table "record_values", force: :cascade do |t|
     t.integer "record_id", null: false
     t.integer "record_item_id", null: false
-    t.string "value"
+    t.string "value", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.time "sleep_time"
     t.time "wake_time"
+    t.string "value_type"
     t.index ["record_id"], name: "index_record_values_on_record_id"
     t.index ["record_item_id"], name: "index_record_values_on_record_item_id"
   end
@@ -59,17 +60,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_13_142926) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_records_on_user_id"
-  end
-
-  create_table "user_record_items", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "record_item_id", null: false
-    t.boolean "is_visible"
-    t.integer "display_order"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["record_item_id"], name: "index_user_record_items_on_record_item_id"
-    t.index ["user_id"], name: "index_user_record_items_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -89,6 +79,4 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_13_142926) do
   add_foreign_key "record_values", "record_items"
   add_foreign_key "record_values", "records"
   add_foreign_key "records", "users"
-  add_foreign_key "user_record_items", "record_items"
-  add_foreign_key "user_record_items", "users"
 end

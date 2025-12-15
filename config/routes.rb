@@ -10,6 +10,10 @@ Rails.application.routes.draw do
   end
 
   resources :records do
+    resources :record_values, only: [:create, :update]
+  end
+  
+  resources :records do
     resource :mood, only: [:new, :create, :edit, :update, :destroy]
   end
   
