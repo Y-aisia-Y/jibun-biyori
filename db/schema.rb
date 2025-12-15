@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_15_132747) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_15_144051) do
   create_table "activities", force: :cascade do |t|
     t.integer "record_id", null: false
     t.datetime "start_time"
@@ -37,7 +37,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_15_132747) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "display_order"
+    t.integer "user_id", null: false
     t.index ["display_order"], name: "index_record_items_on_display_order"
+    t.index ["user_id"], name: "index_record_items_on_user_id"
   end
 
   create_table "record_values", force: :cascade do |t|
@@ -76,6 +78,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_15_132747) do
 
   add_foreign_key "activities", "records"
   add_foreign_key "moods", "records"
+  add_foreign_key "record_items", "users"
   add_foreign_key "record_values", "record_items"
   add_foreign_key "record_values", "records"
   add_foreign_key "records", "users"
