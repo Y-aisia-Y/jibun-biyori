@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  get 'record_items/index'
+  get 'record_items/new'
+  get 'record_items/create'
+  get 'record_items/edit'
+  get 'record_items/update'
+  get 'record_items/destroy'
   get "up" => "rails/health#show", as: :rails_health_check
 
   devise_for :users

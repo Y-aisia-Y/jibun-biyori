@@ -17,16 +17,6 @@
         span.mx-2 | |
         = link_to "削除", @record, data: { turbo_method: :delete, turbo_confirm: "この記録を削除してもよろしいですか？" }, class: "ml-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-600 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
 
-    // RecordItem（体調・生活項目）ごとの入力フォーム
-    - current_user.record_items.each do |item|
-      - record_value = @record.record_values.find_by(record_item: item) || @record.record_values.new(record_item: item)
-
-      = form_with model: [@record, record_value], local: true do |f|
-        = f.hidden_field :record_item_id, value: item.id
-        = f.label :value, item.name
-        = f.text_field :value
-        = f.submit "保存"
-
     // 気分 (Mood) セクション
     .record-values-section.mb-8.p-6.bg-white.rounded-xl.shadow-lg
       h2.text-xl.font-semibold.text-gray-800.mb-4 気分項目

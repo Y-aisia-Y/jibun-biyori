@@ -26,7 +26,8 @@ class RecordsController < ApplicationController
     if @record.save
       redirect_to records_path, success: '記録を作成しました'
     else
-      @default_record_items = RecordItem.where(is_default_visible: true).order(:display_order)
+      @record_items = RecordItem.all.order(:display_order)
+      build_record_values
       render :new, status: :unprocessable_entity
     end
   end
