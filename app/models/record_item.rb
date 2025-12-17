@@ -1,17 +1,15 @@
 class RecordItem < ApplicationRecord
   belongs_to :user
-
   has_many :record_values, dependent: :destroy
-  has_many :user_record_items, dependent: :destroy
 
   validates :name, presence: true, uniqueness: { scope: :user_id }
   validates :input_type, presence: true
 
-  enum input_type: { 
-    five_step: 0, 
-    numeric: 1, 
-    text: 2, 
-    checkbox: 3, 
+  enum input_type: {
+    five_step: 0,
+    numeric: 1,
+    text: 2,
+    checkbox: 3,
     time_range: 4
   }
 

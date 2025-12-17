@@ -1,2 +1,23 @@
-h1 新しい記録項目
-= render "form"
+h1 記録項目を追加
+
+- if @record_item.errors.any?
+  ul
+    - @record_item.errors.full_messages.each do |msg|
+      li= msg
+
+= form_with model: @record_item do |f|
+  div
+    = f.label :name, "項目名"
+    = f.text_field :name
+
+  div
+    = f.label :unit, "単位（任意）"
+    = f.text_field :unit
+
+  div
+    = f.label :input_type, "入力形式"
+    = f.select :input_type, [["5段階評価", "five_step"], ["数値", "numeric"], ["テキスト", "text"], ["チェックボックス", "checkbox"], ["時間範囲", "time_range"]]
+  
+  = f.submit "作成"
+
+= link_to "戻る", mypage_path

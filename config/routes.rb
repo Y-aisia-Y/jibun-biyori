@@ -10,7 +10,9 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :records
-  
+  resource :mypage, only: [:show]
+  resources :record_items, except: [:show]
+
   resources :records do
     resources :activities
   end
@@ -22,7 +24,21 @@ Rails.application.routes.draw do
   resources :records do
     resource :mood, only: [:new, :create, :edit, :update, :destroy]
   end
-  
+
+  resources :record_items do
+    member do
+      patch :toggle_visibility
+    end
+  end
+
+  resources :record_items do
+    member do
+      patch :move_up
+      patch :move_down
+      patch :toggle_visibility
+    end
+  end
+
   get 'welcome', to: 'welcome#index', as: :welcome
 
   # ログイン済み

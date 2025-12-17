@@ -8,11 +8,13 @@ class RecordsController < ApplicationController
   end
 
   def show
+    @record = current_user.records.find(params[:id])
+    @record_items = current_user.record_items.where(is_default_visible: true).order(:display_order)
   end
 
   def new
     @record = current_user.records.build(recorded_date: Date.current)
-    @record_items = RecordItem.all.order(:display_order)
+    @record_items = current_user.record_items.where(is_default_visible: true).order(:display_order)
     @record_items.each do |item|
       unless @record.record_values.any? { |v| v.record_item_id == item.id }
         @record.record_values.build(record_item: item)
@@ -65,7 +67,7 @@ class RecordsController < ApplicationController
   end
 
   def build_record_values
-    @record_items = RecordItem.all
+    @record_items = current_user.record_items.where(is_default_visible: true).order(:display_order)
     @record_items.each do |item|
       unless @record.record_values.any? { |v| v.record_item_id == item.id }
         @record.record_values.build(record_item: item)
