@@ -5,6 +5,8 @@ class RecordItem < ApplicationRecord
   validates :name, presence: true, uniqueness: { scope: :user_id }
   validates :input_type, presence: true
 
+  scope :visible_ordered, -> { where(is_default_visible: true).order(:display_order) }
+
   enum input_type: {
     five_step: 0,
     numeric: 1,

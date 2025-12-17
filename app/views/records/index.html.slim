@@ -11,7 +11,7 @@
       p.text-xl.text-gray-500.mb-4
         | 記録がありません。
     .text-center.mt-4
-      = link_to '一覧に戻る', records_path, class: 'text-sm text-gray-500 hover:text-gray-700'
+      = link_to 'TOP', authenticated_root_path, class: 'text-sm text-indigo-600 hover:underline'
   - else
     .space-y-4
       - @records.each do |record|
