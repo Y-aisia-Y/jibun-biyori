@@ -24,6 +24,7 @@ class RecordsController < ApplicationController
 
   def create
     @record = current_user.records.build(record_params)
+    @assign_time_range_values 
 
     if @record.save
       redirect_to records_path, success: '記録を作成しました'

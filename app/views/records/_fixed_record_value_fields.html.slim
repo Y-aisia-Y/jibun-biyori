@@ -1,0 +1,10 @@
+.record-value-field.p-4.bg-gray-50.rounded-lg.shadow-sm.border.border-gray-200
+  = f.hidden_field :record_item_id
+  h3.text-lg.font-bold.text-gray-800.mb-3
+    = f.object.record_item.name
+
+  p.text-gray-500 "この項目は固定です。ON/OFF トグルで操作してください。"
+
+  / ON/OFF トグル例
+  = f.check_box :enabled, {}, "1", "0"
+  = f.label :enabled, "ON / OFF", class: "ml-2"

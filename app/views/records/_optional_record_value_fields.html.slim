@@ -1,0 +1,45 @@
+.record-value-field.p-4.bg-gray-50.rounded-lg.shadow-sm.border.border-gray-200(
+  data-controller="record-value"
+  data-record-value-target="field"
+)
+  = f.hidden_field :record_item_id
+  = f.hidden_field :_destroy, value: "0", data: { record_value_target: "destroyInput" }
+
+  - item = f.object.record_item
+  h3.text-lg.font-bold.text-gray-800.mb-3
+    = item.name
+
+  .input-area.mt-2
+    - case item.input_type.to_sym
+    - when :five_step
+      .flex.justify-between.items-center.p-2.bg-white.rounded-md.shadow-inner
+        - [1, 2, 3, 4, 5].each do |val|
+          .flex.flex-col.items-center.cursor-pointer
+            = f.radio_button :value, val, id: "item_#{item.id}_value_#{val}", class: "form-radio h-5 w-5 text-indigo-600"
+            = f.label "value_#{val}", "#{val}", for: "item_#{item.id}_value_#{val}", class: "ml-2 text-sm text-gray-700 font-medium"
+
+    - when :numeric
+      = f.number_field :value, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+
+    - when :text
+      = f.text_field :value, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+
+    - when :checkbox
+      = f.check_box :value, {}, "1", "0"
+      = f.label :value, "チェック", class: "ml-2"
+
+    - when :time_range
+      - sleep_time, wake_time = f.object.value.to_s.split('-').map(&:strip)
+      - label1 = item.label1.presence || "就寝時刻"
+      - label2 = item.label2.presence || "起床時刻"
+
+      .flex.space-x-4.items-center.p-2.bg-white.rounded-md.shadow-inner(data-controller="time-range-input")
+        = f.hidden_field :value, data: { time_range_input_target: "value" }
+
+      .w-1/2
+        = f.label :sleep_time, label1, class: "block text-xs font-medium text-gray-500"
+        = f.time_field :sleep_time, value: sleep_time, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500", data: { time_range_input_target: "sleep", action: "input->time-range-input#updateValue" }
+
+      .w-1/2
+        = f.label :wake_time, label2, class: "block text-xs font-medium text-gray-500"
+        = f.time_field :wake_time, value: wake_time, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500", data: { time_range_input_target: "wake", action: "input->time-range-input#updateValue" }
