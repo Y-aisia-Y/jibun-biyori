@@ -1,0 +1,14 @@
+= form_with model: @record_item do |f|
+  .field
+    = f.label :name, "項目名"
+    = f.text_field :name
+
+  .field
+    = f.label :value_type, "入力タイプ"
+    = f.select :value_type, [
+      ["テキスト", "text"],
+      ["数値", "number"],
+      ["時間", "time"]
+    ]
+
+  = f.submit

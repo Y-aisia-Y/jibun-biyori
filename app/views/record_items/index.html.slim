@@ -1,0 +1,10 @@
+h1 記録項目の設定
+
+- @record_items.each do |item|
+  p
+    = item.name
+    | （
+    = item.input_type
+    | ）
+    - if item.is_default
+      span.text-gray-500

@@ -1,0 +1,23 @@
+h1 記録項目を編集
+
+- if @record_item.errors.any?
+  ul
+    - @record_item.errors.full_messages.each do |msg|
+      li= msg
+
+= form_with model: @record_item do |f|
+  div
+    = f.label :name, "項目名"
+    = f.text_field :name
+
+  div
+    = f.label :unit, "単位（任意）"
+    = f.text_field :unit
+
+  div
+    strong 入力形式：
+    = @record_item.input_type
+
+  = f.submit "更新"
+
+= link_to "戻る", mypage_path

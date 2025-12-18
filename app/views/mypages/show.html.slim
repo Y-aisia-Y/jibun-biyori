@@ -1,0 +1,42 @@
+h1 マイページ
+
+= link_to "＋ 記録項目を追加", new_record_item_path, class: "btn"
+
+- if @record_items.any?
+  ul
+    - @record_items.each do |item|
+      li
+        = item.name
+
+        = link_to "↑", move_up_record_item_path(item),
+          data: { turbo_method: :patch }
+
+        = link_to "↓", move_down_record_item_path(item),
+          data: { turbo_method: :patch }
+
+        | ｜
+        - if item.is_default_visible?
+          = link_to "非表示",
+            toggle_visibility_record_item_path(item),
+            data: { turbo_method: :patch }
+        - else
+          = link_to "表示",
+            toggle_visibility_record_item_path(item),
+            data: { turbo_method: :patch }
+
+        | ｜
+        = link_to "編集", edit_record_item_path(item)
+        | ｜
+        = link_to "削除",
+          record_item_path(item),
+          data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }
+
+- else
+  p 記録項目がまだありません
+
+.space-y-4
+  = link_to records_path, class: 'w-full block text-center px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-150' do
+    | 記録一覧
+    | ｜
+  = link_to authenticated_root_path, class: 'w-full block text-center px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-150' do
+    | TOP

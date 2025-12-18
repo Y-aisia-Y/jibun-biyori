@@ -1,12 +1,21 @@
 class RecordValue < ApplicationRecord
   belongs_to :record
   belongs_to :record_item
+
+  attr_accessor :sleep_time, :wake_time
+  before_validation :set_time_range_value
   
   validates :record_item_id, presence: true
   validate :validate_value_based_on_input_type
   
   private
   
+  def set_time_range_value
+    if record_item&.time_range? && sleep_time.present? && wake_time.present?
+      self.value = "#{sleep_time} - #{wake_time}"
+    end
+  end
+
   def validate_value_based_on_input_type
     return unless record_item
   
