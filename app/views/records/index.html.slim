@@ -1,9 +1,14 @@
 / 日付ヘッダー
-div.flex.items-center.justify-between.px-4.py-3.border-b
-  button.text-xl ＜
-  h1.text-lg.font-semibold
-    | 2025/01/03
-  button.text-xl ＞
+.div.flex.items-center.justify-between.px-4.py-3.border-b[
+  data-controller="date-navigator"
+]
+  button.text-xl[data-action="click->date-navigator#prev"]
+    | ＜
+
+  h1.text-lg.font-semibold[data-date-navigator-target="date"]
+
+  button.text-xl[data-action="click->date-navigator#next"]
+    | ＞
 
 / Moodエリア
 div.px-4.py-3.border-b
