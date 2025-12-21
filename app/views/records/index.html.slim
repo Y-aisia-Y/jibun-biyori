@@ -34,8 +34,8 @@ div.px-4.py-3.border-b
       / 時間ブロック
       .flex-1.relative.group
         .hour-block.flex.items-center
-          span.add-button.hidden.group-hover:flex
-            | ＋
+          = link_to "＋", new_record_activity_path(@record, date: @date, hour: hour), class: "add-button hidden group-hover:flex"
+
 
 / 一応残しておく
 .max-w-4xl.mx-auto
