@@ -5,6 +5,7 @@ class RecordsController < ApplicationController
 
   def index
     @records = current_user.records.order(recorded_date: :desc)
+    @date = params[:date]&.to_date || Date.current
   end
 
   def show

@@ -17,13 +17,25 @@ div.px-4.py-3.border-b
     - ["😣", "🙁", "😐", "🙂", "😊"].each do |emoji|
       span.text-2xl.opacity-40 = emoji
 
-/ バーチカルカレンダー
-div class="h-[calc(100vh-160px)] overflow-y-scroll"
+/ タイムライン全体
+.relative#timeline data-controller="timeline"
+
+  / 今日だけ赤線
+  - if @date == Date.current
+    .now-line
+
+  / 24時間ループ
   - (0..23).each do |hour|
-    div.flex.border-b.h-20.px-4
-      div.w-12.text-xs.text-gray-400
+    .flex.items-start.border-b
+      / 時刻ラベル
+      .w-14.text-right.pr-2.text-xs.text-gray-400.pt-1
         = "%02d:00" % hour
-      div.flex-1
+
+      / 時間ブロック
+      .flex-1.relative.group
+        .hour-block.flex.items-center
+          span.add-button.hidden.group-hover:flex
+            | ＋
 
 / 一応残しておく
 .max-w-4xl.mx-auto
