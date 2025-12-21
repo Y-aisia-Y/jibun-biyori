@@ -11,11 +11,8 @@
     | ＞
 
 / Moodエリア
-div.px-4.py-3.border-b
-  p.text-sm.text-gray-500 Mood
-  div.flex.gap-2.mt-2
-    - ["😣", "🙁", "😐", "🙂", "😊"].each do |emoji|
-      span.text-2xl.opacity-40 = emoji
+.bg-gray-50.border-b.px-4.py-3.space-y-2
+  = render "summary", record: @record
 
 / タイムライン全体
 - activities_by_hour = @activities.group_by { |a| a.start_time.hour }
