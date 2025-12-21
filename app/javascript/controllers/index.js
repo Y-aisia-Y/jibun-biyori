@@ -1,5 +1,6 @@
-import { application } from "./application"
+import { Application } from "@hotwired/stimulus"
 
-// Eager load all controllers defined in the import map under controllers/**/*_controller
-import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading"
-eagerLoadControllersFrom("controllers", application)
+const application = Application.start()
+window.Stimulus = application
+
+export { application }

@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   resources :records do
     resources :activities
+    resources :activities, only: [:new, :create]
     resources :record_values, only: [:create, :update]
     resource :mood, only: [:new, :create, :edit, :update, :destroy]
   end

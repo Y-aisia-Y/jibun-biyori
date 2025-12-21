@@ -1,3 +1,39 @@
+/ 日付ヘッダー
+.div.flex.items-center.justify-between.px-4.py-3.border-b[
+  data-controller="date-navigator"
+]
+  button.text-xl[data-action="click->date-navigator#prev"]
+    | ＜
+
+  h1.text-lg.font-semibold[data-date-navigator-target="date"]
+
+  button.text-xl[data-action="click->date-navigator#next"]
+    | ＞
+
+/ Moodエリア
+.bg-gray-50.border-b.px-4.py-3.space-y-2
+  = render "summary", record: @record
+
+/ タイムライン全体
+- activities_by_hour = @activities.group_by { |a| a.start_time.hour }
+
+- (0..23).each do |hour|
+  .hour-block
+    - if activities_by_hour[hour]
+      = render activities_by_hour[hour]
+
+    .flex.items-start.border-b
+      / 時刻ラベル
+      .w-14.text-right.pr-2.text-xs.text-gray-400.pt-1
+        = "%02d:00" % hour
+
+      / 時間ブロック
+      .flex-1.relative.group
+        .hour-block.flex.items-center
+          = link_to "＋", new_record_activity_path(@record, date: @date, hour: hour), class: "add-button hidden group-hover:flex"
+
+
+/ 一応残しておく
 .max-w-4xl.mx-auto
   .flex.justify-between.items-center.mb-6
     h1.text-3xl.font-bold.text-gray-800

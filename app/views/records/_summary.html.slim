@@ -1,0 +1,12 @@
+/ 日付
+.text-sm.text-gray-500
+  = l(record.recorded_date, format: :long)
+
+/ Mood（必須）
+- mood = record.record_values.find { |rv| rv.record_item.name == "Mood" }
+
+- if mood
+  .flex.items-center.space-x-2
+    span.text-sm.font-medium.text-gray-700 気分
+    span.text-lg.font-semibold.text-indigo-600
+      = mood.value
