@@ -7,6 +7,7 @@ class RecordsController < ApplicationController
     @records = current_user.records.order(recorded_date: :desc)
     @date = params[:date]&.to_date || Date.current
     @record = current_user.records.find_or_create_by!(recorded_date: @date)
+    @activities = @record.activities
   end
 
   def show

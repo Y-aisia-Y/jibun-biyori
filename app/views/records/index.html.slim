@@ -18,14 +18,13 @@ div.px-4.py-3.border-b
       span.text-2xl.opacity-40 = emoji
 
 / タイムライン全体
-.relative#timeline data-controller="timeline"
+- activities_by_hour = @activities.group_by { |a| a.start_time.hour }
 
-  / 今日だけ赤線
-  - if @date == Date.current
-    .now-line
+- (0..23).each do |hour|
+  .hour-block
+    - if activities_by_hour[hour]
+      = render activities_by_hour[hour]
 
-  / 24時間ループ
-  - (0..23).each do |hour|
     .flex.items-start.border-b
       / 時刻ラベル
       .w-14.text-right.pr-2.text-xs.text-gray-400.pt-1
