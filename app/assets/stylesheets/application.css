@@ -15,7 +15,7 @@
  */
 
 #timeline {
-  position: relative; /* 絶対配置の基準点 */
+  position: relative;
   overflow-y: scroll;
   height: calc(100vh - 200px);
 }
@@ -25,12 +25,12 @@
   left: 0;
   right: 0;
   height: 2px;
-  background-color: #ef4444; /* Tailwindのred-500 */
+  background-color: #ef4444;
   z-index: 10;
-  pointer-events: none; /* クリックイベントを無視 */
+  pointer-events: none;
 }
 
 .hour-block {
   position: relative;
-  height: 80px; /* 1時間ブロックの高さ */
+  height: 80px;
 }
