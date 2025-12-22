@@ -8,11 +8,19 @@ class RecordsController < ApplicationController
     @date = params[:date]&.to_date || Date.current
     @record = current_user.records.find_or_create_by!(recorded_date: @date)
     @activities = @record.activities
+    @record ||= current_user.records.build(recorded_date: @date)
+
+    @current_hour = Time.current.hour
+    @current_minute = Time.current.min
   end
 
   def show
     @record = current_user.records.find(params[:id])
     @record_items = current_user.record_items.where(is_default_visible: true).order(:display_order)
+    @record = Record.find(params[:id])
+    @activities = @record.activities
+    @current_hour = Time.current.hour
+    @current_minute = Time.current.min
   end
 
   def new

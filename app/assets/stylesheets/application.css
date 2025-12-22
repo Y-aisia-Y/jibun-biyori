@@ -14,31 +14,23 @@
  *= require_self
  */
 
- .hour-block {
-  height: clamp(48px, 6vh, 96px);
+#timeline {
+  position: relative; /* 絶対配置の基準点 */
+  overflow-y: scroll;
+  height: calc(100vh - 200px);
 }
-.add-button {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 32px;
-  height: 32px;
-  border-radius: 9999px;
-  background: #4f46e5; /* indigo */
-  color: white;
-  font-size: 20px;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
+
 .now-line {
   position: absolute;
   left: 0;
   right: 0;
   height: 2px;
-  background: red;
-  z-index: 20;
+  background-color: #ef4444; /* Tailwindのred-500 */
+  z-index: 10;
+  pointer-events: none; /* クリックイベントを無視 */
 }
 
-
+.hour-block {
+  position: relative;
+  height: 80px; /* 1時間ブロックの高さ */
+}

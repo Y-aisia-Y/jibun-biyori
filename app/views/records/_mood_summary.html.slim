@@ -1,0 +1,13 @@
+- mood_item = @record&.record_values&.includes(:record_item)&.find { |rv| rv.record_item.name == "Mood" }
+
+.section.mb-4
+  h2.text-sm.font-semibold.text-gray-600.mb-2
+    | 今日の気分
+
+  .flex.gap-2
+    - %w[😄 🙂 😐 🙁 😫].each_with_index do |emoji, i|
+      - selected = mood_item&.value.to_i == i + 1
+      button.rounded-full.w-10.h-10.flex.items-center.justify-center.text-xl.border
+        class=(selected ? "bg-indigo-500 text-white border-indigo-500" : "bg-white")
+        type="button"
+        = emoji
