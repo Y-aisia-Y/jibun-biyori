@@ -3,16 +3,16 @@ class RecordItemsController < ApplicationController
   before_action :set_record_item, only: %i[edit update destroy move_up move_down]
 
   def index
-    @record_items = current_user.record_items.order(:display_order)
+    @ = current_user..order(:display_order)
   end
 
   def new
-    @record_item = current_user.record_items.build
+    @record_item = current_user..build
   end
 
   def create
-    max_order = current_user.record_items.maximum(:display_order) || 0
-    @record_item = current_user.record_items.build(record_item_params)
+    max_order = current_user..maximum(:display_order) || 0
+    @record_item = current_user..build(record_item_params)
     @record_item.display_order = max_order + 1
 
     if @record_item.save
@@ -34,14 +34,14 @@ class RecordItemsController < ApplicationController
   end
 
   def destroy
-    record_item = current_user.record_items.find(params[:id])
+    record_item = current_user..find(params[:id])
     record_item.destroy
 
     redirect_to mypage_path, notice: "記録項目を削除しました"
   end
 
   def toggle_visibility
-    record_item = current_user.record_items.find(params[:id])
+    record_item = current_user..find(params[:id])
 
     record_item.update!(
       is_default_visible: !record_item.is_default_visible
@@ -51,12 +51,12 @@ class RecordItemsController < ApplicationController
   end
 
   def move_up
-    swap_item = current_user.record_items.where("display_order < ?", @record_item.display_order).order(display_order: :desc).first
+    swap_item = current_user..where("display_order < ?", @record_item.display_order).order(display_order: :desc).first
     swap_display_order(swap_item)
   end
 
   def move_down
-    swap_item = current_user.record_items.where("display_order > ?", @record_item.display_order).order(display_order: :asc).first
+    swap_item = current_user..where("display_order > ?", @record_item.display_order).order(display_order: :asc).first
     swap_display_order(swap_item)
   end
 
@@ -75,7 +75,7 @@ class RecordItemsController < ApplicationController
   end
 
   def set_record_item
-    @record_item = current_user.record_items.find(params[:id])
+    @record_item = current_user..find(params[:id])
   end
 
   def record_item_params
