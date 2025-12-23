@@ -2,10 +2,12 @@ class RecordsController < ApplicationController
   include CurrentTimeSettable
 
   before_action :authenticate_user!
+
   before_action :set_record, only: %i[show edit update destroy]
   before_action :authorize_user!, only: %i[show edit update destroy]
+
   before_action :set_record_items, only: %i[new edit show]
-  before_action :build_record_values, only: %i[new edit]
+  before_action :build_record_values, only: %i[edit]
 
   def index
     @records = current_user.records.order(recorded_date: :desc)
@@ -25,7 +27,11 @@ class RecordsController < ApplicationController
   end
 
   def new
-    @record = current_user.records.build(recorded_date: Date.current)
+    @record = current_user.records.new(
+      recorded_date: params[:date]
+    )
+
+    RecordValuesBuilder.new(@record, current_user).call
   end
 
   def edit
@@ -38,24 +44,38 @@ class RecordsController < ApplicationController
       redirect_to records_path, notice: "記録を保存しました"
     else
       set_record_items
-      build_record_values
+      RecordValuesBuilder.new(@record, current_user).call
       render :new, status: :unprocessable_entity
     end
   end
 
   def update
     if @record.update(processed_record_params)
-      redirect_to @record, notice: '記録を更新しました。'
+      redirect_to @record, notice: "記録を更新しました。"
     else
       set_record_items
-      build_record_values
+      RecordValuesBuilder.new(@record, current_user).call
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     @record.destroy!
-    redirect_to records_url, notice: '記録を削除しました。', status: :see_other
+    redirect_to records_url, notice: "記録を削除しました。", status: :see_other
+  end
+
+  def create_with_activity
+    date = params[:date]
+
+    record = current_user.records.find_or_create_by!(
+      recorded_date: date
+    )
+
+    redirect_to new_record_activity_path(
+      record,
+      date: date,
+      hour: params[:hour]
+    )
   end
 
   private
@@ -66,7 +86,8 @@ class RecordsController < ApplicationController
 
   def authorize_user!
     return if @record.user_id == current_user.id
-    redirect_to records_path, alert: 'アクセス権限がありません。'
+
+    redirect_to records_path, alert: "アクセス権限がありません。"
   end
 
   def set_record_items

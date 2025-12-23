@@ -12,7 +12,7 @@ class RecordItem < ApplicationRecord
     numeric: 1,
     text: 2,
     checkbox: 3,
-    time_range: 4
+    time_range: 4,
   }
 
   # デフォルト値

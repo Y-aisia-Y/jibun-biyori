@@ -31,9 +31,16 @@
         - if activities_by_hour[hour]
           = render activities_by_hour[hour]
 
-        = link_to "＋",
-          new_record_activity_path(@record, date: @date, hour: hour),
-          class: "add-button hidden group-hover:flex"
+        - if @record.persisted?
+          = link_to "＋",
+            new_record_activity_path(@record, date: @date, hour: hour),
+            class: "add-button hidden group-hover:flex"
+        - else
+          = button_to "＋",
+            create_with_activity_records_path(date: @date, hour: hour),
+            method: :post,
+            class: "add-button hidden group-hover:flex"
+
 
 / 一応残しておく
 .max-w-4xl.mx-auto

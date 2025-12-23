@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_17_150322) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_23_134721) do
   create_table "activities", force: :cascade do |t|
     t.integer "record_id", null: false
     t.datetime "start_time"
@@ -40,6 +40,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_17_150322) do
     t.integer "user_id", null: false
     t.boolean "is_default", default: false, null: false
     t.string "unit"
+    t.string "label1"
+    t.string "label2"
+    t.string "category"
     t.index ["display_order"], name: "index_record_items_on_display_order"
     t.index ["user_id"], name: "index_record_items_on_user_id"
   end
