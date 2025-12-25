@@ -6,21 +6,25 @@ User.find_each do |user|
       name: "睡眠時間",
       input_type: :time_range,
       unit: "時間",
+      category: :default_metric,
       display_order: 1
     },
     {
       name: "体調",
       input_type: :five_step,
+      category: :default_metric,
       display_order: 2
     },
     {
       name: "意欲",
       input_type: :five_step,
+      category: :default_metric,
       display_order: 3
     },
     {
       name: "疲労感",
       input_type: :five_step,
+      category: :default_metric,
       display_order: 4
     }
   ]

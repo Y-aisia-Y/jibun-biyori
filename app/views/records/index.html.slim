@@ -1,20 +1,22 @@
 .bg-gray-50.border-b
-
   / 日付ナビ
   .px-4.py-3
     = render "date_navigator"
 
-  / Mood + サマリー
+  / サマリー
   .px-4.py-3.space-y-2
-    = render "records/mood_summary"
-    / = render "summary", record: @record
+    - if @record.persisted?
+      = render "mood_summary", record: @record
+    - else
+      .text-center.text-gray-500.py-4
+        p.text-sm = "#{l(@date, format: :long)}の記録はまだありません"
 
+/ タイムライン
 #timeline[
   data-controller="timeline"
   data-timeline-current-hour-value=@current_hour
   data-timeline-current-minute-value=@current_minute
 ]
-
   / 現在時刻のライン
   .now-line.absolute.left-0.right-0.h-0.5.bg-red-500.z-10
 
@@ -40,7 +42,6 @@
             create_with_activity_records_path(date: @date, hour: hour),
             method: :post,
             class: "add-button hidden group-hover:flex"
-
 
 / 一応残しておく
 .max-w-4xl.mx-auto

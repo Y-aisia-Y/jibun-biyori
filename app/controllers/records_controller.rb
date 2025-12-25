@@ -2,21 +2,21 @@ class RecordsController < ApplicationController
   include CurrentTimeSettable
 
   before_action :authenticate_user!
-
   before_action :set_record, only: %i[show edit update destroy]
   before_action :authorize_user!, only: %i[show edit update destroy]
-
   before_action :set_record_items, only: %i[new edit show]
   before_action :build_record_values, only: %i[edit]
 
   def index
-    @records = current_user.records.order(recorded_date: :desc)
     @date = params[:date]&.to_date || Date.current
 
+    # 指定した日付の記録を取得（入力フォーム用）
     @record = current_user.records
                           .includes(:record_values, :activities)
                           .find_or_initialize_by(recorded_date: @date)
 
+    # 指定した日付の記録だけを取得（表示用）
+    @records = @record.persisted? ? [@record] : []
     @activities = @record.persisted? ? @record.activities : Activity.none
 
     set_current_time
@@ -27,10 +27,9 @@ class RecordsController < ApplicationController
   end
 
   def new
-    @record = current_user.records.new(
-      recorded_date: params[:date]
+    @record = current_user.records.build(
+      recorded_date: params[:date]&.to_date || Date.current
     )
-
     RecordValuesBuilder.new(@record, current_user).call
   end
 
@@ -38,23 +37,21 @@ class RecordsController < ApplicationController
   end
 
   def create
-    @record = current_user.records.build(processed_record_params)
-
+    @record = current_user.records.build(record_params)
+    
     if @record.save
-      redirect_to records_path, notice: "記録を保存しました"
+      redirect_to records_path, success: '記録を作成しました'
     else
       set_record_items
-      RecordValuesBuilder.new(@record, current_user).call
       render :new, status: :unprocessable_entity
     end
   end
 
   def update
-    if @record.update(processed_record_params)
-      redirect_to @record, notice: "記録を更新しました。"
+    if @record.update(record_params)
+      redirect_to record_path(@record), success: '記録を更新しました'
     else
       set_record_items
-      RecordValuesBuilder.new(@record, current_user).call
       render :edit, status: :unprocessable_entity
     end
   end
@@ -65,7 +62,7 @@ class RecordsController < ApplicationController
   end
 
   def create_with_activity
-    date = params[:date]
+    date = params[:date]&.to_date || Date.current
 
     record = current_user.records.find_or_create_by!(
       recorded_date: date
@@ -98,10 +95,6 @@ class RecordsController < ApplicationController
 
   def build_record_values
     RecordValuesBuilder.new(@record, current_user).call
-  end
-
-  def processed_record_params
-    RecordTimeRangeBuilder.new(record_params).call
   end
 
   def record_params

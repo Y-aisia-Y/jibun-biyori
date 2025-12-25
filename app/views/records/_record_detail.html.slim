@@ -1,14 +1,16 @@
-/ タイムライン用サマリー
+/ 詳細な記録表示
 - item_names = ["睡眠時間", "気分", "体調", "意欲", "疲労感"]
 
-.flex.flex-wrap.gap-6
-  - item_names.each do |item_name|
-    - rv = record.record_values.find { |v| v.record_item.name == item_name }
+.space-y-3
+  - item_names.each do |name|
+    - rv = record.record_values.find { |v| v.record_item.name == name }
 
-    .flex.items-center.gap-2
-      span.text-sm.font-medium.text-gray-700.whitespace-nowrap = item_name
+    .flex.items-center.gap-3
+      span.w-20.text-sm.font-medium.text-gray-700 = name
 
-      - if rv.present?
+      - if rv.blank?
+        span.text-sm.text-gray-400 未入力
+      - else
         - case rv.record_item.input_type
         - when "five_step"
           - rating = rv.value.to_i
@@ -24,9 +26,10 @@
             - total_minutes = ((end_time - start_time) / 60).to_i
             - hours = total_minutes / 60
             - minutes = total_minutes % 60
-            span.text-sm.font-medium.text-indigo-600
-              = "#{hours}時間#{minutes}分"
+            .flex.flex-col.gap-1
+              span.text-sm.font-medium.text-indigo-600
+                = "#{hours}時間#{minutes}分"
+              span.text-xs.text-gray-500
+                = "#{start_time.strftime('%H:%M')}〜#{end_time.strftime('%H:%M')}"
           - else
             span.text-sm.text-gray-400 未入力
-      - else
-        span.text-sm.text-gray-400 未入力

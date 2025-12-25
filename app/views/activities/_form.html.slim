@@ -1,4 +1,4 @@
-= form_with(model: [record, activity], class: "space-y-4") do |form|
+= form_with(model: [record, activity], class: "space-y-4", data: { controller: "datetime-sync" }) do |form|
   - if activity.errors.any?
     .bg-red-100.border.border-red-400.text-red-700.px-4.py-3.rounded.relative.mb-4
       p.font-bold = "エラーが #{activity.errors.count} 件あります。"
@@ -6,25 +6,33 @@
         - activity.errors.full_messages.each do |message|
           li = message
 
-  // 開始時刻の入力
+  / 開始時刻の入力
   .field
     = form.label :start_time, "開始時刻", class: "block text-sm font-medium text-gray-700"
   .field
-    = form.datetime_field :start_time, required: true, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+    = form.datetime_field :start_time, \
+      value: (form.object.start_time || Time.current).strftime('%Y-%m-%dT%H:%M'), \
+      required: true, \
+      class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500", \
+      data: { datetime_sync_target: "startTime", action: "change->datetime-sync#updateEndTime" }
 
-  // 終了時刻の入力
+  / 終了時刻の入力
   .field
     = form.label :end_time, "終了時刻", class: "block text-sm font-medium text-gray-700"
   .field
-    = form.datetime_field :end_time, required: true, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+    = form.datetime_field :end_time, \
+      value: (form.object.end_time || (form.object.start_time || Time.current) + 1.hour).strftime('%Y-%m-%dT%H:%M'), \
+      required: true, \
+      class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500", \
+      data: { datetime_sync_target: "endTime" }
 
-  // 活動内容の入力
+  / 活動内容の入力
   .field
     = form.label :content, "活動内容", class: "block text-sm font-medium text-gray-700"
   .field
     = form.text_area :content, rows: 3, required: true, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
 
-  // 送信ボタン
+  / 送信ボタン
   .actions.mt-6
     = form.submit activity.new_record? ? "活動を記録" : "活動を更新", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer"
     = link_to "キャンセル", record_path(record), class: "ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"

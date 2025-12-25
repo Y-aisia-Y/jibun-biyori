@@ -1,36 +1,22 @@
 import { Controller } from "@hotwired/stimulus"
+import Rails from "@rails/ujs"
 
 export default class extends Controller {
-  static targets = ["label", "text"]
-
-  connect() {
-    this.updateUI()
-  }
+  static values = { recordId: Number }
 
   select(event) {
-    this.updateUI(event.target.value)
-  }
+    const rating = event.currentTarget.dataset.ratingValue
 
-  updateUI(selectedValue = null) {
-    const currentRating =
-      selectedValue ||
-      this.element.querySelector('input[type="radio"]:checked')?.value
-
-    this.labelTargets.forEach(label => {
-      const input = document.getElementById(label.getAttribute('for'))
-      const textTarget = label.nextElementSibling
-      const isSelected = input.value === currentRating
-
-      label.classList.toggle('bg-white', isSelected)
-      label.classList.toggle('shadow-xl', isSelected)
-      label.classList.toggle('ring-4', isSelected)
-      label.classList.toggle('ring-indigo-400', isSelected)
-      label.classList.toggle('bg-gray-100', !isSelected)
-      label.classList.toggle('hover:bg-indigo-200', !isSelected)
-
-      textTarget.classList.toggle('text-indigo-600', isSelected)
-      textTarget.classList.toggle('font-bold', isSelected)
-      textTarget.classList.toggle('text-gray-600', !isSelected)
+    Rails.ajax({
+      url: `/records/${this.recordIdValue}/mood`,
+      type: "PATCH",
+      data: `mood[rating]=${rating}`,
+      success: () => {
+        this.element.querySelectorAll("label").forEach((el, index) => {
+          el.classList.toggle("text-yellow-400", index < rating)
+          el.classList.toggle("text-gray-300", index >= rating)
+        })
+      }
     })
   }
 }

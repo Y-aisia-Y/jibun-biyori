@@ -1,0 +1,32 @@
+/ 今日の記録サマリー
+- if @record.persisted?
+  .space-y-2
+    - item_names = ["睡眠時間", "気分", "体調", "意欲", "疲労感"]
+    - item_names.each do |name|
+      - rv = @record.record_values.find { |v| v.record_item.name == name }
+
+      .flex.items-center.gap-3
+        span.w-20.text-sm.font-medium.text-gray-700 = name
+
+        - if rv.blank?
+          span.text-sm.text-gray-400 未入力
+        - else
+          - case rv.record_item.input_type
+          - when "five_step"
+            - rating = rv.value.to_i
+            .flex.gap-0.5
+              - 5.times do |i|
+                span.text-lg(class=(i < rating ? "text-yellow-400" : "text-gray-300")) ★
+
+          - when "time_range"
+            - if rv.sleep_time && rv.wake_time
+              - start_time = rv.sleep_time
+              - end_time   = rv.wake_time
+              - end_time += 1.day if end_time < start_time
+              - hours = ((end_time - start_time) / 1.hour).round(1)
+              span.text-sm
+                = "#{start_time.strftime('%H:%M')} ~ #{end_time.strftime('%H:%M')}（#{hours}h）"
+            - else
+              span.text-sm.text-gray-400 未入力
+- else
+  p.text-gray-500 = "#{l(@date, format: :long)}の記録はまだありません"

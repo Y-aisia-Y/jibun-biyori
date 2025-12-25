@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     # ⭐ record が無い状態から + を押した時用
     post :create_with_activity, on: :collection
 
-    resources :activities, only: [:new, :create]
+    resources :activities, only: [:new, :create, :edit, :update, :destroy]
     resources :record_values, only: [:create, :update]
     resource  :mood, only: [:new, :create, :edit, :update, :destroy]
   end
