@@ -15,9 +15,15 @@ class RecordItem < ApplicationRecord
     custom: "custom"
   }
 
+  enum item_type: {
+    system: 0,
+    user_defined: 1
+  }
+
   validates :name, presence: true, uniqueness: { scope: :user_id }
   validates :input_type, presence: true
   validates :category, presence: true
+  validates :item_type, presence: true
 
   scope :visible, -> { where(is_default_visible: true).order(:display_order) }
   scope :defaults, -> { where(category: "default") }
