@@ -1,14 +1,15 @@
 Rails.application.routes.draw do
-
   get "up" => "rails/health#show", as: :rails_health_check
 
   devise_for :users
 
   resources :records do
-    resources :activities
-    resources :activities, only: [:new, :create]
+    # ⭐ record が無い状態から + を押した時用
+    post :create_with_activity, on: :collection
+
+    resources :activities, only: [:new, :create, :edit, :update, :destroy]
     resources :record_values, only: [:create, :update]
-    resource :mood, only: [:new, :create, :edit, :update, :destroy]
+    resource  :mood, only: [:new, :create, :edit, :update, :destroy]
   end
 
   resources :record_items, except: [:show] do
@@ -20,6 +21,7 @@ Rails.application.routes.draw do
   end
 
   resource :mypage, only: [:show]
+
   get 'welcome', to: 'welcome#index', as: :welcome
 
   authenticated :user do

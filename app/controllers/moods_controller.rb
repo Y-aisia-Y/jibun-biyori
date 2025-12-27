@@ -25,7 +25,7 @@ class MoodsController < ApplicationController
 
   def update
     if @mood.update(mood_params)
-      redirect_to record_path(@record), notice: '気分を更新しました。'
+      redirect_to record_path(@record)
     else
       render :edit, status: :unprocessable_entity
     end

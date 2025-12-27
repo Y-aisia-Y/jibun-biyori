@@ -2,11 +2,6 @@ class RecordItem < ApplicationRecord
   belongs_to :user
   has_many :record_values, dependent: :destroy
 
-  validates :name, presence: true, uniqueness: { scope: :user_id }
-  validates :input_type, presence: true
-
-  scope :visible_ordered, -> { where(is_default_visible: true).order(:display_order) }
-
   enum input_type: {
     five_step: 0,
     numeric: 1,
@@ -15,17 +10,20 @@ class RecordItem < ApplicationRecord
     time_range: 4
   }
 
-  # デフォルト値
-  def default_value
-    case input_type
-    when 'checkbox' then '0'
-    when 'time_range' then '3'
-    else
-      ''
-    end
-  end
+  enum category: {
+    default: "default",
+    custom: "custom"
+  }
 
-  def time_range?
-    input_type == 'time_range'
+  validates :name, presence: true, uniqueness: { scope: :user_id }
+  validates :input_type, presence: true
+  validates :category, presence: true
+
+  scope :visible, -> { where(is_default_visible: true).order(:display_order) }
+  scope :defaults, -> { where(category: "default") }
+  scope :customs,  -> { where(category: "custom") }
+
+  def deletable?
+    custom?
   end
 end

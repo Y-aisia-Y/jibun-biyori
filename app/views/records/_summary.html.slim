@@ -2,11 +2,24 @@
 .text-sm.text-gray-500
   = l(record.recorded_date, format: :long)
 
-/ Mood（必須）
-- mood = record.record_values.find { |rv| rv.record_item.name == "Mood" }
-
-- if mood
+/ 記録項目
+- record.record_values.each do |rv|
   .flex.items-center.space-x-2
-    span.text-sm.font-medium.text-gray-700 気分
-    span.text-lg.font-semibold.text-indigo-600
-      = mood.value
+    span.text-sm.font-medium.text-gray-700 = rv.record_item.name
+
+    - case rv.record_item.input_type
+    - when "five_step"
+      - rating = rv.value.to_i
+      - max_rating = 5
+      .flex
+        - (1..max_rating).each do |i|
+          span.text-lg(class=(i <= rating ? "text-yellow-400" : "text-gray-300")) ★
+      - if rv.value.blank?
+        span.text-sm.text-gray-400 未入力
+
+    - when "time_range"
+      - if rv.sleep_time.present? && rv.wake_time.present?
+        - hours = ((rv.wake_time - rv.sleep_time) / 1.hour).round(2)
+        span.text-sm= "#{rv.sleep_time.strftime('%H:%M')} ~ #{rv.wake_time.strftime('%H:%M')} の合計(#{hours}h)"
+      - else
+        span.text-sm.text-gray-400 未入力

@@ -1,0 +1,73 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* ⭐ */
+.star-filled {
+  font-size: 1.125rem;
+  color: #facc15;
+}
+
+.star-empty {
+  font-size: 1.125rem;
+  color: #d1d5db;
+}
+
+/* ラジオボタン */
+.radio-custom {
+  position: relative;
+  width: 1.5rem;
+  height: 1.5rem;
+  appearance: none;
+  border: 2px solid #d1d5db;
+  border-radius: 50%;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* 中央の● */
+.radio-custom:checked::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background-color: #4f46e5;
+}
+
+/* タイムラインコンテナ */
+.timeline-container {
+  background-color: #f9fafb;
+}
+
+/* 時間軸の各行 */
+.timeline-hour {
+  position: relative;
+}
+
+/* 活動表示エリア */
+.activity-area {
+  position: relative;
+  min-height: 80px;
+}
+
+/* 活動バー */
+.activity-bar {
+  z-index: 10;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.activity-bar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 追加ボタン */
+.add-button {
+  z-index: 20;
+}
