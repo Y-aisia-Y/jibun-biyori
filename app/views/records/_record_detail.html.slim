@@ -1,17 +1,16 @@
 / 詳細な記録表示
-- item_names = ["睡眠時間", "気分", "体調", "意欲", "疲労感"]
-
 .space-y-3
-  - item_names.each do |name|
-    - rv = record.record_values.find { |v| v.record_item.name == name }
+  - record.system_items.each do |item|
+    - rv = record.system_value_for(item)
 
     .flex.items-center.gap-3
-      span.w-20.text-sm.font-medium.text-gray-700 = name
+      span.w-20.text-sm.font-medium.text-gray-700 = item.name
 
-      - if rv.blank?
+      - if rv.blank? || rv.value.blank?
         span.text-sm.text-gray-400 未入力
       - else
-        - case rv.record_item.input_type
+        - case item.input_type
+
         - when "five_step"
           - rating = rv.value.to_i
           .flex.gap-0.5
