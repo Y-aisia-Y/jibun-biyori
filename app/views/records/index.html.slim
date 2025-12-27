@@ -28,7 +28,7 @@
         = "%02d:00" % hour
 
       / 時間ブロック
-      .flex.items-start.border-b.h-20
+      .flex.items-start.border-b.h-20.relative  
         - activities_by_hour = @activities.group_by { |a| a.start_time.hour }
         - if activities_by_hour[hour]
           = render activities_by_hour[hour]
