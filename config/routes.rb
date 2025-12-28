@@ -4,9 +4,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :records do
-    # ⭐ record が無い状態から + を押した時用
     post :create_with_activity, on: :collection
-
     resources :activities, only: [:new, :create, :edit, :update, :destroy]
     resources :record_values, only: [:create, :update]
     resource  :mood, only: [:new, :create, :edit, :update, :destroy]
