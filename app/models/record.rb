@@ -11,7 +11,13 @@ class Record < ApplicationRecord
 
   validates :recorded_date, presence: true, uniqueness: { scope: :user_id }
   
-  def system_value_for(record_item)
-    record_values.find { |rv| rv.record_item_id == record_item.id }
+  # システム項目を取得するメソッド
+  def system_items
+    user.record_items.system_items.visible.ordered
+  end
+  
+  # 指定されたシステム項目の値を取得
+  def system_value_for(item)
+    record_values.find_by(record_item: item)
   end
 end

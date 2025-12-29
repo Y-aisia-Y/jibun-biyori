@@ -59,16 +59,6 @@ class RecordItemsController < ApplicationController
   end
 
   def move_up
-    @record_item.move_higher!
-    redirect_to mypage_path
-  end
-
-  def move_down
-    @record_item.move_lower!
-    redirect_to mypage_path
-  end
-
-  def move_up
     return redirect_to mypage_path unless @record_item.custom?
 
     @record_item.move_higher!
