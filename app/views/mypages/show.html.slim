@@ -1,33 +1,22 @@
-h2 システム項目（表示中）
-ul id="visible_system_items_list" 
-  - @visible_system_items.each do |item|
-    = render "record_items/item", item: item
-
-- if @hidden_system_items.any?
-  h2 システム項目（非表示）
-  ul id="hidden_system_items_list"
-    - @hidden_system_items.each do |item|
+/ システム項目（表示中）
+#visible_system_items
+  h2 システム項目(表示中)
+  ul
+    - @visible_system_items.each do |item|
       = render "record_items/item", item: item
 
+/ システム項目（非表示）
+#hidden_system_items
+  - if @hidden_system_items.any?
+    h2 システム項目(非表示)
+    ul
+      - @hidden_system_items.each do |item|
+        = render "record_items/item", item: item
+
+/ カスタム項目
 h2 カスタム項目
 ul
   - @custom_items.each do |item|
     = render "record_items/item", item: item
-
-/ デフォルト項目
-h2.text-lg.font-bold デフォルト記録項目
-
-- @default_items.each do |item|
-  li
-    = item.name
-    - if item.is_default_visible?
-      = link_to "非表示", toggle_visibility_record_item_path(item),
-        data: { turbo_method: :patch }
-    - else
-      = link_to "表示", toggle_visibility_record_item_path(item),
-        data: { turbo_method: :patch }
-
-/ カスタム項目
-h2.text-lg.font-bold カスタム記録項目
 
 = link_to "＋ 記録項目を追加", new_record_item_path, class: "btn"
