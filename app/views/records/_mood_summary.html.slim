@@ -1,6 +1,6 @@
 / タイムライン用サマリー
 .flex.flex-wrap.gap-6
-  - record.system_items.each do |item|
+  - @record_items.each do |item|
     - rv = record.system_value_for(item)
 
     .flex.items-center.gap-2

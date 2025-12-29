@@ -10,14 +10,19 @@ class RecordsController < ApplicationController
   def index
     @date = params[:date]&.to_date || Date.current
 
-    # 指定した日付の記録を取得（入力フォーム用）
-    @record = current_user.records
-                          .includes(:record_values, :activities)
-                          .find_or_initialize_by(recorded_date: @date)
+    # 指定した日付の記録を取得(入力フォーム用)
+    @record = current_user.records.includes(:record_values, :activities).find_or_initialize_by(recorded_date: @date)
 
-    # 指定した日付の記録だけを取得（表示用）
+    # 指定した日付の記録だけを取得(表示用)
     @records = @record.persisted? ? [@record] : []
-    @activities = @record.persisted? ? @record.activities : Activity.none
+  
+    # 表示項目のみを取得
+    @record_items = current_user.record_items.where(is_default_visible: true).order(:display_order)
+  
+    @activities = @record.persisted? ? @record.activities : []
+
+    @current_hour = Time.current.hour
+    @current_minute = Time.current.min
 
     set_current_time
   end
@@ -27,13 +32,13 @@ class RecordsController < ApplicationController
   end
 
   def new
-    @record = current_user.records.build(
-      recorded_date: params[:date]&.to_date || Date.current
-    )
-    RecordValuesBuilder.new(@record, current_user).call
+    @record = current_user.records.build
+    @record_items = current_user.record_items.where(is_default_visible: true).order(:display_order)
   end
 
   def edit
+    @record = current_user.records.find(params[:id])
+    @record_items = current_user.record_items.where(is_default_visible: true).order(:display_order)
   end
 
   def create
@@ -88,9 +93,7 @@ class RecordsController < ApplicationController
   end
 
   def set_record_items
-    @record_items = current_user.record_items
-                                .where(is_default_visible: true)
-                                .order(:display_order)
+    @record_items = current_user.record_items.system_items.visible.ordered
   end
 
   def build_record_values

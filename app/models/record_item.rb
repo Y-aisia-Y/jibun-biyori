@@ -25,10 +25,11 @@ class RecordItem < ApplicationRecord
   validates :category, presence: true
   validates :item_type, presence: true
 
-  scope :visible, -> { where(is_default_visible: true).order(:display_order) }
-  scope :defaults, -> { where(category: "default") }
-  scope :customs,  -> { where(category: "custom") }
-  scope :ordered, -> { order(:display_order) }
+  scope :system_items, -> { where(item_type: :system) }
+  scope :user_items,   -> { where(item_type: :user_defined) }
+  scope :ordered,      -> { order(:display_order) }
+  scope :visible,      -> { where(is_default_visible: true) }
+  scope :hidden,       -> { where(is_default_visible: false) }
 
   def move_higher!
     upper = user.record_items.where("display_order < ?", display_order).order(display_order: :desc).first
@@ -55,6 +56,18 @@ class RecordItem < ApplicationRecord
   end
 
   def deletable?
-    category == "default"
+    user_defined?
+  end
+
+  def editable?
+    user_defined?
+  end
+
+  def visibility_toggleable?
+    system?
+  end
+
+  def sortable?
+    user_defined?
   end
 end
