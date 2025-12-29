@@ -1,0 +1,10 @@
+h2 システム項目（表示中）
+ul#visible_system_items
+  - visible_system_items.each do |item|
+    = render "record_items/item", item: item
+
+- if hidden_system_items.any?
+  h2 システム項目（非表示）
+  ul#hidden_system_items
+    - hidden_system_items.each do |item|
+      = render "record_items/item", item: item

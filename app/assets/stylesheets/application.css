@@ -1,19 +1,69 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's
- * vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any other CSS
- * files in this directory. Styles in this file should be added after the last require_* statement.
- * It is generally better to create a new file per style scope.
- *
- *= require_tree .
- *= require_self
- */
+/* ⭐ */
+.star-filled {
+  font-size: 1.125rem;
+  color: #facc15;
+}
 
+.star-empty {
+  font-size: 1.125rem;
+  color: #d1d5db;
+}
+
+/* ラジオボタン */
+.radio-custom {
+  position: relative;
+  width: 1.5rem;
+  height: 1.5rem;
+  appearance: none;
+  border: 2px solid #d1d5db;
+  border-radius: 50%;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.radio-custom:checked::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background-color: #4f46e5;
+}
+
+/* タイムライン */
+.timeline-container {
+  background-color: #f9fafb;
+}
+
+.timeline-hour {
+  position: relative;
+}
+
+.activity-area {
+  position: relative;
+  min-height: 80px;
+}
+
+.activity-bar {
+  z-index: 10;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.activity-bar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.add-button {
+  z-index: 20;
+}
+
+/* タイムライン詳細スタイル */
 #timeline {
   position: relative;
   overflow-y: scroll;
@@ -35,7 +85,7 @@
   height: 80px;
 }
 
-/* ★の選択状態をより分かりやすくする */
+/* ★の選択スタイル */
 .star-radio-label {
   position: relative;
   display: inline-block;
@@ -48,17 +98,17 @@
 
 .star-radio-label .star-icon {
   font-size: 1.5rem;
-  color: #d1d5db; /* グレー */
+  color: #d1d5db;
   transition: all 0.2s ease;
 }
 
 .star-radio-label:hover .star-icon {
   transform: scale(1.25);
-  color: #fbbf24; /* ホバー時の黄色 */
+  color: #fbbf24;
 }
 
 .star-radio-label input[type="radio"]:checked ~ .star-icon {
-  color: #facc15; /* 選択時の黄色 */
+  color: #facc15;
   transform: scale(1.1);
   font-weight: bold;
 }

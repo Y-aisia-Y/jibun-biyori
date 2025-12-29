@@ -1,17 +1,16 @@
 / 今日の記録サマリー
-- item_names = ["睡眠時間","気分", "体調", "意欲", "疲労感"]
-
 .space-y-2
-  - item_names.each do |name|
-    - rv = record.record_values.find { |v| v.record_item.name == name }
+  - record.system_items.each do |item|
+    - rv = record.system_value_for(item)
 
     .flex.items-center.gap-3
-      span.w-20.text-sm.font-medium.text-gray-700 = name
+      span.w-20.text-sm.font-medium.text-gray-700 = item.name
 
-      - if rv.blank?
+      - if rv.blank? || rv.value.blank?
         span.text-sm.text-gray-400 未入力
       - else
-        - case rv.record_item.input_type
+        - case item.input_type
+
         - when "five_step"
           - rating = rv.value.to_i
           .flex.gap-0.5
@@ -19,12 +18,14 @@
               span.text-lg(class=(i < rating ? "text-yellow-400" : "text-gray-300")) ★
 
         - when "time_range"
-          - if rv.sleep_time && rv.wake_time
+          - if rv.sleep_time.present? && rv.wake_time.present?
             - start_time = rv.sleep_time
             - end_time   = rv.wake_time
             - end_time += 1.day if end_time < start_time
-            - hours = ((end_time - start_time) / 1.hour).round(1)
+            - total_minutes = ((end_time - start_time) / 60).to_i
+            - hours = total_minutes / 60
+            - minutes = total_minutes % 60
             span.text-sm
-              = "#{start_time.strftime('%H:%M')} ~ #{end_time.strftime('%H:%M')}（#{hours}h）"
+              = "#{start_time.strftime('%H:%M')}〜#{end_time.strftime('%H:%M')}（#{hours}時間#{minutes}分）"
           - else
             span.text-sm.text-gray-400 未入力

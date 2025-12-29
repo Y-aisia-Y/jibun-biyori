@@ -1,0 +1,19 @@
+- if @record_item.is_default_visible?
+  / 非表示→表示に変更された場合
+  = turbo_stream.remove "comment-#{@record_item.id}"
+  = turbo_stream.append "visible_system_items_list" do
+    = render "record_items/item", item: @record_item
+    
+- else
+  / 表示→非表示に変更された場合
+  = turbo_stream.remove "comment-#{@record_item.id}"
+  
+  / 非表示セクションが存在しない場合は作成
+  - unless current_user.record_items.system_items.hidden.exists?
+    = turbo_stream.append "hidden_system_items" do
+      h2 システム項目(非表示)
+      ul id="hidden_system_items_list"
+        = render "record_items/item", item: @record_item
+  - else
+    = turbo_stream.append "hidden_system_items_list" do
+      = render "record_items/item", item: @record_item

@@ -12,11 +12,12 @@
         p.text-sm = "#{l(@date, format: :long)}の記録はまだありません"
 
 / タイムライン
-#timeline[
+#timeline.relative[
   data-controller="timeline"
   data-timeline-current-hour-value=@current_hour
   data-timeline-current-minute-value=@current_minute
 ]
+
   / 現在時刻のライン
   .now-line.absolute.left-0.right-0.h-0.5.bg-red-500.z-10
 
