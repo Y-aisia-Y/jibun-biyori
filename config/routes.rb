@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     post :create_with_activity, on: :collection
     resources :activities, only: [:new, :create, :edit, :update, :destroy]
     resources :record_values, only: [:create, :update]
-    resource  :mood, only: [:new, :create, :edit, :update, :destroy]
+    resource :mood, only: %i[new create edit update destroy]
   end
 
   resources :record_items, except: [:show] do

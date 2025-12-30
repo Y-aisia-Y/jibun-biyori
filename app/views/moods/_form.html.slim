@@ -1,13 +1,3 @@
-/ 5段階評価（⭐）
-.flex.gap-2(
-  data-controller="rating"
-)
-  - (1..5).each do |value|
-    = f.radio_button :rating, value,
-      class: "hidden",
-      data: { action: "change->rating#submit" }
-
-    label.cursor-pointer.text-2xl.transition(
-      class=(mood.rating.to_i >= value ? "text-yellow-400" : "text-gray-300")
-    )
-      | ★
+= form_with model: mood, url: record_mood_path(record) do |f|
+  = render 'rating', f: f
+  = f.submit

@@ -1,0 +1,8 @@
+-# moods/_rating.html.slim
+
+.flex.gap-2 data-controller="rating"
+  - (1..5).each do |value|
+    = f.radio_button :rating,
+                     value,
+                     class: "hidden",
+                     data: { action: "change->rating#submit" }

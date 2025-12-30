@@ -1,11 +1,10 @@
 class RecordsController < ApplicationController
   include CurrentTimeSettable
 
-  before_action :authenticate_user!
   before_action :set_record, only: %i[show edit update destroy]
   before_action :authorize_user!, only: %i[show edit update destroy]
-  before_action :set_record_items, only: %i[new edit show]
-  before_action :build_record_values, only: %i[edit]
+  before_action :set_custom_record_items, only: %i[new edit]
+  before_action :build_record_values, only: %i[new edit]
 
   def index
     @date = params[:date]&.to_date || Date.current
@@ -32,22 +31,21 @@ class RecordsController < ApplicationController
   end
 
   def new
-    @record = current_user.records.build
-    @record_items = current_user.record_items.where(is_default_visible: true).order(:display_order)
+    @record = current_user.records.build(recorded_date: Date.current)
+
   end
 
   def edit
-    @record = current_user.records.find(params[:id])
-    @record_items = current_user.record_items.where(is_default_visible: true).order(:display_order)
   end
 
   def create
     @record = current_user.records.build(record_params)
-    
+
     if @record.save
       redirect_to records_path, success: '記録を作成しました'
     else
-      set_record_items
+      set_custom_record_items
+      build_record_values
       render :new, status: :unprocessable_entity
     end
   end
@@ -56,7 +54,8 @@ class RecordsController < ApplicationController
     if @record.update(record_params)
       redirect_to record_path(@record), success: '記録を更新しました'
     else
-      set_record_items
+      set_custom_record_items
+      build_record_values
       render :edit, status: :unprocessable_entity
     end
   end
@@ -92,12 +91,14 @@ class RecordsController < ApplicationController
     redirect_to records_path, alert: "アクセス権限がありません。"
   end
 
-  def set_record_items
-    @record_items = current_user.record_items.system_items.visible.ordered
+  def set_custom_record_items
+    @record_items = current_user.record_items.where(category: :custom, is_default_visible: true).order(:display_order)
   end
 
   def build_record_values
-    RecordValuesBuilder.new(@record, current_user).call
+    @record_items.each do |item|
+      @record.record_values.find_or_initialize_by(record_item: item)
+    end
   end
 
   def record_params
