@@ -4,8 +4,7 @@ class RecordsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_record, only: %i[show edit update destroy]
   before_action :authorize_user!, only: %i[show edit update destroy]
-  before_action :set_record_items, only: %i[new edit show]
-  before_action :build_record_values, only: %i[edit]
+  before_action :set_record_for_date, only: %i[new_health new_diary]
 
   def index
     @date = params[:date]&.to_date || Date.current
@@ -80,10 +79,37 @@ class RecordsController < ApplicationController
     )
   end
 
+  # 日記ページ
+  def new_diary
+    @items = current_user.record_items.user_items.visible.ordered
+    prepare_record_values(@items)
+    render :diary
+  end
+
+  # 体調管理ページ
+  def new_health
+    @items = current_user.record_items.system_items.visible.ordered
+    prepare_record_values(@items)
+    render :health
+  end
+
   private
 
   def set_record
     @record = current_user.records.find(params[:id])
+  end
+
+  def set_record_for_date
+    date = params[:date]&.to_date || Date.current
+    @record = current_user.records.find_or_initialize_by(recorded_date: date)
+  end
+
+  def prepare_record_values(items)
+    items.each do |item|
+      unless @record.record_values.exists?(record_item_id: item.id)
+        @record.record_values.build(record_item: item)
+      end
+    end
   end
 
   def authorize_user!

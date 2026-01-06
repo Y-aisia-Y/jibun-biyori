@@ -1,0 +1,9 @@
+/ 記録項目一覧（RecordItemベース）
+.record-items-section.space-y-6
+  - record_items.each do |item|
+    - record_value =
+        record.record_values.find { |rv| rv.record_item_id == item.id } ||
+        record.record_values.build(record_item: item)
+
+    = form.fields_for :record_values, record_value do |record_value_fields|
+      = render 'record_value_fields', f: record_value_fields, item: item
