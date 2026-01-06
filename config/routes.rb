@@ -5,6 +5,12 @@ Rails.application.routes.draw do
 
   resources :records do
     post :create_with_activity, on: :collection
+
+    collection do
+      get 'health', to: 'records#new_health'
+      get 'diary',  to: 'records#new_diary'
+    end
+
     resources :activities, only: [:new, :create, :edit, :update, :destroy]
     resources :record_values, only: [:create, :update]
     resource  :mood, only: [:new, :create, :edit, :update, :destroy]
