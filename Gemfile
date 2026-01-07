@@ -25,6 +25,9 @@ gem 'slim-rails'
 # 環境変数管理
 gem 'dotenv-rails'
 
+# Font Awesome
+gem 'font-awesome-sass', '~> 6.5.0'
+
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
 

@@ -1,17 +1,6 @@
-/ システム項目（表示中）
-#visible_system_items
-  h2 システム項目(表示中)
-  ul
-    - @visible_system_items.each do |item|
-      = render "record_items/item", item: item
-
-/ システム項目（非表示）
-#hidden_system_items
-  - if @hidden_system_items.any?
-    h2 システム項目(非表示)
-    ul
-      - @hidden_system_items.each do |item|
-        = render "record_items/item", item: item
+= render "system_items",
+  visible_system_items: @visible_system_items,
+  hidden_system_items: @hidden_system_items
 
 / カスタム項目
 h2 カスタム項目

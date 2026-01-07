@@ -1,12 +1,13 @@
-- @record_items.each do |item|
-  li
-    = item.name
+li id="record_item_#{item.id}"
+  = item.name
 
-    - if item.is_default_visible?
-      = link_to "非表示にする",
-        toggle_visibility_record_item_path(item),
-        data: { turbo_method: :patch }
-    - else
-      = link_to "表示する",
-        toggle_visibility_record_item_path(item),
-        data: { turbo_method: :patch }
+  - if item.is_default_visible?
+    = link_to "非表示",
+      toggle_visibility_record_item_path(item),
+      data: { turbo_method: :patch },
+      class: "toggle-btn"
+  - else
+    = link_to "表示",
+      toggle_visibility_record_item_path(item),
+      data: { turbo_method: :patch },
+      class: "toggle-btn"
