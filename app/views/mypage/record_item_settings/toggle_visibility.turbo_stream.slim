@@ -2,7 +2,7 @@
 
 - if @record_item.is_default_visible?
   = turbo_stream.append "visible_system_items_list" do
-    = render "record_items/item", item: @record_item
+    = render "mypage/record_item_settings/system_item", item: @record_item
 - else
   = turbo_stream.append "hidden_system_items_list" do
-    = render "record_items/item", item: @record_item
+    = render "mypage/record_item_settings/system_item", item: @record_item

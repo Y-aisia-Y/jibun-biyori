@@ -1,0 +1,17 @@
+.container.pt-3
+  h1.mb-4 プロフィール設定
+  
+  = form_with model: @user, url: profile_path, method: :patch, local: true do |f|
+    .mb-3
+      = f.label :nickname, "ニックネーム", class: "form-label"
+      = f.text_field :nickname, class: "form-control"
+    
+    .mb-3
+      = f.label :full_name, "氏名", class: "form-label"
+      / 姓名の入力フィールド
+    
+    .mb-3
+      = f.label :avatar, "プロフィール画像", class: "form-label"
+      / 画像アップロードフィールド
+    
+    = f.submit "更新", class: "btn btn-primary"

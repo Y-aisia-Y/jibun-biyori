@@ -1,13 +1,4 @@
-li id="record_item_#{item.id}"
-  = item.name
-
-  - if item.is_default_visible?
-    = link_to "非表示",
-      toggle_visibility_record_item_path(item),
-      data: { turbo_method: :patch },
-      class: "toggle-btn"
-  - else
-    = link_to "表示",
-      toggle_visibility_record_item_path(item),
-      data: { turbo_method: :patch },
-      class: "toggle-btn"
+h3 カスタム項目
+ul[data-controller="visibility"]
+  - @record_items.each do |item|
+    = render "record_items/custom_item", item: item

@@ -1,10 +1,15 @@
-h1 記録項目の設定
+.container.pt-3
+  .flex.justify-between.items-center.mb-4
+    h1 カスタム項目の管理
+    = link_to "＋ 新しい項目を追加", new_record_item_path, class: "btn btn-primary"
+  
+  - if @record_items.any?
+    ul.space-y-2[data-controller="visibility"]
+      - @record_items.each do |item|
+        = render "record_items/custom_item", item: item
+  - else
+    p.text-gray-500 カスタム項目がまだありません
 
-- @record_items.each do |item|
-  p
-    = item.name
-    | （
-    = item.input_type
-    | ）
-    - if item.is_default
-      span.text-gray-500
+= link_to "← マイページトップに戻る",
+          mypage_root_path,
+          class: "inline-block mt-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-sm"

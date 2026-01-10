@@ -1,0 +1,27 @@
+li.flex.items-center.justify-between.py-2 id="record_item_#{item.id}"
+  span.text-sm = item.name
+
+  .flex.gap-4
+    label.flex.items-center
+      input.mr-1[
+        type="radio"
+        name="record_item_#{item.id}_visibility"
+        value="visible"
+        checked=item.is_default_visible?
+        data-action="change->visibility#toggle"
+        data-item-id=item.id
+        data-url=toggle_visibility_mypage_record_item_path(item)
+      ]
+      span.text-sm 表示
+
+    label.flex.items-center
+      input.mr-1[
+        type="radio"
+        name="record_item_#{item.id}_visibility"
+        value="hidden"
+        checked=!item.is_default_visible?
+        data-action="change->visibility#toggle"
+        data-item-id=item.id
+        data-url=toggle_visibility_mypage_record_item_path(item)
+      ]
+      span.text-sm 非表示

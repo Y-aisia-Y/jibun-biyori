@@ -1,10 +1,10 @@
 class RecordItemsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_record_item, only: %i[edit update destroy move_up move_down toggle_visibility]
-  before_action :reject_default_item, only: [:edit, :update, :destroy]
+  before_action :reject_default_item, only: %i[edit update destroy]
 
   def index
-    @record_items = current_user.record_items.ordered
+    @record_items = current_user.record_items.user_items.ordered
   end
 
   def new
@@ -45,31 +45,35 @@ class RecordItemsController < ApplicationController
     end
   end
 
-  def toggle_visibility
-    @record_item.toggle!(:is_default_visible)
-
-    system_items = current_user.record_items.system_items.ordered
-    @visible_system_items = system_items.visible
-    @hidden_system_items  = system_items.hidden
-
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to mypage_path, notice: "表示設定を更新しました" }
-    end
-  end
-
   def move_up
     return redirect_to mypage_path unless @record_item.custom?
 
     @record_item.move_higher!
-    redirect_to mypage_path
+    redirect_to record_items_path
   end
 
   def move_down
     return redirect_to mypage_path unless @record_item.custom?
 
     @record_item.move_lower!
-    redirect_to mypage_path
+    redirect_to record_items_path
+  end
+
+  def toggle_visibility
+    @record_item.update!(is_default_visible: !@record_item.is_default_visible?)
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.replace(
+            "record_item_#{@record_item.id}",
+            partial: "record_items/custom_item",
+            locals: { item: @record_item }
+          )
+        ]
+      end
+      format.html { redirect_to record_items_path }
+    end
   end
 
   private

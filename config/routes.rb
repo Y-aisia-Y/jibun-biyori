@@ -7,8 +7,8 @@ Rails.application.routes.draw do
     post :create_with_activity, on: :collection
 
     collection do
-      get 'health', to: 'records#new_health'
-      get 'diary',  to: 'records#new_diary'
+      get :health, to: 'records#new_health'
+      get :diary,  to: 'records#new_diary'
     end
 
     resources :activities, only: [:new, :create, :edit, :update, :destroy]
@@ -16,6 +16,9 @@ Rails.application.routes.draw do
     resource  :mood, only: [:new, :create, :edit, :update, :destroy]
   end
 
+  # -----------------------------
+  # カスタム項目管理（user定義）
+  # -----------------------------
   resources :record_items, except: [:show] do
     member do
       patch :move_up
@@ -24,8 +27,30 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :mypage, only: [:show]
+  # -----------------------------
+  # プロフィール設定
+  # -----------------------------
+  resource :profile, only: [:edit, :update]
 
+  # -----------------------------
+  # マイページ
+  # -----------------------------
+  namespace :mypage do
+    root to: 'base#show'
+    # system項目の表示/非表示
+    resource :record_item_settings, only: :show
+
+    # system項目のトグル操作専用
+    resources :record_items, only: [] do
+      member do
+        patch :toggle_visibility
+      end
+    end
+  end
+
+  # -----------------------------
+  # トップ・ウェルカム
+  # -----------------------------
   get 'welcome', to: 'welcome#index', as: :welcome
 
   authenticated :user do
