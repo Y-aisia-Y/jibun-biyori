@@ -1,0 +1,18 @@
+.flex.flex-col.max-w-3xl.mx-auto.p-6.space-y-4
+  h1.text-3xl.font-bold.mb-4
+    | マイページ
+
+  nav.grid.grid-cols-1.md:grid-cols-3.gap-4
+    = link_to mypage_record_item_settings_path, class: 'block p-4 rounded-lg border hover:bg-gray-50' do
+      h2.font-semibold 記録項目の設定
+      p.text-sm.text-gray-500 system項目の表示 / 非表示を管理します
+
+    = link_to record_items_path, class: 'block p-4 rounded-lg border hover:bg-gray-50' do
+      h2.font-semibold カスタム項目
+      p.text-sm.text-gray-500 個人で作った項目の管理・作成・並び替え
+
+    = link_to profile_path, class: 'block p-4 rounded-lg border hover:bg-gray-50' do
+      h2.font-semibold プロフィール設定
+      p.text-sm.text-gray-500 名前や画像を編集します
+
+      = link_to 'TOP', authenticated_root_path, class: 'text-sm text-indigo-600 hover:underline'

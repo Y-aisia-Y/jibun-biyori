@@ -1,0 +1,13 @@
+h3.font-semibold.mb-2 表示中
+ul#visible_system_items_list[data-controller="visibility"]
+  - @visible_system_items.each do |item|
+    = render "mypage/record_item_settings/system_item", item: item
+
+h3.font-semibold.mb-2.mt-6 非表示
+ul#hidden_system_items_list[data-controller="visibility"]
+  - @hidden_system_items.each do |item|
+    = render "mypage/record_item_settings/system_item", item: item
+
+= link_to "← マイページトップに戻る",
+          mypage_root_path,
+          class: "inline-block mt-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-sm"

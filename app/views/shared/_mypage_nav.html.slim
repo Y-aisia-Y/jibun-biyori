@@ -1,0 +1,13 @@
+nav.mb-4
+  ul.flex.gap-4.border-b
+    li
+      = link_to "記録項目の設定", mypage_record_item_settings_path,
+        class: "px-4 py-2 inline-block hover:bg-gray-100"
+
+    li
+      = link_to "カスタム項目", record_items_path,
+        class: "px-4 py-2 inline-block hover:bg-gray-100"
+
+    li
+      = link_to "プロフィール設定", edit_profile_path,
+        class: "px-4 py-2 inline-block hover:bg-gray-100"

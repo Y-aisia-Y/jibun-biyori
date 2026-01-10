@@ -1,3 +1,5 @@
+@import 'font-awesome';
+
 /* ⭐ */
 .star-filled {
   font-size: 1.125rem;
@@ -8,6 +10,7 @@
   font-size: 1.125rem;
   color: #d1d5db;
 }
+
 
 /* ラジオボタン */
 .radio-custom {
@@ -33,6 +36,7 @@
   border-radius: 50%;
   background-color: #4f46e5;
 }
+
 
 /* タイムライン */
 .timeline-container {
@@ -63,6 +67,7 @@
   z-index: 20;
 }
 
+
 /* タイムライン詳細スタイル */
 #timeline {
   position: relative;
@@ -84,6 +89,7 @@
   position: relative;
   height: 80px;
 }
+
 
 /* ★の選択スタイル */
 .star-radio-label {
@@ -128,3 +134,35 @@
 .star-radio-label input[type="radio"]:checked ~ .circle-icon {
   opacity: 1;
 }
+
+
+/* マイページのラジオボタン */
+.toggle-switch {
+  width: 44px;
+  height: 24px;
+  background-color: #d1d5db;
+  border-radius: 9999px;
+  position: relative;
+  display: inline-block;
+  transition: background-color 0.2s ease;
+}
+
+.toggle-switch.on {
+  background-color: #22c55e;
+}
+
+.toggle-thumb {
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 9999px;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s ease;
+}
+
+.toggle-switch.on .toggle-thumb {
+  transform: translateX(20px);
+}
+
