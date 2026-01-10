@@ -1,0 +1,8 @@
+- if object.errors.any?
+  .alert.alert-danger.alert-dismissible.fade.show role="alert"
+    button.btn-close type="button" data-bs-dismiss="alert" aria-label="Close"
+    h4.alert-heading
+      = t('defaults.message.error_count', count: object.errors.count)
+    ul.mb-0
+      - object.errors.full_messages.each do |message|
+        li = message

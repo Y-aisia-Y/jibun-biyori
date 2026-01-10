@@ -1,17 +1,31 @@
-.container.pt-3
-  h1.mb-4 プロフィール設定
-  
+.section.max-w-xl.mx-auto.bg-white.rounded-xl.shadow-md.p-6
+  h1.text-xl.font-semibold.mb-6 プロフィール編集
+
   = form_with model: @user, url: profile_path, method: :patch, local: true do |f|
-    .mb-3
-      = f.label :nickname, "ニックネーム", class: "form-label"
-      = f.text_field :nickname, class: "form-control"
+    .mb-4
+      = f.label :avatar, "プロフィール画像", class: "block font-semibold mb-2"
+      = f.file_field :avatar, class: 'w-full border rounded px-3 py-2', accept: 'image/*', onchange: 'previewImage(this);'
+      = f.hidden_field :avatar_cache
     
-    .mb-3
-      = f.label :full_name, "氏名", class: "form-label"
-      / 姓名の入力フィールド
-    
-    .mb-3
-      = f.label :avatar, "プロフィール画像", class: "form-label"
-      / 画像アップロードフィールド
-    
-    = f.submit "更新", class: "btn btn-primary"
+    .mb-4
+      - if @user.avatar.present?
+        = image_tag @user.avatar.url, class: "rounded-full object-cover border", id: "preview", style: "width: 100px; height: 100px;"
+      - else
+        .rounded-full.bg-gray-200.flex.items-center.justify-center.border id="preview" style="width: 100px; height: 100px;"
+          span.text-4xl 👤
+
+    .mb-4
+      = f.label :nickname, "ニックネーム", class: "block font-semibold mb-1"
+      = f.text_field :nickname, class: "w-full border rounded px-3 py-2"
+
+    .mb-4
+      = f.label :last_name, "姓", class: "block font-semibold mb-1"
+      = f.text_field :last_name, class: "w-full border rounded px-3 py-2"
+
+    .mb-4
+      = f.label :first_name, "名", class: "block font-semibold mb-1"
+      = f.text_field :first_name, class: "w-full border rounded px-3 py-2"
+
+    .flex.gap-4.mt-6
+      = f.submit "保存する", class: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+      = link_to "戻る", profile_path, class: "px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"

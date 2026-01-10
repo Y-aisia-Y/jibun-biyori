@@ -1,0 +1,32 @@
+.section.max-w-xl.mx-auto.bg-white.rounded-xl.shadow-md.p-6
+  h1.text-2xl.font-bold.mb-8 プロフィール
+
+  .flex.items-center.gap-6.mb-8
+    - if @user.avatar.present?
+      = image_tag @user.avatar.url, class: "rounded-full object-cover border bg-gray-100", style: "width: 96px; height: 96px;"
+    - else
+      .rounded-full.bg-gray-200.flex.items-center.justify-center.border style="width: 96px; height: 96px;"
+        span.text-4xl 👤
+
+    .flex-1
+      p.text-xl.font-semibold
+        = @user.nickname.presence || "未設定"
+      p.text-sm.text-gray-500
+        = @user.email
+
+  .border-t.pt-6
+    dl.space-y-3
+      div.flex
+        dt.w-24.text-gray-500.text-sm 姓
+        dd.flex-1 = @user.last_name.presence || "未設定"
+
+      div.flex
+        dt.w-24.text-gray-500.text-sm 名
+        dd.flex-1 = @user.first_name.presence || "未設定"
+
+  .mt-8.flex.justify-end
+    = link_to "編集する", edit_profile_path, class: "px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+
+= link_to "← マイページトップに戻る",
+          mypage_root_path,
+          class: "inline-block mt-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-sm"

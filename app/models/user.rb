@@ -7,6 +7,18 @@ class User < ApplicationRecord
 
   after_create :create_default_record_items
 
+  # Devise の設定
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
+
+  # CarrierWaveのマウント
+  mount_uploader :avatar, AvatarUploader
+  
+  # プロフィール用のバリデーション
+  validates :nickname, length: { maximum: 50 }, allow_blank: true
+  validates :first_name, length: { maximum: 50 }, allow_blank: true
+  validates :last_name, length: { maximum: 50 }, allow_blank: true
+
   private
 
   def create_default_record_items

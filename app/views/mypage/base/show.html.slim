@@ -11,6 +11,8 @@
       h2.font-semibold カスタム項目
       p.text-sm.text-gray-500 個人で作った項目の管理・作成・並び替え
 
-    = link_to edit_profile_path, class: 'block p-4 rounded-lg border hover:bg-gray-50' do
+    = link_to profile_path, class: 'block p-4 rounded-lg border hover:bg-gray-50' do
       h2.font-semibold プロフィール設定
       p.text-sm.text-gray-500 名前や画像を編集します
+
+      = link_to 'TOP', authenticated_root_path, class: 'text-sm text-indigo-600 hover:underline'

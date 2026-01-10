@@ -16,9 +16,7 @@ Rails.application.routes.draw do
     resource  :mood, only: [:new, :create, :edit, :update, :destroy]
   end
 
-  # -----------------------------
   # カスタム項目管理（user定義）
-  # -----------------------------
   resources :record_items, except: [:show] do
     member do
       patch :move_up
@@ -27,14 +25,10 @@ Rails.application.routes.draw do
     end
   end
 
-  # -----------------------------
   # プロフィール設定
-  # -----------------------------
-  resource :profile, only: [:edit, :update]
+  resource :profile, only: %i[show edit update]
 
-  # -----------------------------
   # マイページ
-  # -----------------------------
   namespace :mypage do
     root to: 'base#show'
     # system項目の表示/非表示
@@ -48,9 +42,7 @@ Rails.application.routes.draw do
     end
   end
 
-  # -----------------------------
   # トップ・ウェルカム
-  # -----------------------------
   get 'welcome', to: 'welcome#index', as: :welcome
 
   authenticated :user do

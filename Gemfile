@@ -22,8 +22,15 @@ gem 'devise'
 # ビューテンプレート
 gem 'slim-rails'
 
+# 画像アップロード設定
+gem 'carrierwave', '~> 3.0'
+gem 'mini_magick'
+
 # 環境変数管理
 gem 'dotenv-rails'
+
+# i18n
+gem 'rails-i18n', '~> 7.0.0'
 
 # Font Awesome
 gem 'font-awesome-sass', '~> 6.5.0'

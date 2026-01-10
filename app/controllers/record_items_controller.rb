@@ -19,7 +19,7 @@ class RecordItemsController < ApplicationController
     @record_item.item_type = "user_defined"
 
     if @record_item.save
-      redirect_to mypage_path, notice: "記録項目を作成しました"
+      redirect_to record_items_path, notice: "記録項目を作成しました"
     else
       render :new, status: :unprocessable_entity
     end
@@ -30,7 +30,7 @@ class RecordItemsController < ApplicationController
 
   def update
     if @record_item.update(record_item_update_params)
-      redirect_to mypage_path, notice: "記録項目を更新しました"
+      redirect_to record_items_path, notice: "記録項目を更新しました"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -38,25 +38,25 @@ class RecordItemsController < ApplicationController
 
   def destroy
     if @record_item.system?
-      redirect_to mypage_path, alert: "システム項目は削除できません"
+      redirect_to record_items_path, alert: "システム項目は削除できません"
     else
       @record_item.destroy
-      redirect_to mypage_path, notice: "記録項目を削除しました"
+      redirect_to record_items_path, notice: "記録項目を削除しました"
     end
   end
 
   def move_up
-    return redirect_to mypage_path unless @record_item.custom?
+    return redirect_to mypage_root_path, status: :see_other unless @record_item.custom?
 
     @record_item.move_higher!
-    redirect_to record_items_path
+    redirect_to record_items_path, status: :see_other
   end
 
   def move_down
-    return redirect_to mypage_path unless @record_item.custom?
+    return redirect_to mypage_root_path, status: :see_other unless @record_item.custom?
 
     @record_item.move_lower!
-    redirect_to record_items_path
+    redirect_to record_items_path, status: :see_other
   end
 
   def toggle_visibility
