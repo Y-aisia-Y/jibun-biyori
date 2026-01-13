@@ -122,10 +122,6 @@ class RecordsController < ApplicationController
     @record_items = current_user.record_items.system_items.visible.ordered
   end
 
-  def build_record_values
-    RecordValuesBuilder.new(@record, current_user).call
-  end
-
   def record_params
     params.require(:record).permit(
       :recorded_date,
