@@ -13,7 +13,7 @@ Rails.application.routes.draw do
 
     resources :activities, only: [:new, :create, :edit, :update, :destroy]
     resources :record_values, only: [:create, :update]
-    resource  :mood, only: [:new, :create, :edit, :update, :destroy]
+    resource  :mood
   end
 
   # カスタム項目管理（user定義）
