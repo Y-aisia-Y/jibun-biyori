@@ -1,0 +1,4 @@
+- record.system_items.each do |item|
+  - rv = record.system_value_for(item) || record.record_values.build(record_item: item)
+  = form.fields_for :record_values, rv do |f|
+    = render "record_values/inputs/field", f: f

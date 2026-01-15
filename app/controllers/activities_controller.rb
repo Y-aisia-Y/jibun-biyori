@@ -11,8 +11,6 @@ class ActivitiesController < ApplicationController
   end
 
   def new
-    @activity = @record.activities.build
-    @record = Record.find(params[:record_id])
     @date = params[:date]&.to_date || @record.recorded_date
     @hour = params[:hour].to_i
 

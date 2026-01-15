@@ -13,7 +13,7 @@ Rails.application.routes.draw do
 
     resources :activities, only: [:new, :create, :edit, :update, :destroy]
     resources :record_values, only: [:create, :update]
-    resource  :mood, only: [:new, :create, :edit, :update, :destroy]
+    resource  :mood
   end
 
   # カスタム項目管理（user定義）
@@ -42,14 +42,15 @@ Rails.application.routes.draw do
     end
   end
 
-  # トップ・ウェルカム
+  # ウェルカムページ
   get 'welcome', to: 'welcome#index', as: :welcome
-
-  authenticated :user do
-    root 'pages#top', as: :authenticated_root
-  end
 
   unauthenticated do
     root 'welcome#index', as: :unauthenticated_root
+  end
+
+  # ログイン後にアクティブページへ
+  authenticated :user do
+    root 'records#index', as: :authenticated_root
   end
 end

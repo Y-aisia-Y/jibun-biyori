@@ -10,19 +10,15 @@ class RecordsController < ApplicationController
     @date = params[:date]&.to_date || Date.current
 
     # 指定した日付の記録を取得(入力フォーム用)
-    @record = current_user.records.includes(:record_values, :activities).find_or_initialize_by(recorded_date: @date)
+    @record = current_user.records
+                          .includes(:record_values, :activities)
+                          .find_or_initialize_by(recorded_date: @date)
 
     # 指定した日付の記録だけを取得(表示用)
     @records = @record.persisted? ? [@record] : []
   
-    # 表示項目のみを取得
-    @record_items = current_user.record_items.where(is_default_visible: true).order(:display_order)
-  
+    set_all_visible_items
     @activities = @record.persisted? ? @record.activities : []
-
-    @current_hour = Time.current.hour
-    @current_minute = Time.current.min
-
     set_current_time
   end
 
@@ -32,19 +28,19 @@ class RecordsController < ApplicationController
 
   def new
     @record = current_user.records.build
-    @record_items = current_user.record_items.where(is_default_visible: true).order(:display_order)
+    set_all_visible_items
   end
 
   def edit
-    @record = current_user.records.find(params[:id])
-    @record_items = current_user.record_items.where(is_default_visible: true).order(:display_order)
+    set_all_visible_items
   end
 
   def create
-    @record = current_user.records.build(record_params)
-    
+    @record = Record.new(record_params)
+    @record.user = current_user
+  
     if @record.save
-      redirect_to records_path, success: '記録を作成しました'
+      redirect_to_record_date(@record, '記録を作成しました')
     else
       set_record_items
       render :new, status: :unprocessable_entity
@@ -53,7 +49,7 @@ class RecordsController < ApplicationController
 
   def update
     if @record.update(record_params)
-      redirect_to record_path(@record), success: '記録を更新しました'
+      redirect_to_record_date(@record, '記録を更新しました')
     else
       set_record_items
       render :edit, status: :unprocessable_entity
@@ -61,33 +57,30 @@ class RecordsController < ApplicationController
   end
 
   def destroy
-    @record.destroy!
-    redirect_to records_url, notice: "記録を削除しました。", status: :see_other
+    recorded_date = @record.recorded_date
+    
+    if @record.destroy
+      redirect_to records_url(date: recorded_date), notice: "記録を削除しました。", status: :see_other
+    else
+      redirect_to records_url(date: recorded_date), alert: "記録の削除に失敗しました。", status: :see_other
+    end
   end
 
   def create_with_activity
     date = params[:date]&.to_date || Date.current
+    record = current_user.records.find_or_create_by!(recorded_date: date)
 
-    record = current_user.records.find_or_create_by!(
-      recorded_date: date
-    )
-
-    redirect_to new_record_activity_path(
-      record,
-      date: date,
-      hour: params[:hour]
-    )
+    redirect_to new_record_activity_path(record, date: date, hour: params[:hour])
   end
 
-  # 日記ページ
   def new_diary
     @items = current_user.record_items.user_items.visible.ordered
     prepare_record_values(@items)
     render :diary
   end
 
-  # 体調管理ページ
   def new_health
+    @date = params[:date]&.to_date || Date.current
     @items = current_user.record_items.system_items.visible.ordered
     prepare_record_values(@items)
     render :health
@@ -102,6 +95,7 @@ class RecordsController < ApplicationController
   def set_record_for_date
     date = params[:date]&.to_date || Date.current
     @record = current_user.records.find_or_initialize_by(recorded_date: date)
+    @record.recorded_date = date
   end
 
   def prepare_record_values(items)
@@ -122,8 +116,12 @@ class RecordsController < ApplicationController
     @record_items = current_user.record_items.system_items.visible.ordered
   end
 
-  def build_record_values
-    RecordValuesBuilder.new(@record, current_user).call
+  def set_all_visible_items
+    @record_items = current_user.record_items.where(is_default_visible: true).order(:display_order)
+  end
+
+  def redirect_to_record_date(record, message)
+    redirect_to records_path(date: record.recorded_date), success: message
   end
 
   def record_params
