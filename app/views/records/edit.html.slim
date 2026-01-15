@@ -2,4 +2,7 @@
   h1.text-3xl.font-bold.text-gray-800.mb-6.text-center
     | 編集
 
-  = render 'form', record: @record
+  = form_with model: @record do |f|
+    = f.hidden_field :recorded_date, value: @record.recorded_date
+  
+    = render "records/record_values/system_fields", form: f, record: @record

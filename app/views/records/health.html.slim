@@ -1,13 +1,17 @@
-h1.text-center 体調管理
+h1.text-center
+  = @record.recorded_date.strftime('%Y年%m月%d日')
+  | の記録
 
 = form_with model: @record do |f|
-  = f.hidden_field :recorded_date
+  = f.hidden_field :recorded_date, value: @record.recorded_date
 
   .space-y-4
-    = f.fields_for :record_values do |rv_f|
-      - if rv_f.object.record_item.system?
-        = render "record_value_fields", f: rv_f
+    = render "records/record_values/system_fields",
+             form: f,
+             record: @record
 
   .mt-6.text-center
     = f.submit "体調を記録する",
       class: "inline-flex justify-center py-2 px-6 rounded-md bg-indigo-600 text-white hover:bg-indigo-700"
+    = f.submit 'TOPに戻る', records_path,
+      class: "text-indigo-600 hover:text-indigo-800 font-medium mt-6 inline-block transition duration-150"

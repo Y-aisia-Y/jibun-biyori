@@ -1,0 +1,6 @@
+.field
+  = f.label :value, item.name
+  .flex.gap-1
+    - 1.upto(5) do |i|
+      = f.radio_button :value, i
+      = i

@@ -1,0 +1,9 @@
+= form.fields_for :record_values do |f|
+  - next unless f.object.record_item.user_defined?
+
+  .record-value-field(
+    data-controller="record-value"
+    data-record-value-target="field"
+  )
+    = f.hidden_field :_destroy, data: { record_value_target: "destroyInput" }
+    = render "record_values/inputs/field", f: f

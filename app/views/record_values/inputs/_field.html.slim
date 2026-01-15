@@ -1,5 +1,3 @@
-/ デフォルトオプション
-
 - item = f.object.record_item
 - return unless item
 
@@ -13,27 +11,28 @@
   .input-area.mt-2
     - case item.input_type.to_sym
 
-    / 5段階評価
+    / ⭐ 5段階評価
     - when :five_step
       .flex.items-center.justify-between.p-3.bg-white.rounded-md
-        - [1, 2, 3, 4, 5].each do |val|
+        - (1..5).each do |val|
           - input_id = "item_#{item.id}_value_#{val}"
           - checked = f.object.value.to_i == val
           label.flex.flex-col.items-center.cursor-pointer for=input_id class=(checked ? "bg-indigo-50 rounded-lg p-2" : "p-2")
-            = f.radio_button :value, val, id: input_id, checked: checked, class: "radio-custom"
-            span.mt-2.text-sm.font-bold class=(checked ? "text-indigo-600" : "text-gray-700") = val.to_s
+            = f.radio_button :value, val, id: input_id, checked: checked
+            span.mt-2.text-sm.font-bold class=(checked ? "text-indigo-600" : "text-gray-700") = val
 
     / 数値入力
     - when :numeric
-      = f.number_field :value, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+      = f.number_field :value,
+        class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
 
     / チェックボックス
     - when :checkbox
       - check_id = "item_#{item.id}_check"
-      .flex.items-center.p-3.bg-white.rounded-md.shadow-inner
-        = f.check_box :value, { id: check_id, class: "h-6 w-6 text-indigo-600 rounded border-gray-300 cursor-pointer" }, "1", "0"
-        = f.label :value, "実施した", for: check_id, class: "ml-3 text-base text-gray-700 font-bold cursor-pointer"
-
+      .flex.items-center.p-3.bg-white.rounded-md
+        = f.check_box :value, { id: check_id }, "1", "0"
+        = f.label :value, "実施した", for: check_id, class: "ml-3 font-bold"
+        
     / 時間範囲
     - when :time_range
       .flex.items-center.space-x-2
