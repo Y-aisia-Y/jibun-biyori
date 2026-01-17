@@ -1,40 +1,16 @@
-/ マイページのカスタム項目
-li.flex.items-center.justify-between.py-2[
-  id="record_item_#{item.id}"
-]
+/ カスタムトグル
+li.flex.items-center.justify-between.py-2 id="record_item_#{item.id}" data-controller="visibility"
   span.text-sm = item.name
 
-  .flex.gap-4
-    label.flex.items-center
-      input.mr-1[
-        type="radio"
-        name="record_item_#{item.id}_visibility"
-        value="visible"
-        checked=item.is_default_visible?
-        data-action="change->visibility#toggle"
-        data-item-id=item.id
-        data-url=toggle_visibility_record_item_path(item)
-      ]
-      span.text-sm 表示
-
-    label.flex.items-center
-      input.mr-1[
-        type="radio"
-        name="record_item_#{item.id}_visibility"
-        value="hidden"
-        checked=!item.is_default_visible?
-        data-action="change->visibility#toggle"
-        data-item-id=item.id
-        data-url=toggle_visibility_record_item_path(item)
-      ]
-      span.text-sm 非表示
+  label.toggle-switch.cursor-pointer class=(item.is_default_visible? ? "on" : "") data-action="click->visibility#toggle" data-item-id=item.id data-url=toggle_visibility_record_item_path(item)
+    span.toggle-thumb
 
   .flex.gap-2.ml-4
-    = link_to move_up_record_item_path(item), data: { turbo_method: :patch }, class: "text-blue-500 hover:text-blue-700", title: "上に移動"
+    = link_to move_up_record_item_path(item), data: { turbo_method: :patch }, class: "text-blue-500 hover:text-blue-700", title: "上に移動" do
       svg.w-5.h-5 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
         path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"
     
-    = link_to move_down_record_item_path(item), data: { turbo_method: :patch }, class: "text-blue-500 hover:text-blue-700", title: "下に移動"
+    = link_to move_down_record_item_path(item), data: { turbo_method: :patch }, class: "text-blue-500 hover:text-blue-700", title: "下に移動" do
       svg.w-5.h-5 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
         path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"
     

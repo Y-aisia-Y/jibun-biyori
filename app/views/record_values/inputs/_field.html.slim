@@ -13,13 +13,13 @@
 
     / ⭐ 5段階評価
     - when :five_step
-      .flex.items-center.justify-between.p-3.bg-white.rounded-md
+      .star-rating.flex.gap-1.p-3.bg-white.rounded-md
         - (1..5).each do |val|
           - input_id = "item_#{item.id}_value_#{val}"
-          - checked = f.object.value.to_i == val
-          label.flex.flex-col.items-center.cursor-pointer for=input_id class=(checked ? "bg-indigo-50 rounded-lg p-2" : "p-2")
-            = f.radio_button :value, val, id: input_id, checked: checked
-            span.mt-2.text-sm.font-bold class=(checked ? "text-indigo-600" : "text-gray-700") = val
+          = f.radio_button :value, val, id: input_id, class: "hidden peer"
+          label.star-label for=input_id
+            span.star ★
+
 
     / 数値入力
     - when :numeric

@@ -1,50 +1,58 @@
 @import 'font-awesome';
 
-/* ⭐ */
-.star-filled {
-  font-size: 1.125rem;
-  color: #facc15;
+/*⭐ 星評価 */
+.star-rating {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  gap: 0.25rem;
 }
 
-.star-empty {
-  font-size: 1.125rem;
+.star-input,
+input[type="radio"].hidden.peer {
+  display: none;
+}
+
+.star {
+  font-size: 1.4rem;
   color: #d1d5db;
+  transition: color 0.2s ease;
 }
 
-
-/* ラジオボタン */
-.radio-custom {
-  position: relative;
-  width: 1.5rem;
-  height: 1.5rem;
-  appearance: none;
-  border: 2px solid #d1d5db;
-  border-radius: 50%;
-  background-color: white;
+.star-label {
   cursor: pointer;
-  transition: all 0.2s;
 }
 
-.radio-custom:checked::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 0.75rem;
-  height: 0.75rem;
-  border-radius: 50%;
-  background-color: #4f46e5;
+.star-label:hover .star,
+.star-label:hover ~ .star-label .star {
+  color: #fbbf24;
+}
+
+input[type="radio"]:checked + .star-label .star,
+input[type="radio"]:checked + .star-label ~ .star-label .star {
+  color: #facc15;
 }
 
 
 /* タイムライン */
-.timeline-container {
-  background-color: #f9fafb;
+.timeline {
+  &-container {
+    background-color: #f9fafb;
+  }
+
+  &-hour {
+    position: relative;
+  }
 }
 
-.timeline-hour {
+#timeline {
   position: relative;
+  overflow-y: scroll;
+  max-height: 60vh;
+}
+
+.hour-block {
+  position: relative;
+  height: 80px;
 }
 
 .activity-area {
@@ -56,23 +64,15 @@
   z-index: 10;
   cursor: pointer;
   transition: all 0.2s ease;
-}
 
-.activity-bar:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .add-button {
   z-index: 20;
-}
-
-
-/* タイムライン詳細スタイル */
-#timeline {
-  position: relative;
-  overflow-y: scroll;
-  max-height: 60vh;
 }
 
 .now-line {
@@ -85,58 +85,8 @@
   pointer-events: none;
 }
 
-.hour-block {
-  position: relative;
-  height: 80px;
-}
 
-
-/* ★の選択スタイル */
-.star-radio-label {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-}
-
-.star-radio-label input[type="radio"] {
-  display: none;
-}
-
-.star-radio-label .star-icon {
-  font-size: 1.5rem;
-  color: #d1d5db;
-  transition: all 0.2s ease;
-}
-
-.star-radio-label:hover .star-icon {
-  transform: scale(1.25);
-  color: #fbbf24;
-}
-
-.star-radio-label input[type="radio"]:checked ~ .star-icon {
-  color: #facc15;
-  transform: scale(1.1);
-  font-weight: bold;
-}
-
-.star-radio-label .circle-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2.5rem;
-  color: #facc15;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  pointer-events: none;
-}
-
-.star-radio-label input[type="radio"]:checked ~ .circle-icon {
-  opacity: 1;
-}
-
-
-/* マイページのラジオボタン */
+/* マイページのトグルスイッチ */
 .toggle-switch {
   width: 44px;
   height: 24px;
@@ -145,24 +95,23 @@
   position: relative;
   display: inline-block;
   transition: background-color 0.2s ease;
-}
 
-.toggle-switch.on {
-  background-color: #22c55e;
-}
+  &.on {
+    background-color: #22c55e;
+  }
 
-.toggle-thumb {
-  width: 20px;
-  height: 20px;
-  background-color: white;
-  border-radius: 9999px;
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  transition: transform 0.2s ease;
-}
+  .toggle-thumb {
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 9999px;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.2s ease;
+  }
 
-.toggle-switch.on .toggle-thumb {
-  transform: translateX(20px);
+  &.on .toggle-thumb {
+    transform: translateX(20px);
+  }
 }
-
