@@ -9,13 +9,14 @@ html
     = stylesheet_link_tag "application", "data-turbo-track": "reload"
     = javascript_importmap_tags
   body
-    header
-      - if user_signed_in?
-        = button_to "ログアウト", destroy_user_session_path, method: :delete
-
+    / フラッシュメッセージ
     - if notice
       p.notice= notice
     - if alert
       p.alert= alert
 
+    / ヘッダー
+    = render "shared/header"
+    
+    / メインコンテンツ
     = yield

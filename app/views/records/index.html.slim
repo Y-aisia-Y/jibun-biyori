@@ -1,3 +1,22 @@
+/ ヘッダー
+.header.bg-green-50.px-4.py-3.flex.items-center.justify-between.relative[data-controller="menu"]
+  h1.text-lg.font-bold.text-green-800 🌿じぶん日和
+  button.text-2xl.p-2.hover:bg-green-100.rounded.transition[data-action="click->menu#toggle"] ☰
+
+  #menu-panel.hidden.bg-white.border.border-gray-200.shadow-lg.rounded-md.absolute.right-4.top-full.mt-2.w-auto.z-50[data-menu-target="panel"]
+    ul.py-1
+      li
+        hr.my-1.border-gray-200
+      li
+        = link_to "体調を記録", health_records_path,
+          class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
+      li
+        = link_to "日記の記入", diary_records_path,
+          class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
+      li
+        = link_to "マイページ", mypage_root_path,
+          class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
+
 .bg-gray-50.border-b
   / 日付ナビ
   .px-4.py-3
@@ -6,6 +25,13 @@
   / サマリー
   .px-4.py-3.space-y-2
     - if @record.persisted?
+      / 今日の体調と編集ボタンを横並びに配置
+      .flex.items-center.justify-between.mb-4
+        .text-1xl.font-bold.text-gray-800
+          | 今日の体調
+        = link_to '編集', edit_record_path(@record), class: 'text-sm text-yellow-600 hover:underline'
+      
+      / サマリー表示
       = render "mood_summary", record: @record
     - else
       .text-center.text-gray-500.py-4
@@ -43,50 +69,3 @@
             create_with_activity_records_path(date: @date, hour: hour),
             method: :post,
             class: "add-button hidden group-hover:flex"
-
-.max-w-2xl.mx-auto.space-y-4.relative.z-20
-  h1.text-2xl.font-bold.text-center 今日の記録
-
-  .flex.justify-center.gap-4
-    = link_to "体調を記録する", health_records_path(date: @record.recorded_date), class: "px-4 py-2 rounded bg-green-600 text-white"
-    = link_to "日記を書く", diary_records_path(date: @record.recorded_date), class: "px-4 py-2 rounded bg-blue-600 text-white"
-
-
-/ 一応残しておく
-
-.max-w-4xl.mx-auto
-  .flex.justify-between.items-center.mb-6
-    h1.text-3xl.font-bold.text-gray-800
-      | 記録一覧
-
-    = link_to new_record_path, class: 'px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg shadow-md hover:bg-indigo-700 transition duration-150' do
-      | 新規作成
-
-  - if @records.empty?
-    .text-center.p-10.bg-white.rounded-xl.shadow-inner.mt-8
-      p.text-xl.text-gray-500.mb-4
-        | 記録がありません。
-    .text-center.mt-4
-      = link_to 'TOP', authenticated_root_path, class: 'text-sm text-indigo-600 hover:underline'
-      = link_to 'マイページ', mypage_root_path, class: 'text-sm text-indigo-600 hover:underline'
-
-  - else
-    .space-y-4
-      - @records.each do |record|
-        .bg-white.p-5.rounded-xl.shadow-lg.flex.justify-between.items-center.hover:shadow-xl.transition.duration-200
-          .flex-grow
-            = link_to record_path(record), class: 'text-xl.font-semibold.text-gray-900.hover:text-indigo-600'
-              = record.recorded_date.strftime('%Y年%m月%d日 (%a)')
-            
-            p.text-sm.text-gray-500.mt-1
-              | メモ: 
-              = truncate(record.diary_memo, length: 50, omission: "...")
-          
-          .flex.space-x-2.ml-4
-            = link_to '編集', edit_record_path(record), class: 'text-sm text-yellow-600 hover:underline'
-            span.mx-2 | |
-            = link_to '削除', record_path(record), data: { turbo_method: :delete, turbo_confirm: "本当にこの記録を削除してもよろしいですか？" }, class: 'text-sm text-red-600 hover:underline'
-            span.mx-2 | |
-            = link_to 'TOP', authenticated_root_path, class: 'text-sm text-indigo-600 hover:underline'
-            span.mx-2 | |
-            = link_to 'マイページ', mypage_root_path, class: 'text-sm text-indigo-600 hover:underline'

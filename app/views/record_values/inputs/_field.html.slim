@@ -5,46 +5,49 @@
   = f.hidden_field :record_item_id
   = f.hidden_field :_destroy, value: "0"
 
-  h3.text-lg.font-bold.text-gray-800.mb-3
-    = item.name
+  .flex.flex-col.items-center.gap-4
 
-  .input-area.mt-2
-    - case item.input_type.to_sym
+    h3.text-xl.font-bold.text-gray-800
+      = item.name
 
-    / ⭐ 5段階評価
-    - when :five_step
-      .star-rating.flex.gap-1.p-3.bg-white.rounded-md
-        - (1..5).each do |val|
-          - input_id = "item_#{item.id}_value_#{val}"
-          = f.radio_button :value, val, id: input_id, class: "hidden peer"
-          label.star-label for=input_id
-            span.star ★
+    .input-area
+      - case item.input_type.to_sym
 
+      / ⭐ 5段階評価
+      - when :five_step
+        .star-rating.flex.gap-3.justify-center
+          - 5.downto(1) do |i|
+            - input_id = "item_#{item.id}_value_#{i}"
+            = f.radio_button :value, i,
+              id: input_id,
+              class: "hidden peer"
+            label.star-label.cursor-pointer.transition-all.duration-200.hover:scale-125 for=input_id
+              span.star.text-4xl.text-gray-300.peer-checked:text-yellow-500.transition-colors.duration-200 ★
 
-    / 数値入力
-    - when :numeric
-      = f.number_field :value,
-        class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+      / 数値入力
+      - when :numeric
+        = f.number_field :value,
+          class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
 
-    / チェックボックス
-    - when :checkbox
-      - check_id = "item_#{item.id}_check"
-      .flex.items-center.p-3.bg-white.rounded-md
-        = f.check_box :value, { id: check_id }, "1", "0"
-        = f.label :value, "実施した", for: check_id, class: "ml-3 font-bold"
-        
-    / 時間範囲
-    - when :time_range
-      .flex.items-center.space-x-2
-        = f.hidden_field :value
-        = f.time_field :sleep_time, 
-          value: f.object.sleep_time&.strftime('%H:%M'),
-          class: "block w-1/2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500"
-        span.text-xl ~
-        = f.time_field :wake_time, 
-          value: f.object.wake_time&.strftime('%H:%M'),
-          class: "block w-1/2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500"
+      / チェックボックス
+      - when :checkbox
+        - check_id = "item_#{item.id}_check"
+        .flex.items-center.justify-center.p-3.bg-white.rounded-md
+          = f.check_box :value, { id: check_id }, "1", "0"
+          = f.label :value, "実施した", for: check_id, class: "ml-3 font-bold"
+          
+      / 時間範囲
+      - when :time_range
+        .flex.items-center.justify-center.space-x-2
+          = f.hidden_field :value
+          = f.time_field :sleep_time, 
+            value: f.object.sleep_time&.strftime('%H:%M'),
+            class: "block w-1/2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500"
+          span.text-xl ~
+          = f.time_field :wake_time, 
+            value: f.object.wake_time&.strftime('%H:%M'),
+            class: "block w-1/2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500"
 
-    / テキスト入力・その他
-    - else
-      = f.text_field :value, placeholder: item.name, class: "block w-full rounded-md border-gray-300 shadow-sm"
+      / テキスト入力・その他
+      - else
+        = f.text_field :value, placeholder: item.name, class: "block w-full rounded-md border-gray-300 shadow-sm"

@@ -1,17 +1,16 @@
-h1.text-center
-  = @record.recorded_date.strftime('%Y年%m月%d日')
-  | の記録
+.max-w-2xl.mx-auto
+  h1.text-3xl.font-bold.text-gray-800.mb-6.text-center
+    = @record.recorded_date.strftime('%Y年%m月%d日')
+    | の体調
 
-= form_with model: @record do |f|
-  = f.hidden_field :recorded_date, value: @record.recorded_date
+  = form_with model: @record do |f|
+    = f.hidden_field :recorded_date, value: @record.recorded_date
 
-  .space-y-4
-    = render "records/record_values/system_fields",
-             form: f,
-             record: @record
+    .space-y-4
+      = render "records/record_values/system_fields", form: f, record: @record
 
-  .mt-6.text-center
-    = f.submit "体調を記録する",
-      class: "inline-flex justify-center py-2 px-6 rounded-md bg-indigo-600 text-white hover:bg-indigo-700"
-    = link_to 'TOPに戻る', records_path,
-      class: "text-indigo-600 hover:text-indigo-800 font-medium mt-6 inline-block transition duration-150"
+    .flex.justify-center.gap-4.mt-6
+      = f.submit "記録する",
+        class: "inline-flex justify-center py-2 px-6 rounded-md bg-indigo-600 text-white hover:bg-indigo-700"
+      = link_to "キャンセル", records_path(date: @record.recorded_date), 
+        class: "px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"

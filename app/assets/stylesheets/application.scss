@@ -115,3 +115,9 @@ input[type="radio"]:checked + .star-label ~ .star-label .star {
     transform: translateX(20px);
   }
 }
+
+/* ヘッダートグル */
+#menu-panel {
+  right: 1.5rem;
+  top: calc(60% + 0.5rem);
+}
