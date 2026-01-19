@@ -23,7 +23,9 @@ class RecordsController < ApplicationController
   end
 
   def show
-    @activities = @record.activities
+    @record = current_user.records
+      .includes(:record_values, :activities)
+      .find(params[:id])
   end
 
   def new
@@ -35,7 +37,7 @@ class RecordsController < ApplicationController
     set_all_visible_items
   end
 
-  def create
+  def create  
     @record = Record.new(record_params)
     @record.user = current_user
   
@@ -73,17 +75,20 @@ class RecordsController < ApplicationController
     redirect_to new_record_activity_path(record, date: date, hour: params[:hour])
   end
 
-  def new_diary
-    @items = current_user.record_items.user_items.visible.ordered
-    prepare_record_values(@items)
-    render :diary
-  end
-
   def new_health
     @date = params[:date]&.to_date || Date.current
+    set_record_for_date
     @items = current_user.record_items.system_items.visible.ordered
     prepare_record_values(@items)
     render :health
+  end
+
+  def new_diary
+    @date = params[:date]&.to_date || Date.current
+    set_record_for_date
+    @items = current_user.record_items.user_items.visible.ordered
+    prepare_record_values(@items)
+    render :diary
   end
 
   private
@@ -93,9 +98,8 @@ class RecordsController < ApplicationController
   end
 
   def set_record_for_date
-    date = params[:date]&.to_date || Date.current
-    @record = current_user.records.find_or_initialize_by(recorded_date: date)
-    @record.recorded_date = date
+    @record = current_user.records.find_or_initialize_by(recorded_date: @date)
+    @record.recorded_date = @date
   end
 
   def prepare_record_values(items)
@@ -132,9 +136,11 @@ class RecordsController < ApplicationController
         :id,
         :record_item_id,
         :value,
-        :sleep_time,
-        :wake_time,
-        :_destroy
+        :_destroy,
+        :sleep_hour,
+        :sleep_minute,
+        :wake_hour,
+        :wake_minute
       ]
     )
   end

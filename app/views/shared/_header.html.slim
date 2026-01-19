@@ -1,0 +1,17 @@
+.header.bg-green-50.px-4.py-3.flex.items-center.justify-between.relative[data-controller="menu"]
+  h1.text-lg.font-bold.text-green-800 🌿じぶん日和
+  button.text-2xl.p-2.hover:bg-green-100.rounded.transition[data-action="click->menu#toggle"] ☰
+
+  #menu-panel.hidden.bg-white.border.border-gray-200.shadow-lg.rounded-md.absolute.right-4.top-full.mt-2.w-auto.z-50[data-menu-target="panel"]
+    ul.py-1
+      li
+        hr.my-1.border-gray-200
+      li
+        = link_to "体調を記録", health_records_path(date: @date || Date.current),
+          class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
+      li
+        = link_to "日記の記入", diary_records_path(date: @date || Date.current),
+          class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
+      li
+        = link_to "マイページ", mypage_root_path,
+          class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"

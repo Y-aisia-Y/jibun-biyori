@@ -20,7 +20,16 @@ class ActivitiesController < ApplicationController
   end
 
   def create
-    @activity = @record.activities.build(activity_params)
+    attrs = activity_params
+
+    start_time = Time.zone.parse("#{attrs[:start_date]} #{attrs[:start_hour]}:#{attrs[:start_minute]}")
+    end_time   = Time.zone.parse("#{attrs[:end_date]} #{attrs[:end_hour]}:#{attrs[:end_minute]}")
+
+    @activity = @record.activities.build(
+      content: attrs[:content],
+      start_time: start_time,
+      end_time: end_time
+    )
 
     if @activity.save
       redirect_to record_path(@record), notice: '活動を登録しました。'
@@ -60,6 +69,14 @@ class ActivitiesController < ApplicationController
   end
 
   def activity_params
-    params.require(:activity).permit(:start_time, :end_time, :content)
+    params.require(:activity).permit(
+      :content,
+      :start_date,
+      :start_hour,
+      :start_minute,
+      :end_date,
+      :end_hour,
+      :end_minute
+    )
   end
 end

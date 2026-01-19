@@ -1,11 +1,13 @@
 / 日付ナビゲーター
-.flex.items-center.justify-between.bg-white.px-4.py-3.border-b
-  = link_to records_path(date: @date - 1.day), 
-    class: "flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-800 transition" do
-    i.fas.fa-chevron-left
+.bg-white.rounded-lg.shadow-sm.border.border-gray-200.p-4
+  .flex.items-center.justify-between
+    = link_to records_path(date: @date - 1.day), 
+      class: "flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-800 transition" do
+      i.fas.fa-chevron-left
 
-  h2.text-lg.font-bold = l(@date, format: :long)
+    .text-lg.font-bold.text-gray-800
+      = l(@date, format: :long)
 
-  = link_to records_path(date: @date + 1.day), 
-    class: "flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-800 transition" do
-    i.fas.fa-chevron-right
+    = link_to records_path(date: @date + 1.day), 
+      class: "flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-800 transition" do
+      i.fas.fa-chevron-right

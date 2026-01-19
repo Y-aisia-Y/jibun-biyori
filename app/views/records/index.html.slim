@@ -1,71 +1,63 @@
-/ ヘッダー
-.header.bg-green-50.px-4.py-3.flex.items-center.justify-between.relative[data-controller="menu"]
-  h1.text-lg.font-bold.text-green-800 🌿じぶん日和
-  button.text-2xl.p-2.hover:bg-green-100.rounded.transition[data-action="click->menu#toggle"] ☰
-
-  #menu-panel.hidden.bg-white.border.border-gray-200.shadow-lg.rounded-md.absolute.right-4.top-full.mt-2.w-auto.z-50[data-menu-target="panel"]
-    ul.py-1
-      li
-        hr.my-1.border-gray-200
-      li
-        = link_to "体調を記録", health_records_path,
-          class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
-      li
-        = link_to "日記の記入", diary_records_path,
-          class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
-      li
-        = link_to "マイページ", mypage_root_path,
-          class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
-
-.bg-gray-50.border-b
-  / 日付ナビ
-  .px-4.py-3
+/ サマリーセクション
+.bg-gray-50.border-b.py-4
+  .max-w-4xl.mx-auto.px-4.space-y-3
+    / 日付ナビ
     = render "date_navigator"
 
-  / サマリー
-  .px-4.py-3.space-y-2
+    / サマリー
     - if @record.persisted?
-      / 今日の体調と編集ボタンを横並びに配置
-      .flex.items-center.justify-between.mb-4
-        .text-1xl.font-bold.text-gray-800
-          | 今日の体調
-        = link_to '編集', edit_record_path(@record), class: 'text-sm text-yellow-600 hover:underline'
-      
-      / サマリー表示
-      = render "mood_summary", record: @record
+      .bg-white.rounded-lg.shadow-sm.p-4.border.border-gray-200
+        .flex.items-center.justify-between.mb-3
+          .text-lg.font-bold.text-gray-800
+            | 今日の体調
+          = link_to '編集', edit_record_path(@record), 
+            class: 'px-3 py-1 text-sm text-yellow-600 hover:bg-yellow-50 rounded transition'
+        
+        / 体調情報を中央寄せ
+        = render "mood_summary", record: @record
     - else
-      .text-center.text-gray-500.py-4
-        p.text-sm = "#{l(@date, format: :long)}の記録はまだありません"
+      .bg-white.rounded-lg.shadow-sm.p-6.border.border-gray-200.text-center
+        p.text-gray-500 = "#{l(@date, format: :long)}の記録はまだありません"
 
-/ タイムライン
-#timeline.relative.max-h-screen.overflow-y-auto[
-  data-controller="timeline"
-  data-timeline-current-hour-value=@current_hour
-  data-timeline-current-minute-value=@current_minute
-]
+/ タイムラインセクション
+.max-w-4xl.mx-auto.px-4.py-4
+  #timeline.relative.max-h-screen.overflow-y-auto.bg-white.rounded-lg.shadow-sm.border.border-gray-200[
+    data-controller="timeline"
+    data-timeline-current-hour-value=@current_hour
+    data-timeline-current-minute-value=@current_minute
+  ]
+    / 現在時刻のライン
+    .now-line.absolute.left-0.right-0.h-0.5.bg-red-500.z-10
 
-  / 現在時刻のライン
-  .now-line.absolute.left-0.right-0.h-0.5.bg-red-500.z-10
+    / 時間ブロック
+    - (0..23).each do |hour|
+      .hour-block.relative.group.border-b.border-gray-200
+        .flex.items-start
+          / 時刻ラベル
+          .w-16.flex-shrink-0.text-right.pr-3.text-sm.text-gray-500.pt-2.border-r.border-gray-200
+            = "%02d:00" % hour
 
-  / 時間ブロック
-  - (0..23).each do |hour| 
-    .hour-block.relative.group
-      / 時刻ラベル
-      .w-14.text-right.pr-2.text-xs.text-gray-400.pt-1
-        = "%02d:00" % hour
-
-      / 時間ブロック
-      .flex.items-start.border-b.h-20.relative  
-        - activities_by_hour = @activities.group_by { |a| a.start_time.hour }
-        - if activities_by_hour[hour]
-          = render activities_by_hour[hour]
-
-        - if @record.persisted?
-          = link_to "＋",
-            new_record_activity_path(@record, date: @date, hour: hour),
-            class: "add-button hidden group-hover:flex"
-        - else
-          = button_to "＋",
-            create_with_activity_records_path(date: @date, hour: hour),
-            method: :post,
-            class: "add-button hidden group-hover:flex"
+          / アクティビティエリア
+          .flex-1.min-h-20.p-2.hover:bg-gray-50.transition.relative.group
+            / nilチェック
+            - activities_by_hour = @activities.select { |a| a.start_time.present? && a.end_time.present? }.group_by { |a| a.start_time.hour }
+  
+            - if activities_by_hour[hour]
+              / アクティビティがある場合
+              .space-y-2
+                = render activities_by_hour[hour]
+            - else
+              / アクティビティがない場合
+              - if @record.persisted?
+                / レコードが保存済みの場合
+                = link_to new_record_activity_path(@record, date: @date, hour: hour),
+                  class: "absolute inset-0 flex flex-col items-center justify-center hover:bg-gray-100 transition-colors"
+                  .w-3.h-3.rounded-full.bg-gray-300.group-hover:bg-green-500.group-hover:scale-150.transition-all.duration-200
+                  .text-xs.text-gray-500.opacity-0.group-hover:opacity-100.transition-opacity.mt-2 追加
+              - else
+                / レコードが未保存の場合は、先にレコードを作成
+                = link_to create_with_activity_records_path(date: @date, hour: hour),
+                  method: :post,
+                  class: "absolute inset-0 flex flex-col items-center justify-center hover:bg-gray-100 transition-colors"
+                  .w-3.h-3.rounded-full.bg-gray-300.group-hover:bg-green-500.group-hover:scale-150.transition-all.duration-200
+                  .text-xs.text-gray-500.opacity-0.group-hover:opacity-100.transition-opacity.mt-2 追加
