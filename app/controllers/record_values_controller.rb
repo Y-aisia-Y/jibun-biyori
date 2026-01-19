@@ -26,6 +26,14 @@ class RecordValuesController < ApplicationController
   end
 
   def record_value_params
-    params.require(:record_value).permit(:record_item_id, :value)
+    params.require(:record_value).permit(
+      :record_item_id, 
+      :value,
+      # 時間範囲用の仮想属性
+      :sleep_hour, 
+      :sleep_minute, 
+      :wake_hour, 
+      :wake_minute
+    )
   end
 end

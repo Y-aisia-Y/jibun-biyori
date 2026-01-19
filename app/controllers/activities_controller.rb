@@ -4,7 +4,7 @@ class ActivitiesController < ApplicationController
   before_action :set_activity, only: %i[show edit update destroy]
 
   def index
-    @activities = @record.activities.order(start_time: :asc)
+    @activities = @record.activities.order(start_time: :asc).decorate
   end
   
   def show

@@ -36,17 +36,48 @@
           = f.check_box :value, { id: check_id }, "1", "0"
           = f.label :value, "実施した", for: check_id, class: "ml-3 font-bold"
           
-      / 時間範囲
+      / 時間範囲(デコレーター使用)
       - when :time_range
-        .flex.items-center.justify-center.space-x-2
+        - decorated = f.object.decorate
+        .space-y-3
           = f.hidden_field :value
-          = f.time_field :sleep_time, 
-            value: f.object.sleep_time&.strftime('%H:%M'),
-            class: "block w-1/2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500"
-          span.text-xl ~
-          = f.time_field :wake_time, 
-            value: f.object.wake_time&.strftime('%H:%M'),
-            class: "block w-1/2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500"
+    
+          / 就寝時刻と起床時刻を横並びに
+          .flex.items-center.gap-4.justify-center
+            / 就寝時刻
+            .bg-white.p-3.rounded-md.border.border-gray-300.flex-1
+              .flex.items-center.justify-center.space-x-2
+                = f.select :sleep_hour,
+                  decorated.hour_options,
+                  { selected: decorated.sleep_hour },
+                  { class: "text-center text-lg w-20 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" }
+                span.text-xl.font-bold = ":"
+                = f.select :sleep_minute,
+                  decorated.minute_options,
+                  { selected: decorated.sleep_minute },
+                  { class: "text-center text-lg w-20 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" }
+      
+            / 矢印アイコン
+            .flex.items-center.text-gray-400
+              span.text-2xl ～
+      
+            / 起床時刻
+            .bg-white.p-3.rounded-md.border.border-gray-300.flex-1
+              .flex.items-center.justify-center.space-x-2
+                = f.select :wake_hour,
+                  decorated.hour_options,
+                  { selected: decorated.wake_hour },
+                  { class: "text-center text-lg w-20 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" }
+                span.text-xl.font-bold = ":"
+                = f.select :wake_minute,
+                  decorated.minute_options,
+                  { selected: decorated.wake_minute },
+                  { class: "text-center text-lg w-20 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" }
+    
+          / 睡眠時間の表示
+          - if decorated.sleep_duration
+            .text-center.text-sm.text-gray-600.mt-2
+              span.font-medium = decorated.sleep_duration_text
 
       / テキスト入力・その他
       - else
