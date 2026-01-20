@@ -6,9 +6,19 @@
   = form_with model: @record do |f|
     = f.hidden_field :recorded_date
 
+    / カスタム項目(ユーザー定義の記録項目)
     .space-y-4.mb-8
-      = render "records/record_values/custom_fields",form: f,record: @record
+      = render "records/record_values/custom_fields", form: f, record: @record
 
+    / 日記のメモ欄を追加
+    .mb-8
+      = f.label :diary_memo, "日記", class: "block text-sm font-medium text-gray-700 mb-2"
+      = f.text_area :diary_memo, 
+        rows: 10, 
+        placeholder: "今日の出来事や気持ちを自由に書いてください", 
+        class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-4"
+
+    / 送信ボタン
     .flex.justify-center.gap-4.mt-6
       = f.submit "記録する",
         class: "inline-flex justify-center py-2 px-6 rounded-md bg-indigo-600 text-white hover:bg-indigo-700"

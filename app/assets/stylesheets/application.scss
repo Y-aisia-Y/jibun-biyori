@@ -1,6 +1,41 @@
 @import 'font-awesome';
 
-/* ⭐ 星評価 */
+// ========================================
+// 🎨 変数定義
+// ========================================
+
+// カラー
+$color-primary: #2196f3;
+$color-primary-light: #e3f2fd;
+$color-primary-lighter: #bbdefb;
+$color-primary-dark: #1565c0;
+$color-gray-light: #d1d5db;
+$color-gray-border: #e5e7eb;
+$color-gray-text: #212121;
+$color-success: #22c55e;
+$color-warning: #fbbf24;
+$color-star: #facc15;
+$color-danger: #ef4444;
+$color-white: white;
+
+// サイズ
+$timeline-hour-height: 80px;
+$timeline-max-height: 60vh;
+$activity-border-width: 4px;
+$activity-padding: 8px 12px;
+$activity-border-radius: 6px;
+$toggle-width: 44px;
+$toggle-height: 24px;
+$toggle-thumb-size: 20px;
+
+// トランジション
+$transition-default: all 0.2s ease;
+$transition-color: color 0.2s ease;
+
+// ========================================
+// ⭐ 星評価
+// ========================================
+
 .star-rating {
   display: inline-flex;
   flex-direction: row-reverse;
@@ -14,47 +49,152 @@ input[type="radio"].hidden.peer {
 
 .star {
   font-size: 1.4rem;
-  color: #d1d5db;
-  transition: color 0.2s ease;
+  color: $color-gray-light;
+  transition: $transition-color;
 }
 
 .star-label {
   cursor: pointer;
-}
 
-.star-label:hover .star,
-.star-label:hover ~ .star-label .star {
-  color: #fbbf24;
+  &:hover .star,
+  &:hover ~ .star-label .star {
+    color: $color-warning;
+  }
 }
 
 input[type="radio"]:checked + .star-label .star,
 input[type="radio"]:checked + .star-label ~ .star-label .star {
-  color: #facc15;
+  color: $color-star;
 }
 
-/* タイムライン */
+// ========================================
+// 📅 タイムライン
+// ========================================
+
 #timeline {
   position: relative;
   overflow-y: auto;
-  max-height: 60vh;
+  max-height: $timeline-max-height;
   scroll-behavior: smooth;
   padding: 1rem;
 }
 
 .hour-block {
   position: relative;
-  min-height: 80px;
+  min-height: $timeline-hour-height;
 }
 
-.activity-area {
+.activity-area,
+.flex-1 {
   position: relative;
-  min-height: 80px;
+  min-height: $timeline-hour-height;
+}
+
+// 現在時刻のライン
+.now-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: $color-danger;
+  z-index: 10;
+  pointer-events: none;
+  box-shadow: 0 0 8px rgba($color-danger, 0.5);
+  transition: top 0.3s ease;
+}
+
+// ========================================
+// 📝 アクティビティマーカー
+// ========================================
+
+.activity-marker {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  background-color: $color-primary-light;
+  border-left: $activity-border-width solid $color-primary;
+  padding: $activity-padding;
+  border-radius: $activity-border-radius;
+  cursor: pointer;
+  transition: $transition-default;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  z-index: 5;
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    background-color: $color-primary-lighter;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transform: translateX(2px);
+  }
+
+  // 開始時刻のスタイル
+  &.activity-marker-start {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+
+  // 終了時刻のスタイル
+  &.activity-marker-end {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+
+  // 継続中のスタイル
+  &.activity-marker-continuation {
+    border-top: 1px dashed #90caf9;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    padding-top: 4px;
+  }
+
+  // 時間表示
+  .font-medium {
+    font-size: 0.75rem;
+    color: $color-primary-dark;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  // 内容表示
+  .mt-1 {
+    font-size: 0.875rem;
+    color: $color-gray-text;
+    line-height: 1.4;
+  }
+}
+
+// ========================================
+// 📋 アクティビティカード
+// ========================================
+
+.activity-card {
+  background: $color-white;
+  border: 1px solid $color-gray-border;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: $transition-default;
+
+  &:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+  }
+}
+
+// ========================================
+// 🔘 追加ボタン
+// ========================================
+
+.add-button {
+  z-index: 20;
 }
 
 .activity-bar {
   z-index: 10;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: $transition-default;
 
   &:hover {
     transform: translateY(-2px);
@@ -62,56 +202,27 @@ input[type="radio"]:checked + .star-label ~ .star-label .star {
   }
 }
 
-.add-button {
-  z-index: 20;
-}
+// ========================================
+// 🔄 トグルスイッチ
+// ========================================
 
-/* 現在時刻のライン - より目立つように */
-.now-line {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background-color: #ef4444;
-  z-index: 10;
-  pointer-events: none;
-  box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
-  transition: top 0.3s ease;
-}
-
-/* アクティビティカード */
-.activity-card {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  padding: 0.75rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s;
-}
-
-.activity-card:hover {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transform: translateY(-1px);
-}
-
-/* マイページのトグルスイッチ */
 .toggle-switch {
-  width: 44px;
-  height: 24px;
-  background-color: #d1d5db;
+  width: $toggle-width;
+  height: $toggle-height;
+  background-color: $color-gray-light;
   border-radius: 9999px;
   position: relative;
   display: inline-block;
   transition: background-color 0.2s ease;
 
   &.on {
-    background-color: #22c55e;
+    background-color: $color-success;
   }
 
   .toggle-thumb {
-    width: 20px;
-    height: 20px;
-    background-color: white;
+    width: $toggle-thumb-size;
+    height: $toggle-thumb-size;
+    background-color: $color-white;
     border-radius: 9999px;
     position: absolute;
     top: 2px;
@@ -124,7 +235,10 @@ input[type="radio"]:checked + .star-label ~ .star-label .star {
   }
 }
 
-/* ヘッダートグル */
+// ========================================
+// 📱 ヘッダートグル
+// ========================================
+
 #menu-panel {
   right: 1.5rem;
   top: calc(100% + 0.5rem);

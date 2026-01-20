@@ -4,3 +4,9 @@
     | の活動を編集
 
   = render 'form', record: @record, activity: @activity
+
+  .mt-6.pt-6.border-t.border-gray-200.text-center
+    = button_to '削除', record_activity_path(@record, @activity), \
+      method: :delete, \
+      data: { turbo_confirm: '本当に削除しますか?' }, \
+      class: 'px-6 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-lg transition-colors'
