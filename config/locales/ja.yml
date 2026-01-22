@@ -2,6 +2,7 @@ ja:
   date:
     formats:
       long_with_weekday: "%Y年%-m月%-d日（%a）"
+      long: "%Y年%-m月%-d日（%a）"
       
   defaults:
     message:

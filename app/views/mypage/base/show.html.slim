@@ -16,3 +16,7 @@
       p.text-sm.text-gray-500 名前や画像を編集します
 
       = link_to 'TOP', authenticated_root_path, class: 'text-sm text-indigo-600 hover:underline'
+
+  .mt-8.pt-6.border-t.border-gray-200
+    = button_to destroy_user_session_path, method: :delete, class: 'w-full py-3 px-4 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition shadow-sm' do
+      | ログアウト

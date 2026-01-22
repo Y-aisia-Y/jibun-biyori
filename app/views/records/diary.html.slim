@@ -1,16 +1,28 @@
-.max-w-2xl.mx-auto
+.max-w-2xl.mx-auto.relative[data-controller="menu"]
+  / トグルボタン
+  button.absolute.right-2.top-2.p-2.text-gray-400.hover:text-gray-600.rounded-full.hover:bg-gray-100.transition[
+    data-action="click->menu#toggle"
+    type="button"
+  ]
+    | ⋯
+
+  / ドロップダウンメニュー(パーシャル)
+  = render "shared/dropdown_menu", date: @record.recorded_date
+
+  / タイトル
   h1.text-3xl.font-bold.text-gray-800.mb-6.text-center
     = @record.recorded_date.strftime('%Y年%m月%d日')
     | の日記
 
+  / フォーム
   = form_with model: @record do |f|
     = f.hidden_field :recorded_date
 
-    / カスタム項目(ユーザー定義の記録項目)
+    / カスタム項目
     .space-y-4.mb-8
       = render "records/record_values/custom_fields", form: f, record: @record
 
-    / 日記のメモ欄を追加
+    / 日記のメモ欄
     .mb-8
       = f.label :diary_memo, "日記", class: "block text-sm font-medium text-gray-700 mb-2"
       = f.text_area :diary_memo, 

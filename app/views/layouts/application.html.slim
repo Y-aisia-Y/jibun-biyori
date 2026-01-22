@@ -14,9 +14,10 @@ html
       p.notice= notice
     - if alert
       p.alert= alert
-
+      
     / ヘッダー
-    = render "shared/header"
+    - unless content_for?(:no_header)
+      = render "shared/header"
     
     / メインコンテンツ
     = yield

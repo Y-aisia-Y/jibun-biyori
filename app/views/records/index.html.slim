@@ -1,97 +1,47 @@
-/ サマリーセクション
-.bg-gray-50.border-b.py-4
-  .max-w-4xl.mx-auto.px-4.space-y-3
-    / 日付ナビ
-    = render "date_navigator"
+.bg-gray-50.min-h-screen.py-8
+  .max-w-2xl.mx-auto.px-6
+    / ヘッダー部分
+    .mb-8
+      h1.text-3xl.font-bold.text-gray-800.mb-2.text-center
+        | 日記一覧
+      p.text-sm.text-gray-500.text-center
+        = "全#{@records.count}件"
 
-    / サマリー
-    - if @record.persisted?
-      .bg-white.rounded-lg.shadow-sm.p-4.border.border-gray-200
-        .flex.items-center.justify-between.mb-3
-          .text-lg.font-bold.text-gray-800
-            | 今日の体調
-          = link_to '編集', edit_record_path(@record), 
-            class: 'px-3 py-1 text-sm text-yellow-600 hover:bg-yellow-50 rounded transition'
-        
-        / 体調情報を中央寄せ
-        = render "mood_summary", record: @record
-    - else
-      .bg-white.rounded-lg.shadow-sm.p-6.border.border-gray-200.text-center
-        p.text-gray-500 = "#{l(@date, format: :long)}の記録はまだありません"
+    / 検索ブロック
+    .relative.mb-6.z-50[data-controller="menu"]
+      = form_with url: diary_records_path, method: :get, local: true do |f|
+        .relative
+          = f.text_field :q,
+            value: params[:q],
+            placeholder: "🔍 キーワードで検索",
+            class: "w-full pl-4 pr-12 py-3 bg-white border border-gray-200 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all"
+  
+          button.absolute.right-2.top-1/2.transform.-translate-y-1/2.p-2.text-gray-400.hover:text-gray-600.rounded-full.hover:bg-gray-100.transition[
+            type="button"
+            data-action="click->menu#toggle"
+          ]
+            | ⋯
 
-/ タイムラインセクション
-.max-w-4xl.mx-auto.px-4.py-4
-  #timeline.relative.max-h-screen.overflow-y-auto.bg-white.rounded-lg.shadow-sm.border.border-gray-200[
-    data-controller="timeline"
-    data-timeline-current-hour-value=@current_hour
-    data-timeline-current-minute-value=@current_minute
-  ]
-    / 現在時刻のライン
-    .now-line.absolute.left-0.right-0.h-0.5.bg-red-500[style="z-index: 20;"]
+      / ドロップダウンメニュー(パーシャル)
+      = render "shared/dropdown_menu", date: @date
 
-    / 時間ブロック
-    - (0..23).each do |hour|
-      .hour-block.relative.border-b.border-gray-200[style="height: 80px;"]
-        .flex.items-start.h-full
-          / 時刻ラベル
-          .w-16.flex-shrink-0.text-right.pr-3.text-sm.text-gray-500.pt-2.border-r.border-gray-200
-            = "#{sprintf('%02d', hour)}:00"
+    / 日記一覧
+    #timeline.relative.space-y-4[
+      data-controller="timeline"
+      data-timeline-current-hour-value=@current_hour
+      data-timeline-current-minute-value=@current_minute
+    ]
 
-          / アクティビティ表示エリア
-          .flex-1.relative[style="position: relative; min-height: 80px;"]
-            - if @activities_by_hour && @activities_by_hour[hour]
-              / アクティビティがある場合
-              - @activities_by_hour[hour].each do |presenter|
-                / 開始時刻のみマーカーを表示
-                - if presenter.is_start?
-                  - start_hour = presenter.activity.start_time.hour
-                  - start_min = presenter.activity.start_time.min
-                  - end_hour = presenter.activity.end_time.hour
-                  - end_min = presenter.activity.end_time.min
-                  
-                  / 時間と分を考慮した高さの計算
-                  - duration_hours = end_hour - start_hour
-                  - duration_minutes = end_min - start_min
-                  - total_minutes = duration_hours * 60 + duration_minutes
-                  - height_px = (total_minutes / 60.0) * 80
-                  
-                  / 時間表示の条件分岐(40分以上は時間表示、35分以下はメモのみ)
-                  - show_time = total_minutes >= 40
-                  
-                  = link_to edit_record_activity_path(@record, presenter.activity), \
-                    class: "activity-marker activity-marker-start block no-underline absolute left-0 right-0 bg-blue-100 hover:bg-blue-200 border-l-4 border-blue-500 px-3 py-2 transition", \
-                    style: "top: 0; height: #{height_px}px; z-index: 10;"
-                    - if show_time
-                      .font-medium.text-sm.text-gray-700 = presenter.time_range
-                    .mt-1.text-sm.text-gray-600 = presenter.content
-              
-              / 継続の時間帯には追加ボタンを表示(開始時刻以外)
-              - if @activities_by_hour[hour].all? { |p| !p.is_start? }
-                - if @record.persisted?
-                  = link_to new_record_activity_path(@record, date: @date, hour: hour), \
-                    class: "flex-1 relative hover:bg-gray-50 transition flex flex-col items-center justify-center group", \
-                    style: "position: relative; min-height: 80px; z-index: 5;"
-                    .w-3.h-3.rounded-full.bg-gray-300.group-hover:bg-green-500.group-hover:scale-150.transition-all.duration-200
-                    .text-xs.text-gray-500.opacity-0.group-hover:opacity-100.transition-opacity.mt-2 追加
-                - else
-                  = link_to create_with_activity_records_path(date: @date, hour: hour), \
-                    method: :post, \
-                    class: "flex-1 relative hover:bg-gray-50 transition flex flex-col items-center justify-center group", \
-                    style: "position: relative; min-height: 80px; z-index: 5;"
-                    .w-3.h-3.rounded-full.bg-gray-300.group-hover:bg-green-500.group-hover:scale-150.transition-all.duration-200
-                    .text-xs.text-gray-500.opacity-0.group-hover:opacity-100.transition-opacity.mt-2 追加
-            - else
-              / アクティビティがない場合 → 全体をリンクに
-              - if @record.persisted?
-                = link_to new_record_activity_path(@record, date: @date, hour: hour), \
-                  class: "flex-1 relative hover:bg-gray-50 transition flex flex-col items-center justify-center group", \
-                  style: "position: relative; min-height: 80px;"
-                  .w-3.h-3.rounded-full.bg-gray-300.group-hover:bg-green-500.group-hover:scale-150.transition-all.duration-200
-                  .text-xs.text-gray-500.opacity-0.group-hover:opacity-100.transition-opacity.mt-2 追加
-              - else
-                = link_to create_with_activity_records_path(date: @date, hour: hour), \
-                  method: :post, \
-                  class: "flex-1 relative hover:bg-gray-50 transition flex flex-col items-center justify-center group", \
-                  style: "position: relative; min-height: 80px;"
-                  .w-3.h-3.rounded-full.bg-gray-300.group-hover:bg-green-500.group-hover:scale-150.transition-all.duration-200
-                  .text-xs.text-gray-500.opacity-0.group-hover:opacity-100.transition-opacity.mt-2 追加
+      - if @records.any?
+        - @records.each do |record|
+          = link_to edit_diary_record_path(record),
+            class: "block bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition"
+
+            .text-xs.text-gray-400.mb-1.text-center
+              = l record.recorded_date, format: :long
+
+            .text-gray-800.leading-relaxed.text-sm.text-center
+              = truncate(record.diary_memo, length: 120)
+      - else
+        .bg-white.rounded-xl.border.border-gray-200.p-6.text-center.text-gray-500
+          | まだ日記がありません

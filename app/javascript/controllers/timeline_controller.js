@@ -12,18 +12,19 @@ export default class extends Controller {
   }
 
   positionNowLine() {
+    const nowLine = this.element.querySelector('.now-line')
+    
+    // .now-line が存在しない場合は何もしない(エラーログも出さない)
+    if (!nowLine) {
+      return
+    }
+
     const hours = this.currentHourValue
     const minutes = this.currentMinuteValue
     const HOUR_HEIGHT = 80
     const topPosition = (hours * HOUR_HEIGHT) + (minutes / 60) * HOUR_HEIGHT
-  
-    const nowLine = this.element.querySelector('.now-line')
     
-    if (nowLine) {
-      nowLine.style.top = `${topPosition}px`
-    } else {
-      console.error('.now-line 要素が見つかりません')
-    }
+    nowLine.style.top = `${topPosition}px`
   }
 
   scrollToCurrentTime() {

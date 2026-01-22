@@ -3,21 +3,27 @@ Rails.application.routes.draw do
 
   devise_for :users
 
+  get "dashboard", to: "records#dashboard", as: :dashboard
+
   resources :records do
     post :create_with_activity, on: :collection
 
     collection do
-      get :health, to: 'records#new_health'
-      get :diary,  to: 'records#new_diary'
+      get :health, to: "records#new_health"
+      get :diary,  to: "records#new_diary"
     end
 
-    resources :activities, only: [:new, :create, :edit, :update, :destroy]
-    resources :record_values, only: [:create, :update]
+    member do
+      get   :edit_diary   # 日記編集画面
+      patch :update_diary # 日記更新
+    end
+    
+    resources :activities, only: %i[new create edit update destroy]
+    resources :record_values, only: %i[create update]
     resource  :mood
   end
 
-  # カスタム項目管理（user定義）
-  resources :record_items, except: [:show] do
+  resources :record_items, except: %i[show] do
     member do
       patch :move_up
       patch :move_down
@@ -25,16 +31,13 @@ Rails.application.routes.draw do
     end
   end
 
-  # プロフィール設定
   resource :profile, only: %i[show edit update]
 
-  # マイページ
   namespace :mypage do
-    root to: 'base#show'
-    # system項目の表示/非表示
+    root to: "base#show"
+
     resource :record_item_settings, only: :show
 
-    # system項目のトグル操作専用
     resources :record_items, only: [] do
       member do
         patch :toggle_visibility
@@ -42,15 +45,13 @@ Rails.application.routes.draw do
     end
   end
 
-  # ウェルカムページ
-  get 'welcome', to: 'welcome#index', as: :welcome
+  get "welcome", to: "welcome#index", as: :welcome
 
   unauthenticated do
-    root 'welcome#index', as: :unauthenticated_root
+    root "welcome#index", as: :unauthenticated_root
   end
 
-  # ログイン後にアクティブページへ
   authenticated :user do
-    root 'records#index', as: :authenticated_root
+    root "records#dashboard", as: :authenticated_root
   end
 end

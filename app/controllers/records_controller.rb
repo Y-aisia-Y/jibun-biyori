@@ -5,8 +5,33 @@ class RecordsController < ApplicationController
   before_action :set_record, only: %i[show edit update destroy]
   before_action :authorize_user!, only: %i[show edit update destroy]
   before_action :set_record_for_date, only: %i[new_health new_diary]
+  before_action :set_record, only: %i[show edit update destroy edit_diary update_diary]
 
   def index
+    @records = current_user.records
+                           .where.not(diary_memo: [nil, ""])
+  
+    if params[:q].present?
+      @records = @records.where("diary_memo LIKE ?", "%#{params[:q]}%")
+    end
+
+    @records = @records.order(recorded_date: :desc)
+  end
+
+  def edit_diary
+    @record = current_user.records.find(params[:id])
+  end
+
+  def update_diary
+    if @record.update(processed_record_params)
+      redirect_to records_path, notice: "日記を更新しました"
+    else
+      set_all_visible_items
+      render :edit_diary, status: :unprocessable_entity
+    end
+  end
+
+  def dashboard
     @date = params[:date]&.to_date || Date.current
 
     # 指定した日付の記録を取得(入力フォーム用)
@@ -104,6 +129,9 @@ class RecordsController < ApplicationController
 
   private
 
+  def diary_params
+    params.require(:record).permit(:diary_memo)
+  end
 
   def set_record
     @record = current_user.records.find(params[:id])
@@ -117,7 +145,7 @@ class RecordsController < ApplicationController
   def authorize_user!
     return if @record.user_id == current_user.id
 
-    redirect_to records_path, alert: "アクセス権限がありません。"
+    redirect_to dashboard_path, alert: "アクセス権限がありません。"
   end
 
   def set_all_visible_items
@@ -136,7 +164,7 @@ class RecordsController < ApplicationController
   end
 
   def redirect_to_record_date(record, message)
-    redirect_to records_path(date: record.recorded_date), success: message
+    redirect_to dashboard_path(date: record.recorded_date), success: message
   end
 
   def processed_record_params
