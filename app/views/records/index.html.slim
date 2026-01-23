@@ -9,7 +9,7 @@
 
     / 検索ブロック
     .relative.mb-6.z-50[data-controller="menu"]
-      = form_with url: diary_records_path, method: :get, local: true do |f|
+      = form_with url: records_path, method: :get, local: true do |f|
         .relative
           = f.text_field :q,
             value: params[:q],

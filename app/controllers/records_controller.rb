@@ -2,10 +2,9 @@ class RecordsController < ApplicationController
   include CurrentTimeSettable
 
   before_action :authenticate_user!
-  before_action :set_record, only: %i[show edit update destroy]
-  before_action :authorize_user!, only: %i[show edit update destroy]
-  before_action :set_record_for_date, only: %i[new_health new_diary]
   before_action :set_record, only: %i[show edit update destroy edit_diary update_diary]
+  before_action :authorize_user!, only: %i[show edit update destroy edit_diary update_diary]
+  before_action :set_record_for_date, only: %i[new_health new_diary]
 
   def index
     @records = current_user.records
@@ -73,12 +72,12 @@ class RecordsController < ApplicationController
     set_all_visible_items
   end
 
-  def create  
+  def create
     @record = Record.new(processed_record_params)
     @record.user = current_user
-  
+
     if @record.save
-      redirect_to_record_date(@record, '記録を作成しました')
+      redirect_to records_path, notice: "日記を作成しました"
     else
       set_all_visible_items
       render :new, status: :unprocessable_entity
@@ -87,7 +86,7 @@ class RecordsController < ApplicationController
 
   def update
     if @record.update(processed_record_params)
-      redirect_to_record_date(@record, '記録を更新しました')
+      redirect_to records_path, notice: "日記を更新しました"
     else
       set_all_visible_items
       render :edit, status: :unprocessable_entity
@@ -143,9 +142,12 @@ class RecordsController < ApplicationController
   end
 
   def authorize_user!
-    return if @record.user_id == current_user.id
+    return if @record.user == current_user
 
-    redirect_to dashboard_path, alert: "アクセス権限がありません。"
+    respond_to do |format|
+      format.html { redirect_to records_path, alert: "権限がありません" }
+      format.turbo_stream { head :forbidden }
+    end
   end
 
   def set_all_visible_items
