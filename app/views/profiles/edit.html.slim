@@ -11,8 +11,7 @@
       - if @user.avatar.present?
         = image_tag @user.avatar.url, class: "rounded-full object-cover border", id: "preview", style: "width: 100px; height: 100px;"
       - else
-        .rounded-full.bg-gray-200.flex.items-center.justify-center.border id="preview" style="width: 100px; height: 100px;"
-          span.text-4xl 👤
+        = image_tag "default_avatar.png", class: "rounded-full object-cover border", id: "preview", style: "width: 100px; height: 100px;"
 
     .mb-4
       = f.label :nickname, "ニックネーム", class: "block font-semibold mb-1"

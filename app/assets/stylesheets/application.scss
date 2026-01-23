@@ -243,3 +243,12 @@ input[type="radio"]:checked + .star-label ~ .star-label .star {
   right: 1.5rem;
   top: calc(100% + 0.5rem);
 }
+
+@layer utilities {
+  .w-5 {
+    width: 30px;
+  }
+  .h-5 {
+    height: 30px;
+  }
+}

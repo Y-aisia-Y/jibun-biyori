@@ -5,8 +5,7 @@
     - if @user.avatar.present?
       = image_tag @user.avatar.url, class: "rounded-full object-cover border bg-gray-100", style: "width: 96px; height: 96px;"
     - else
-      .rounded-full.bg-gray-200.flex.items-center.justify-center.border style="width: 96px; height: 96px;"
-        span.text-4xl 👤
+      = image_tag "default_avatar.png", class: "rounded-full object-cover border bg-gray-100", style: "width: 96px; height: 96px;"
 
     .flex-1
       p.text-xl.font-semibold
