@@ -1,9 +1,16 @@
-/ カスタムトグル
-li.flex.items-center.justify-between.py-2 id="record_item_#{item.id}" data-controller="visibility"
-  span.text-sm = item.name
+/ カスタム項目
+li.bg-white.border.border-gray-200.rounded-xl.shadow-sm.p-4
+  .flex.items-center.justify-between
+    span.text-base.font-medium.text-gray-800
+      = item.name
 
-  label.toggle-switch.cursor-pointer class=(item.is_default_visible? ? "on" : "") data-action="click->visibility#toggle" data-item-id=item.id data-url=toggle_visibility_record_item_path(item)
-    span.toggle-thumb
+    label.toggle-switch.cursor-pointer(
+      class=(item.is_default_visible? ? "on" : "")
+      data-action="click->visibility#toggle"
+      data-item-id=item.id
+      data-url=toggle_visibility_record_item_path(item)
+    )
+      span.toggle-thumb
 
   .flex.gap-2.ml-4
     = link_to move_up_record_item_path(item), data: { turbo_method: :patch }, class: "text-blue-500 hover:text-blue-700", title: "上に移動" do

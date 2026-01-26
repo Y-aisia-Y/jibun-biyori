@@ -18,6 +18,7 @@ module JibunBiyori
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w(assets tasks))
+    config.action_view.preload_links_header = false
 
     # Configuration for the application, engines, and railties goes here.
     #

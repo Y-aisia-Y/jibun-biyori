@@ -5,6 +5,7 @@
 
   = form_with model: @record do |f|
     = f.hidden_field :recorded_date, value: @record.recorded_date
+    = f.hidden_field :redirect_to_dashboard, value: true
 
     .space-y-4
       = render "records/record_values/system_fields", form: f, record: @record

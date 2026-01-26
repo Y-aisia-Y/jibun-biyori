@@ -41,6 +41,7 @@ Rails.application.routes.draw do
     resources :record_items, only: [] do
       member do
         patch :toggle_visibility
+        post :toggle_visibility 
       end
     end
   end
