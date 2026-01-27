@@ -5,7 +5,6 @@ User.find_each do |user|
     {
       name: "睡眠時間",
       input_type: :time_range,
-      unit: "時間",
       category: :default_metric,
       display_order: 1
     },

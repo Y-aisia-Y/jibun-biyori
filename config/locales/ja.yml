@@ -3,7 +3,6 @@ ja:
     formats:
       long_with_weekday: "%Y年%-m月%-d日（%a）"
       long: "%Y年%-m月%-d日（%a）"
-      
   defaults:
     message:
       error_count: "%{count}件のエラーがあります"
@@ -14,9 +13,16 @@ ja:
     flash_message:
       updated: "%{item}を更新しました"
       not_updated: "%{item}の更新に失敗しました"
-  
   profiles:
     show:
       title: "プロフィール"
     edit:
       title: "プロフィール編集"
+  record_items:
+    input_type:
+      five_step: "5段階評価"
+      numeric: "数値"
+      text: "テキスト"
+      checkbox: "チェックボックス"
+      time_range: "時間範囲"
+

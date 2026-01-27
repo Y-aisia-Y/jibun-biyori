@@ -2,6 +2,10 @@ class RecordItem < ApplicationRecord
   belongs_to :user
   has_many :record_values, dependent: :destroy
 
+  def input_type_i18n
+    I18n.t("record_items.input_type.#{input_type}")
+  end
+
   enum input_type: {
     five_step: 0,
     numeric: 1,

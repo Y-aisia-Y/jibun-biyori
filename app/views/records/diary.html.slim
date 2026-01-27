@@ -10,29 +10,30 @@
   = render "shared/dropdown_menu", date: @record.recorded_date
 
   / タイトル
-  h1.text-3xl.font-bold.text-gray-800.mb-6.text-center
-    = @record.recorded_date.strftime('%Y年%m月%d日')
-    | の日記
+  .max-w-xl.mx-auto.py-6
+    h1.text-3xl.font-bold.text-gray-800.mb-6.text-center
+      = @record.recorded_date.strftime('%Y年%m月%d日')
+      | の日記
 
-  / フォーム
-  = form_with model: @record do |f|
-    = f.hidden_field :recorded_date
+    / フォーム
+    = form_with model: @record do |f|
+      = f.hidden_field :recorded_date
 
-    / カスタム項目
-    .space-y-4.mb-8
-      = render "records/record_values/custom_fields", form: f, record: @record
+      / カスタム項目
+      .space-y-4.mb-8
+        = render "records/record_values/custom_fields", form: f, record: @record
 
-    / 日記のメモ欄
-    .mb-8
-      = f.label :diary_memo, "日記", class: "block text-sm font-medium text-gray-700 mb-2"
-      = f.text_area :diary_memo, 
-        rows: 10, 
-        placeholder: "今日の出来事や気持ちを自由に書いてください", 
-        class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-4"
+      / 日記のメモ欄
+      .mb-8
+        = f.label :diary_memo, "日記", class: "block text-sm font-medium text-gray-700 mb-2"
+        = f.text_area :diary_memo, 
+          rows: 10, 
+          placeholder: "今日の出来事や気持ちを自由に書いてください", 
+          class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-4"
 
-    / 送信ボタン
-    .flex.justify-center.gap-4.mt-6
-      = f.submit "記録する",
-        class: "inline-flex justify-center py-2 px-6 rounded-md bg-indigo-600 text-white hover:bg-indigo-700"
-      = link_to "キャンセル", records_path(date: @record.recorded_date), 
-        class: "px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
+      / 送信ボタン
+      .flex.justify-center.gap-4.mt-6
+        = f.submit "記録する",
+          class: "inline-flex justify-center py-2 px-6 rounded-md bg-indigo-600 text-white hover:bg-indigo-700"
+        = link_to "キャンセル", records_path(date: @record.recorded_date), 
+          class: "px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"

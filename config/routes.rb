@@ -6,18 +6,17 @@ Rails.application.routes.draw do
   get "dashboard", to: "records#dashboard", as: :dashboard
 
   resources :records do
-    post :create_with_activity, on: :collection
-
     collection do
+      get :create_with_activity
       get :health, to: "records#new_health"
       get :diary,  to: "records#new_diary"
     end
 
     member do
-      get   :edit_diary   # 日記編集画面
-      patch :update_diary # 日記更新
+      get   :edit_diary
+      patch :update_diary
     end
-    
+  
     resources :activities, only: %i[new create edit update destroy]
     resources :record_values, only: %i[create update]
     resource  :mood
