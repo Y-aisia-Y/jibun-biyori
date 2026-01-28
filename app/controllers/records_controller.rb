@@ -62,10 +62,10 @@ class RecordsController < ApplicationController
     if @record.save
       if params[:record][:redirect_to_dashboard] == "true"
         redirect_to dashboard_path(date: @record.recorded_date),
-                    notice: "体調を記録しました"
+                    success: "体調を記録しました"
       else
         redirect_to records_path,
-                  notice: "日記を作成しました"
+                  success: "日記を作成しました"
       end
     else
       set_all_visible_items
@@ -76,9 +76,9 @@ class RecordsController < ApplicationController
   def update
     if @record.update(processed_record_params)
       if params[:record][:redirect_to_dashboard] == "true"
-        redirect_to dashboard_path(date: @record.recorded_date), notice: "体調を更新しました"
+        redirect_to dashboard_path(date: @record.recorded_date), success: "体調を更新しました"
       else
-        redirect_to records_path, notice: "日記を更新しました"
+        redirect_to records_path, success: "日記を更新しました"
       end
     else
       set_all_visible_items
@@ -88,7 +88,7 @@ class RecordsController < ApplicationController
 
   def update_diary
     if @record.update(processed_record_params)
-      redirect_to records_path, notice: "日記を更新しました"
+      redirect_to records_path, success: "日記を更新しました"
     else
       set_all_visible_items
       render :edit_diary, status: :unprocessable_entity
@@ -100,11 +100,11 @@ class RecordsController < ApplicationController
 
     if @record.destroy
       redirect_to records_url(date: recorded_date),
-                  notice: "記録を削除しました。",
+                  danger: "記録を削除しました。",
                   status: :see_other
     else
       redirect_to records_url(date: recorded_date),
-                  alert: "記録の削除に失敗しました。",
+                  warning: "記録の削除に失敗しました。",
                   status: :see_other
     end
   end
@@ -138,7 +138,7 @@ class RecordsController < ApplicationController
                           .find_by(id: params[:id])
 
     unless @record
-      redirect_to records_path, alert: "記録が見つかりません"
+      redirect_to records_path, warning: "記録が見つかりません"
       return
     end
   end
@@ -152,7 +152,7 @@ class RecordsController < ApplicationController
     return if @record && @record.user_id == current_user.id
 
     respond_to do |format|
-      format.html { redirect_to records_path, alert: "権限がありません" }
+      format.html { redirect_to records_path, warning: "権限がありません" }
       format.turbo_stream { head :forbidden }
     end
   end

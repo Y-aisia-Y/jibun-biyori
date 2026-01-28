@@ -13,7 +13,6 @@ class ActivitiesController < ApplicationController
   def new
     @activity = @record.activities.build
     
-    # hourパラメータがある場合は開始時刻を設定
     if params[:hour].present?
       date = params[:date] || @record.recorded_date
       @activity.start_time = Time.zone.parse("#{date} #{params[:hour]}:00")
@@ -25,19 +24,18 @@ class ActivitiesController < ApplicationController
     @activity = @record.activities.build(activity_params)
     
     if @activity.save
-      redirect_to dashboard_path(date: @record.recorded_date), notice: '活動を記録しました'
+      redirect_to dashboard_path(date: @record.recorded_date), success: '活動を記録しました'
     else
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
-    # 編集画面を表示
   end
 
   def update
     if @activity.update(activity_params)
-      redirect_to dashboard_path(date: @record.recorded_date), notice: '活動を更新しました'
+      redirect_to dashboard_path(date: @record.recorded_date), success: '活動を更新しました'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -45,9 +43,9 @@ class ActivitiesController < ApplicationController
 
   def destroy
     @activity.destroy!
-    redirect_to dashboard_path(date: @record.recorded_date), notice: '活動を削除しました'
+    redirect_to dashboard_path(date: @record.recorded_date), danger: '活動を削除しました'
   rescue ActiveRecord::RecordNotDestroyed => e
-    redirect_to edit_record_activity_path(@record, @activity), alert: '削除に失敗しました'
+    redirect_to edit_record_activity_path(@record, @activity), warning: '削除に失敗しました'
   end
 
   private

@@ -1,0 +1,9 @@
+- flash.each do |type, message|
+  - next if message.blank?
+  - base = "rounded-xl px-4 py-3 text-sm font-medium flex items-center justify-between mb-4"
+
+  .max-w-4xl.mx-auto.px-4.mb-4.mt-4
+    div class="#{base} #{flash_style_classes(type)}" data-controller="flash"
+      span = message
+      button.text-lg.leading-none.opacity-60.hover:opacity-100 data-action="click->flash#close"
+        | ×

@@ -8,15 +8,6 @@ html
     = stylesheet_link_tag "tailwind", "application", "data-turbo-track": "reload", preload: false
     = javascript_importmap_tags
   body
-    / フラッシュメッセージ
-    - if notice
-      p.notice= notice
-    - if alert
-      p.alert= alert
-      
-    / ヘッダー
-    - unless content_for?(:no_header)
-      = render "shared/header"
-    
-    / メインコンテンツ
+    = render "shared/header"
+    = render "shared/flash"
     = yield
