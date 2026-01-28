@@ -1,28 +1,61 @@
 ja:
   date:
     formats:
-      long_with_weekday: "%Y年%-m月%-d日（%a）"
       long: "%Y年%-m月%-d日（%a）"
-  defaults:
-    message:
-      error_count: "%{count}件のエラーがあります"
+
+  common:
     not_set: "未設定"
     edit: "編集"
     update: "更新"
     cancel: "キャンセル"
-    flash_message:
-      updated: "%{item}を更新しました"
-      not_updated: "%{item}の更新に失敗しました"
-  profiles:
-    show:
-      title: "プロフィール"
-    edit:
-      title: "プロフィール編集"
-  record_items:
-    input_type:
-      five_step: "5段階評価"
-      numeric: "数値"
-      text: "テキスト"
-      checkbox: "チェックボックス"
-      time_range: "時間範囲"
+
+  helpers:
+    submit:
+      update: "更新する"
+      create: "登録する"
+
+  flash:
+    update:
+      success: "%{item}を更新しました"
+      failure: "%{item}の更新に失敗しました"
+
+  errors:
+    messages:
+      count: "%{count}件のエラーがあります"
+
+  views:
+    profiles:
+      show:
+        title: "プロフィール"
+      edit:
+        title: "プロフィール編集"
+
+  enums:
+    record_item:
+      input_type:
+        five_step: "5段階評価"
+        numeric: "数値"
+        text: "テキスト"
+        checkbox: "チェックボックス"
+        time_range: "時間範囲"
+  devise:
+    sign_up: "新規登録はこちら"
+    log_in: "ログインはこちら"
+
+    failure:
+      invalid: "メールアドレスまたはパスワードが正しくありません"
+      not_found_in_database: "メールアドレスまたはパスワードが正しくありません"
+
+      user:
+        invalid: "メールアドレスまたはパスワードが正しくありません"
+        not_found_in_database: "メールアドレスまたはパスワードが正しくありません"
+
+  activerecord:
+    attributes:
+      user:
+        email: メールアドレス
+        password: パスワード
+        password_confirmation: パスワード（確認）
+
+
 
