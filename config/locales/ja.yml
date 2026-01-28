@@ -38,17 +38,28 @@ ja:
         text: "テキスト"
         checkbox: "チェックボックス"
         time_range: "時間範囲"
+
   devise:
     sign_up: "新規登録はこちら"
     log_in: "ログインはこちら"
 
+    sessions:
+      signed_in: "ログインしました。"
+      signed_out: "ログアウトしました。"
+      user:
+        signed_in: "ログインしました。"
+        signed_out: "ログアウトしました。"
+
     failure:
+      unauthenticated: "ログインしてください。"
       invalid: "メールアドレスまたはパスワードが正しくありません"
       not_found_in_database: "メールアドレスまたはパスワードが正しくありません"
 
       user:
+        unauthenticated: "ログインしてください。"
         invalid: "メールアドレスまたはパスワードが正しくありません"
         not_found_in_database: "メールアドレスまたはパスワードが正しくありません"
+
 
   activerecord:
     attributes:
