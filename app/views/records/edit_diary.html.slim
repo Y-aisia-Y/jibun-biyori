@@ -29,7 +29,7 @@
           class: "btn-cancel px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
 
   / 削除エリア
-  .mt-12.py-12.border-t.border-gray-200.text-center.mb-5
+  .border-t.border-gray-200.text-center.mb-5
     = button_to '削除', record_path(@record), 
       method: :delete, 
       data: { turbo_confirm: '本当に削除しますか？' }, 

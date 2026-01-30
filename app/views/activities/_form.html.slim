@@ -9,50 +9,55 @@
   / 開始日時
   .field
     = form.label :start_date, "開始日時", class: "block text-sm font-medium text-gray-700 mb-2"
-    .flex.gap-2.items-center.justify-center
+    / flex-wrap を追加し、中央寄せにする
+    .flex.flex-wrap.gap-2.items-center.justify-center
+      / 日付入力
       = form.date_field :start_date, \
         value: (form.object.start_time || Time.current).strftime('%Y-%m-%d'), \
         required: true, \
-        class: "w-40 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500", \
+        class: "w-40 rounded-md border-gray-300 shadow-sm focus:border-brand-main", \
         data: { datetime_sync_target: "startDate", action: "change->datetime-sync#updateEndTime" }
       
-      = form.select :start_hour, \
-        (0..23).map { |h| [sprintf("%02d", h), h] }, \
-        { selected: (form.object.start_time || Time.current).hour }, \
-        { class: "w-20 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500", \
-          data: { datetime_sync_target: "startHour", action: "change->datetime-sync#updateEndTime" } }
-      
-      span.text-gray-600.font-medium = ":"
-      
-      = form.select :start_minute, \
-        (0..11).map { |m| [sprintf("%02d", m * 5), m * 5] }, \
-        { selected: ((form.object.start_time || Time.current).min / 5) * 5 }, \
-        { class: "w-20 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500", \
-          data: { datetime_sync_target: "startMinute", action: "change->datetime-sync#updateEndTime" } }
+      / 時・分をひとまとめの .flex にして「時と分の間」では改行されないようにする
+      .flex.items-center.gap-2
+        = form.select :start_hour, \
+          (0..23).map { |h| [sprintf("%02d", h), h] }, \
+          { selected: (form.object.start_time || Time.current).hour }, \
+          { class: "w-20 rounded-md border-gray-300 shadow-sm focus:border-brand-main", \
+            data: { datetime_sync_target: "startHour", action: "change->datetime-sync#updateEndTime" } }
+        
+        span.text-gray-600.font-medium = ":"
+        
+        = form.select :start_minute, \
+          (0..11).map { |m| [sprintf("%02d", m * 5), m * 5] }, \
+          { selected: ((form.object.start_time || Time.current).min / 5) * 5 }, \
+          { class: "w-20 rounded-md border-gray-300 shadow-sm focus:border-brand-main", \
+            data: { datetime_sync_target: "startMinute", action: "change->datetime-sync#updateEndTime" } }
 
-  / 終了日時
+  / 終了日時（同様に修正）
   .field.mt-4
     = form.label :end_date, "終了日時", class: "block text-sm font-medium text-gray-700 mb-2"
-    .flex.gap-2.items-center.justify-center
+    .flex.flex-wrap.gap-2.items-center.justify-center
       = form.date_field :end_date, \
         value: (form.object.end_time || (form.object.start_time || Time.current) + 1.hour).strftime('%Y-%m-%d'), \
         required: true, \
-        class: "w-40 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500", \
+        class: "w-40 rounded-md border-gray-300 shadow-sm focus:border-brand-main", \
         data: { datetime_sync_target: "endDate" }
       
-      = form.select :end_hour, \
-        (0..23).map { |h| [sprintf("%02d", h), h] }, \
-        { selected: (form.object.end_time || (form.object.start_time || Time.current) + 1.hour).hour }, \
-        { class: "w-20 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500", \
-          data: { datetime_sync_target: "endHour" } }
-      
-      span.text-gray-600.font-medium = ":"
-      
-      = form.select :end_minute, \
-        (0..11).map { |m| [sprintf("%02d", m * 5), m * 5] }, \
-        { selected: ((form.object.end_time || (form.object.start_time || Time.current) + 1.hour).min / 5) * 5 }, \
-        { class: "w-20 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500", \
-          data: { datetime_sync_target: "endMinute" } }
+      .flex.items-center.gap-2
+        = form.select :end_hour, \
+          (0..23).map { |h| [sprintf("%02d", h), h] }, \
+          { selected: (form.object.end_time || (form.object.start_time || Time.current) + 1.hour).hour }, \
+          { class: "w-20 rounded-md border-gray-300 shadow-sm focus:border-brand-main", \
+            data: { datetime_sync_target: "endHour" } }
+        
+        span.text-gray-600.font-medium = ":"
+        
+        = form.select :end_minute, \
+          (0..11).map { |m| [sprintf("%02d", m * 5), m * 5] }, \
+          { selected: ((form.object.end_time || (form.object.start_time || Time.current) + 1.hour).min / 5) * 5 }, \
+          { class: "w-20 rounded-md border-gray-300 shadow-sm focus:border-brand-main", \
+            data: { datetime_sync_target: "endMinute" } }
 
   / 活動内容の入力
   .field.mt-4
