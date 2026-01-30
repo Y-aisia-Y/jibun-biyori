@@ -1,6 +1,6 @@
-.flex.flex-col.items-center.justify-center.min-h-screen.bg-gray-50.p-4
+.flex.flex-col.items-center.justify-center.min-h-screen.p-4
   .w-full.max-w-md.text-center.p-8.bg-white.rounded-2xl.shadow-2xl
-    h1.text-4xl.font-extrabold.text-indigo-600.mb-4
+    h1.text-4xl.font-extrabold.mb-4.text-brand-dark
       | じぶん日和
 
     = form_for(resource,
@@ -39,7 +39,7 @@
 
       .mt-8
         = f.submit "新規登録",
-          class: "w-full px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:bg-indigo-700 transition transform hover:scale-105"
+          class: 'btn-save w-full block text-center px-6 py-3 btn-brand-primary font-semibold rounded-lg shadow-lg transition duration-150 transform hover:scale-105' do
 
     .mt-6.text-sm.text-gray-500
       = render "devise/shared/links"

@@ -1,5 +1,5 @@
 / サマリーセクション
-.bg-white.border-b.py-4
+li.border-b.py-4
   .max-w-4xl.mx-auto.px-4.space-y-3
     / 日付ナビ
     = render "date_navigator"
@@ -11,7 +11,7 @@
           .text-lg.font-bold.text-gray-800
             | 今日の体調
           = link_to '編集', edit_record_path(@record), 
-            class: 'px-3 py-1 text-sm text-yellow-600 hover:bg-yellow-50 rounded transition'
+            class: 'btn-cancel px-3 py-1 text-sm text-gray-600 rounded-lg hover:bg-gray-50 rounded transition'
         
         / 体調情報を中央寄せ
         = render "mood_summary", record: @record

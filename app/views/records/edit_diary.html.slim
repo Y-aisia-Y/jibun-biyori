@@ -17,20 +17,20 @@
       = f.text_area :diary_memo, 
         rows: 10, 
         placeholder: "今日の出来事や気持ちを自由に書いてください", 
-        class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-4"
+        class: "bg-white block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-4"
 
     / 変更・キャンセル
     .flex.justify-center.gap-4.mt-6
       = f.submit "変更する",
-        class: "px-6 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition"
+        class: "btn-save px-6 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition"
 
       = link_to "キャンセル",
         records_path(date: @record.recorded_date),
-        class: "px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
+        class: "btn-cancel px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
 
-.mt-6.pt-6.border-t.border-gray-200.text-center
-  = button_to '削除',
-    record_path(@record),
-    method: :delete,
-    data: { turbo_confirm: '本当に削除しますか？' },
-    class: 'px-6 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-lg transition-colors'
+/ 削除エリア
+.mt-12.py-12.border-t.border-gray-200.text-center.mb-5
+  = button_to '削除', record_path(@record), 
+    method: :delete, 
+    data: { turbo_confirm: '本当に削除しますか？' }, 
+    class: 'btn-delete px-6 py-2 text-sm font-semibold rounded-lg transition'

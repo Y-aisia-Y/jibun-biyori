@@ -3,7 +3,7 @@
     | カスタム項目の管理
 
   = link_to new_record_item_path,
-            class: "mb-6 inline-flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-medium" do
+            class: "btn-save mb-6 inline-flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-medium" do
     span.text-xl ＋
     span 新しい項目を追加
 
@@ -17,4 +17,4 @@
 
   .flex.justify-center.gap-4.mt-6
     = link_to "一覧へ戻る",mypage_root_path,
-      class: "px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
+      class: "btn-cancel px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
