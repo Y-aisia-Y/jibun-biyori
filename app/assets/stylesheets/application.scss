@@ -58,6 +58,13 @@ body {
   top: 90%;
 }
 
+#menu-panel {
+  z-index: 9999 !important; 
+}
+.relative.mb-6[data-controller="menu"] {
+  z-index: 40; 
+}
+
 // ========================================
 // 🔘 ボタン（じぶん日和スタイル）
 // ========================================
@@ -74,6 +81,24 @@ body {
     background-color: $color-brand-main;
     transform: translateY(-1px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  }
+}
+
+// ハンバーガー(☰)
+button[data-action="click->menu#toggle"] {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: $transition-default;
+  color: $color-brand-dark;
+
+  &:hover {
+
+    background-color: rgba($color-brand-dark, 0.1); 
+  }
+
+  &:active {
+    background-color: rgba($color-brand-dark, 0.2);
+    transform: scale(0.92);
   }
 }
 
@@ -217,4 +242,16 @@ input[type="radio"]:checked + .star-label ~ .star-label .star {
 @layer utilities {
   .w-5 { width: 30px; }
   .h-5 { height: 30px; }
+}
+
+// ========================================
+// 📱 スマホ向けの微調整
+// ========================================
+
+@media (max-width: 640px) {
+  .max-w-2xl, .max-w-xl {
+    width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
