@@ -54,7 +54,4 @@ Rails.application.routes.draw do
   authenticated :user do
     root "records#dashboard", as: :authenticated_root
   end
-
-  # 生存確認用
-  get "up" => "rails/health#show", as: :rails_health_check
 end
