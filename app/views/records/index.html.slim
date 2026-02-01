@@ -1,92 +1,47 @@
-.bg-gray-50.border-b
-  / 日付ナビ
-  .px-4.py-3
-    = render "date_navigator"
+li.min-h-screen.py-8
+  .max-w-2xl.mx-auto.px-6
+    / ヘッダー部分
+    .mb-8
+      h1.text-3xl.font-bold.text-gray-800.mb-2.text-center
+        | 日記一覧
+      p.text-sm.text-gray-500.text-center
+        = "全#{@records.count}件"
 
-  / サマリー
-  .px-4.py-3.space-y-2
-    - if @record.persisted?
-      = render "mood_summary", record: @record
-    - else
-      .text-center.text-gray-500.py-4
-        p.text-sm = "#{l(@date, format: :long)}の記録はまだありません"
+    / 検索ブロック
+    .relative.mb-6.z-50[data-controller="menu"]
+      = form_with url: records_path, method: :get, local: true do |f|
+        .relative
+          = f.text_field :q,
+            value: params[:q],
+            placeholder: "🔍 キーワードで検索",
+            class: "w-full pl-4 pr-12 py-3 bg-white border border-gray-200 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all"
+  
+          button.absolute.right-2.top-1/2.transform.-translate-y-1/2.p-2.text-gray-400.hover:text-gray-600.rounded-full.hover:bg-gray-100.transition[
+            type="button"
+            data-action="click->menu#toggle"
+          ]
+            | ⋯
 
-/ タイムライン
-#timeline.relative.max-h-screen.overflow-y-auto[
-  data-controller="timeline"
-  data-timeline-current-hour-value=@current_hour
-  data-timeline-current-minute-value=@current_minute
-]
+      / ドロップダウンメニュー(パーシャル)
+      = render "shared/dropdown_menu", date: @date
 
-  / 現在時刻のライン
-  .now-line.absolute.left-0.right-0.h-0.5.bg-red-500.z-10
+    / 日記一覧
+    #timeline.relative.space-y-4[
+      data-controller="timeline"
+      data-timeline-current-hour-value=@current_hour
+      data-timeline-current-minute-value=@current_minute
+    ]
 
-  / 時間ブロック
-  - (0..23).each do |hour| 
-    .hour-block.relative.group
-      / 時刻ラベル
-      .w-14.text-right.pr-2.text-xs.text-gray-400.pt-1
-        = "%02d:00" % hour
+      - if @records.any?
+        - @records.each do |record|
+          = link_to edit_diary_record_path(record),
+            class: "block bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition"
 
-      / 時間ブロック
-      .flex.items-start.border-b.h-20.relative  
-        - activities_by_hour = @activities.group_by { |a| a.start_time.hour }
-        - if activities_by_hour[hour]
-          = render activities_by_hour[hour]
+            .text-xs.text-gray-400.mb-1.text-center
+              = l record.recorded_date, format: :long
 
-        - if @record.persisted?
-          = link_to "＋",
-            new_record_activity_path(@record, date: @date, hour: hour),
-            class: "add-button hidden group-hover:flex"
-        - else
-          = button_to "＋",
-            create_with_activity_records_path(date: @date, hour: hour),
-            method: :post,
-            class: "add-button hidden group-hover:flex"
-
-.max-w-2xl.mx-auto.space-y-4.relative.z-20
-  h1.text-2xl.font-bold.text-center 今日の記録
-
-  .flex.justify-center.gap-4
-    = link_to "体調を記録する", health_records_path(date: @record.recorded_date), class: "px-4 py-2 rounded bg-green-600 text-white"
-    = link_to "日記を書く", diary_records_path(date: @record.recorded_date), class: "px-4 py-2 rounded bg-blue-600 text-white"
-
-
-/ 一応残しておく
-
-.max-w-4xl.mx-auto
-  .flex.justify-between.items-center.mb-6
-    h1.text-3xl.font-bold.text-gray-800
-      | 記録一覧
-
-    = link_to new_record_path, class: 'px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg shadow-md hover:bg-indigo-700 transition duration-150' do
-      | 新規作成
-
-  - if @records.empty?
-    .text-center.p-10.bg-white.rounded-xl.shadow-inner.mt-8
-      p.text-xl.text-gray-500.mb-4
-        | 記録がありません。
-    .text-center.mt-4
-      = link_to 'TOP', authenticated_root_path, class: 'text-sm text-indigo-600 hover:underline'
-      = link_to 'マイページ', mypage_root_path, class: 'text-sm text-indigo-600 hover:underline'
-
-  - else
-    .space-y-4
-      - @records.each do |record|
-        .bg-white.p-5.rounded-xl.shadow-lg.flex.justify-between.items-center.hover:shadow-xl.transition.duration-200
-          .flex-grow
-            = link_to record_path(record), class: 'text-xl.font-semibold.text-gray-900.hover:text-indigo-600'
-              = record.recorded_date.strftime('%Y年%m月%d日 (%a)')
-            
-            p.text-sm.text-gray-500.mt-1
-              | メモ: 
-              = truncate(record.diary_memo, length: 50, omission: "...")
-          
-          .flex.space-x-2.ml-4
-            = link_to '編集', edit_record_path(record), class: 'text-sm text-yellow-600 hover:underline'
-            span.mx-2 | |
-            = link_to '削除', record_path(record), data: { turbo_method: :delete, turbo_confirm: "本当にこの記録を削除してもよろしいですか？" }, class: 'text-sm text-red-600 hover:underline'
-            span.mx-2 | |
-            = link_to 'TOP', authenticated_root_path, class: 'text-sm text-indigo-600 hover:underline'
-            span.mx-2 | |
-            = link_to 'マイページ', mypage_root_path, class: 'text-sm text-indigo-600 hover:underline'
+            .text-gray-800.leading-relaxed.text-sm.text-center
+              = truncate(record.diary_memo, length: 120)
+      - else
+        .bg-white.rounded-xl.border.border-gray-200.p-6.text-center.text-gray-500
+          | まだ日記がありません

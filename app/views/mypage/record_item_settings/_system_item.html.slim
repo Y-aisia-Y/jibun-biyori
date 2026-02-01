@@ -1,27 +1,15 @@
-li.flex.items-center.justify-between.py-2 id="record_item_#{item.id}"
-  span.text-sm = item.name
+/ システム項目
+li.bg-white.border.border-gray-200.rounded-xl.shadow-sm.p-4(
+  data-controller="toggle-switch"
+  data-toggle-switch-item-id-value=item.id
+  data-toggle-switch-url-value=toggle_visibility_mypage_record_item_path(item)
+)
+  .flex.items-center.justify-between
+    span.text-base.font-medium.text-gray-800
+      = item.name
 
-  .flex.gap-4
-    label.flex.items-center
-      input.mr-1[
-        type="radio"
-        name="record_item_#{item.id}_visibility"
-        value="visible"
-        checked=item.is_default_visible?
-        data-action="change->visibility#toggle"
-        data-item-id=item.id
-        data-url=toggle_visibility_mypage_record_item_path(item)
-      ]
-      span.text-sm 表示
-
-    label.flex.items-center
-      input.mr-1[
-        type="radio"
-        name="record_item_#{item.id}_visibility"
-        value="hidden"
-        checked=!item.is_default_visible?
-        data-action="change->visibility#toggle"
-        data-item-id=item.id
-        data-url=toggle_visibility_mypage_record_item_path(item)
-      ]
-      span.text-sm 非表示
+    label.toggle-switch.cursor-pointer(
+      class=(item.is_default_visible? ? "on" : "")
+      data-action="click->toggle-switch#toggle"
+    )
+      span.toggle-thumb

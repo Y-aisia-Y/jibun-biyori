@@ -1,13 +1,12 @@
-h3.font-semibold.mb-2 表示中
-ul#visible_system_items_list[data-controller="visibility"]
-  - @visible_system_items.each do |item|
-    = render "mypage/record_item_settings/system_item", item: item
+.max-w-xl.mx-auto.py-6
+  h1.text-3xl.font-bold.mb-6.text-center
+    | 記録項目の管理
 
-h3.font-semibold.mb-2.mt-6 非表示
-ul#hidden_system_items_list[data-controller="visibility"]
-  - @hidden_system_items.each do |item|
-    = render "mypage/record_item_settings/system_item", item: item
+  / システム項目一覧
+  ul#visible_system_items_list.space-y-4
+    - @system_items.each do |item|
+      = render "mypage/record_item_settings/system_item", item: item
 
-= link_to "← マイページトップに戻る",
-          mypage_root_path,
-          class: "inline-block mt-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-sm"
+  .flex.justify-center.gap-4.mt-6
+    = link_to "一覧へ戻る", mypage_root_path,
+      class: "px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"

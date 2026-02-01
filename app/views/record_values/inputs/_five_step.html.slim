@@ -1,6 +1,11 @@
-.field
-  = f.label :value, item.name
-  .flex.gap-1
-    - 1.upto(5) do |i|
-      = f.radio_button :value, i
-      = i
+.flex.flex-col.items-center.gap-4.p-4.bg-gray-50.rounded-lg
+  = f.label :value, item.name, class: "text-xl font-bold text-gray-800"
+  
+  .star-rating.flex.gap-3.justify-center
+    - 5.downto(1) do |i|
+      - input_id = "item_#{item.id}_value_#{i}"
+      = f.radio_button :value, i,
+        id: input_id,
+        class: "hidden peer"
+      label.star-label.cursor-pointer.transition-all.duration-200.hover:scale-125 for=input_id
+        span.star.text-4xl.text-gray-300.peer-checked:text-yellow-500.transition-colors.duration-200 ★

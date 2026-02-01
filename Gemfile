@@ -29,8 +29,14 @@ gem 'mini_magick'
 # 環境変数管理
 gem 'dotenv-rails'
 
+# デコレーター
+gem 'draper'
+
 # i18n
 gem 'rails-i18n', '~> 7.0.0'
+
+# ページドネーション
+gem 'kaminari'
 
 # Font Awesome
 gem 'font-awesome-sass', '~> 6.5.0'

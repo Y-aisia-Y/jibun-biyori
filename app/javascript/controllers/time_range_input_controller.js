@@ -1,16 +1,16 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["sleep", "wake", "value"]
+  static targets = ["sleepHour", "sleepMinute", "wakeHour", "wakeMinute", "value"]
 
   updateValue() {
-    const sleepTime = this.sleepTarget.value
-    const wakeTime = this.wakeTarget.value
+    const sh = this.sleepHourTarget.value
+    const sm = this.sleepMinuteTarget.value
+    const wh = this.wakeHourTarget.value
+    const wm = this.wakeMinuteTarget.value
 
-    if (sleepTime && wakeTime) {
-      this.valueTarget.value = `${sleepTime}-${wakeTime}`
-    } else {
-      this.valueTarget.value = ""
+    if (sh && sm && wh && wm) {
+      this.valueTarget.value = `${sh}:${sm}-${wh}:${wm}`
     }
   }
 }

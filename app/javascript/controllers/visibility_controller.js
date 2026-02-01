@@ -1,11 +1,13 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["radio"]
-
   toggle(event) {
-    const itemId = event.currentTarget.dataset.itemId
-    const url = event.currentTarget.dataset.url
+    event.preventDefault()
+    event.stopPropagation()
+    
+    const toggleSwitch = event.currentTarget
+    const itemId = toggleSwitch.dataset.itemId
+    const url = toggleSwitch.dataset.url
 
     fetch(url, {
       method: 'PATCH',
@@ -13,6 +15,16 @@ export default class extends Controller {
         'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content,
         'Accept': 'text/vnd.turbo-stream.html'
       }
+    })
+    .then(response => {
+      if (response.ok) {
+        toggleSwitch.classList.toggle('on')
+      } else {
+        console.error('Failed to update visibility')
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error)
     })
   }
 }

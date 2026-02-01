@@ -22,20 +22,45 @@ class User < ApplicationRecord
 
   def create_default_record_items
     default_items = [
-      { name: "睡眠時間", input_type: :time_range, unit: "時間", display_order: 1 },
-      { name: "気分", input_type: :five_step, display_order: 2 },
-      { name: "体調", input_type: :five_step, display_order: 3 },
-      { name: "意欲", input_type: :five_step, display_order: 4 },
-      { name: "疲労感", input_type: :five_step, display_order: 5 }
+      { 
+        name: "睡眠時間", 
+        input_type: :time_range, 
+        category: :default,
+        display_order: 1,
+        item_type: :system
+      },
+      { 
+        name: "気分", 
+        input_type: :five_step, 
+        category: :default,
+        display_order: 2,
+        item_type: :system
+      },
+      { 
+        name: "体調", 
+        input_type: :five_step, 
+        category: :default,
+        display_order: 3,
+        item_type: :system
+      },
+      { 
+        name: "意欲", 
+        input_type: :five_step, 
+        category: :default,
+        display_order: 4,
+        item_type: :system
+      },
+      { 
+        name: "疲労感", 
+        input_type: :five_step, 
+        category: :default,
+        display_order: 5,
+        item_type: :system
+      }
     ]
 
     default_items.each do |attrs|
-      record_items.create!(
-        attrs.merge(
-          is_default: true,
-          is_default_visible: true
-        )
-      )
+      record_items.create!(attrs)
     end
   end
 end

@@ -5,7 +5,7 @@
   nav.grid.grid-cols-1.md:grid-cols-3.gap-4
     = link_to mypage_record_item_settings_path, class: 'block p-4 rounded-lg border hover:bg-gray-50' do
       h2.font-semibold 記録項目の設定
-      p.text-sm.text-gray-500 system項目の表示 / 非表示を管理します
+      p.text-sm.text-gray-500 体調の表示 / 非表示を管理します
 
     = link_to record_items_path, class: 'block p-4 rounded-lg border hover:bg-gray-50' do
       h2.font-semibold カスタム項目
@@ -15,4 +15,6 @@
       h2.font-semibold プロフィール設定
       p.text-sm.text-gray-500 名前や画像を編集します
 
-      = link_to 'TOP', authenticated_root_path, class: 'text-sm text-indigo-600 hover:underline'
+  .mt-8.pt-6.border-t.border-gray-200
+    = button_to destroy_user_session_path, method: :delete, class: 'btn-delete w-full py-3 px-4 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition shadow-sm' do
+      | ログアウト

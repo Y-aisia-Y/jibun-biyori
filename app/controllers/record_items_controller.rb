@@ -19,7 +19,7 @@ class RecordItemsController < ApplicationController
     @record_item.item_type = "user_defined"
 
     if @record_item.save
-      redirect_to record_items_path, notice: "記録項目を作成しました"
+      redirect_to record_items_path, success: "記録項目を作成しました"
     else
       render :new, status: :unprocessable_entity
     end
@@ -30,7 +30,7 @@ class RecordItemsController < ApplicationController
 
   def update
     if @record_item.update(record_item_update_params)
-      redirect_to record_items_path, notice: "記録項目を更新しました"
+      redirect_to record_items_path, success: "カスタム項目を更新しました"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -38,10 +38,10 @@ class RecordItemsController < ApplicationController
 
   def destroy
     if @record_item.system?
-      redirect_to record_items_path, alert: "システム項目は削除できません"
+      redirect_to record_items_path, warning: "記録項目は削除できません"
     else
       @record_item.destroy
-      redirect_to record_items_path, notice: "記録項目を削除しました"
+      redirect_to record_items_path, danger: "カスタム項目を削除しました"
     end
   end
 
@@ -93,6 +93,6 @@ class RecordItemsController < ApplicationController
   def reject_default_item
     return unless @record_item&.default?
 
-    redirect_to mypage_path, alert: "デフォルト項目は編集・削除できません"
+    redirect_to mypage_path, warning: "記録項目は編集・削除できません"
   end
 end

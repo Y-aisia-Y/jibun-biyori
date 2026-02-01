@@ -10,6 +10,6 @@ class Mypage::RecordItemsController < ApplicationController
   private
 
   def set_record_item
-    @record_item = current_user.record_items.system_items.find(params[:id])
+    @record_item = current_user.record_items.find(params[:id])
   end
 end

@@ -1,0 +1,7 @@
+.absolute.right-2.top-full.w-48.bg-white.rounded-lg.shadow-lg.border.border-gray-200.hidden.z-50[
+  data-menu-target="panel"
+]
+  ul.py-1
+    li
+      = link_to "日記を書く", diary_records_path(date: local_assigns[:date] || Date.current),
+        class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"

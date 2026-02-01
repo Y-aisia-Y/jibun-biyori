@@ -1,6 +1,12 @@
-.max-w-xl.mx-auto.p-6.bg-white.rounded-xl.shadow-2xl.mt-10
+.max-w-xl.mx-auto.p-6.bg-white.rounded-xl.shadow-2xl.mt-10.
   h1.text-2xl.font-bold.text-gray-800.mb-6.text-center
     = @record.recorded_date.strftime('%Y年%m月%d日')
     | の活動を編集
 
   = render 'form', record: @record, activity: @activity
+
+  .mt-6.pt-6.border-t.border-gray-200.text-center
+    = button_to '削除', record_activity_path(@record, @activity), \
+      method: :delete, \
+      data: { turbo_confirm: '本当に削除しますか?' }, \
+      class: 'btn-delete px-6 py-2 text-sm font-semibold rounded-lg'

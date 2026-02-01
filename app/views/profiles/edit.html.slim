@@ -11,8 +11,7 @@
       - if @user.avatar.present?
         = image_tag @user.avatar.url, class: "rounded-full object-cover border", id: "preview", style: "width: 100px; height: 100px;"
       - else
-        .rounded-full.bg-gray-200.flex.items-center.justify-center.border id="preview" style="width: 100px; height: 100px;"
-          span.text-4xl 👤
+        = image_tag "default_avatar.png", class: "rounded-full object-cover border", id: "preview", style: "width: 100px; height: 100px;"
 
     .mb-4
       = f.label :nickname, "ニックネーム", class: "block font-semibold mb-1"
@@ -26,6 +25,8 @@
       = f.label :first_name, "名", class: "block font-semibold mb-1"
       = f.text_field :first_name, class: "w-full border rounded px-3 py-2"
 
-    .flex.gap-4.mt-6
-      = f.submit "保存する", class: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      = link_to "戻る", profile_path, class: "px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+    .flex.justify-center.gap-4.mt-6
+      = f.submit "保存する", 
+        class: "btn-save inline-flex justify-center py-2 px-6 rounded-md bg-indigo-600 text-white hover:bg-indigo-700"
+      = link_to "キャンセル", profile_path,
+        class: "btn-cancel px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"

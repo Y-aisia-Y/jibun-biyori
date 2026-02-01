@@ -1,13 +1,5 @@
-/ app/views/activities/_activity.html.slim
-- start_min = activity.start_time.min
-- end_time   = activity.end_time.min
-- duration   = ((activity.end_time - activity.start_time) / 60).to_i
-
-- top_px    = (start_min / 60.0) * 80   # h-20 = 80px
-- height_px = (duration / 60.0) * 80
-
 .div.absolute.left-14.right-2.rounded-lg.bg-indigo-100.p-2.text-xs.shadow(
-  style="top: #{top_px}px; height: #{height_px}px;"
+  style="top: #{activity.top_position}px; height: #{activity.height}px;"
 )
-  .font-medium = "#{activity.start_time.strftime('%H:%M')} - #{activity.end_time.strftime('%H:%M')}"
+  .font-medium = activity.time_range
   .mt-1 = activity.content

@@ -1,5 +1,5 @@
 class ProfilesController < ApplicationController
-  before_action :authenticate_user!  # Deviseのログイン認証
+  before_action :authenticate_user!
   
   def show
     @user = current_user
@@ -12,9 +12,9 @@ class ProfilesController < ApplicationController
   def update
     @user = current_user
     if @user.update(profile_params)
-      redirect_to profile_path, success: t('defaults.flash_message.updated', item: User.model_name.human)
+      redirect_to profile_path, success: 'プロフィールを更新しました'
     else
-      flash.now[:danger] = t('defaults.flash_message.not_updated', item: User.model_name.human)
+      flash.now[:danger] = 'プロフィールの更新に失敗しました'
       render :edit, status: :unprocessable_entity
     end
   end

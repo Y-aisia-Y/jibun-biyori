@@ -1,13 +1,36 @@
-nav.mb-4
-  ul.flex.gap-4.border-b
-    li
-      = link_to "記録項目の設定", mypage_record_item_settings_path,
-        class: "px-4 py-2 inline-block hover:bg-gray-100"
+.header.custom-header.px-4.py-3.flex.items-center.justify-between.relative[data-controller="menu"]
+  / ロゴ＋タイトル
+  = link_to authenticated_root_path,
+    class: "header-title flex items-center gap-2 font-bold text-lg transition" do
+    span.text-2xl 🌿
+    span じぶん日和
 
-    li
-      = link_to "カスタム項目", record_items_path,
-        class: "px-4 py-2 inline-block hover:bg-gray-100"
+  / プロフィール画像＋トグル
+  - if user_signed_in?
+    .flex.items-center.gap-2
+      = link_to mypage_root_path do
+        - if current_user.avatar.present?
+          = image_tag current_user.avatar.url,
+            class:"w-5 h-5 rounded-full object-cover border border-gray-300 bg-white"
+        - else
+          = image_tag "default_avatar.png",
+            class:"w-5 h-5 rounded-full object-cover border border-gray-300 bg-white"
 
-    li
-      = link_to "プロフィール設定", edit_profile_path,
-        class: "px-4 py-2 inline-block hover:bg-gray-100"
+      button.text-2xl.p-2.hover:bg-gray-100.rounded.transition[data-action="click->menu#toggle"] ☰
+
+    #menu-panel.hidden.bg-white.border.border-gray-200.shadow-lg.rounded-md.absolute.right-3.top-full.mt-2.w-auto.z-50[
+      data-menu-target="panel"
+    ]
+      ul.py-1
+        li
+          = link_to "カレンダー", authenticated_root_path,
+            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
+        li
+          = link_to "体調記入", health_records_path(date: @date || Date.current),
+            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
+        li
+          = link_to "日記一覧", records_path(date: Date.current),
+            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
+        li
+          = link_to "マイページ", mypage_root_path,
+            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
