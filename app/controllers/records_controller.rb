@@ -3,7 +3,7 @@ class RecordsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_date, only: %i[dashboard new_health new_diary create_with_activity]
-  before_action :set_record, only: %i[show edit update destroy edit_diary update_diary ]
+  before_action :set_record, only: %i[show edit update destroy edit_diary update_diary]
   before_action :authorize_user!, only: %i[show edit update destroy edit_diary update_diary]
   before_action :set_record_for_date, only: %i[new_health new_diary]
 
@@ -57,24 +57,60 @@ class RecordsController < ApplicationController
   end
 
   def create
-    @record = current_user.records.build(processed_record_params)
+    redirect_to_dashboard = params[:record].delete(:redirect_to_dashboard) == "true"
+    record_params = processed_record_params
+  
+  # 同じ日付のレコードを探す
+    @record = current_user.records.find_or_initialize_by(recorded_date: record_params[:recorded_date])
+  
+  # 既存のレコードの場合は recorded_date 以外を更新
+    if @record.persisted?
+      params_without_date = record_params.except(:recorded_date)
+      @record.assign_attributes(params_without_date)
+    else
+      @record.assign_attributes(record_params)
+    end
 
-    if @record.save
-      if params[:record][:redirect_to_dashboard] == "true"
+  # 日記として保存する場合はコンテキストを指定
+    if redirect_to_dashboard
+      save_result = @record.save
+    else
+      save_result = @record.save(context: :diary)
+    end
+
+    if save_result
+      if redirect_to_dashboard
         redirect_to dashboard_path(date: @record.recorded_date),
                     success: "体調を記録しました"
       else
         redirect_to records_path,
-                  success: "日記を作成しました"
+                    success: "日記を作成しました"
       end
     else
-      set_all_visible_items
-      render :new, status: :unprocessable_entity
+      if redirect_to_dashboard
+        set_all_visible_items
+        flash.now[:danger] = "保存に失敗しました"
+        render :new, status: :unprocessable_entity
+      else
+        @items = current_user.record_items.user_items.visible.ordered
+        prepare_record_values(@items)
+        @record.recorded_date ||= Date.current
+        flash.now[:danger] = "保存に失敗しました"
+        render :diary, status: :unprocessable_entity
+      end
     end
   end
 
   def update
-    if @record.update(processed_record_params)
+    @record.assign_attributes(processed_record_params)
+
+    if params[:record][:redirect_to_dashboard] == "true"
+      update_result = @record.save
+    else
+      update_result = @record.save(context: :diary)
+    end
+
+    if update_result
       if params[:record][:redirect_to_dashboard] == "true"
         redirect_to dashboard_path(date: @record.recorded_date), success: "体調を更新しました"
       else
@@ -82,15 +118,18 @@ class RecordsController < ApplicationController
       end
     else
       set_all_visible_items
+      flash.now[:danger] = "更新に失敗しました"
       render :edit, status: :unprocessable_entity
     end
   end
 
   def update_diary
-    if @record.update(processed_record_params)
+    @record.assign_attributes(processed_record_params)
+    
+    if @record.save(context: :diary)
       redirect_to records_path, success: "日記を更新しました"
     else
-      set_all_visible_items
+      flash.now[:danger] = "更新に失敗しました"
       render :edit_diary, status: :unprocessable_entity
     end
   end
@@ -122,7 +161,10 @@ class RecordsController < ApplicationController
 
   def new_diary
     @items = current_user.record_items.user_items.visible.ordered
+    @date = params[:date]&.to_date || Date.current
+    @record = current_user.records.find_or_initialize_by(recorded_date: @date)
     prepare_record_values(@items)
+  
     render :diary
   end
 

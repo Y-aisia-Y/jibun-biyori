@@ -3,5 +3,5 @@
 ]
   ul.py-1
     li
-      = link_to "日記を書く", diary_records_path(date: local_assigns[:date] || Date.current),
+      = link_to "日記を作成", new_diary_records_path(date: Date.current),
         class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"

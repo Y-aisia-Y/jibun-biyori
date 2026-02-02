@@ -38,6 +38,19 @@ ja:
       checkbox: "チェックボックス"
       time_range: "時間範囲"
 
+  activerecord:
+    models:
+      record: 記録
+    attributes:
+      record:
+        diary_memo: 日記
+    errors:
+      models:
+        record:
+          attributes:
+            diary_memo:
+              blank: を入力してください
+
   devise:
     sign_up: "新規登録はこちら"
     log_in: "ログインはこちら"

@@ -27,7 +27,7 @@
             class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition",
             data: { action: "click->menu#hide" }
         li
-          = link_to "体調記入", health_records_path(date: @date || Date.current),
+          = link_to "体調記入", new_health_records_path(date: @date || Date.current),
             class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition",
             data: { action: "click->menu#hide" }
         li

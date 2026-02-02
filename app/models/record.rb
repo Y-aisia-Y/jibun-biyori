@@ -8,7 +8,13 @@ class Record < ApplicationRecord
   accepts_nested_attributes_for :record_values, allow_destroy: true
 
   validates :recorded_date, presence: true, uniqueness: { scope: :user_id }
+  validates :diary_memo,presence: true,if: :diary_context?
   
+  # バリデーションコンテキストを判定するメソッド
+  def diary_context?
+    validation_context == :diary
+  end
+
   # システム項目を取得するメソッド
   def system_items
     user.record_items.system_items.visible.ordered
