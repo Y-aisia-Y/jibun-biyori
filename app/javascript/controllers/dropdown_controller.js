@@ -7,7 +7,10 @@ export default class extends Controller {
     this.panelTarget.classList.toggle("hidden")
   }
 
-  // メニュー外をクリックしたら閉じる
+  hide() {
+    this.panelTarget.classList.add("hidden")
+  }
+
   close(event) {
     if (!this.element.contains(event.target)) {
       this.panelTarget.classList.add("hidden")
@@ -15,12 +18,11 @@ export default class extends Controller {
   }
 
   connect() {
-    // ページ読み込み時にイベントリスナーを追加
-    document.addEventListener("click", this.close.bind(this))
+    this.clickOutsideHandler = this.close.bind(this)
+    document.addEventListener("click", this.clickOutsideHandler)
   }
 
   disconnect() {
-    // コントローラーが削除されるときにイベントリスナーを解除
-    document.removeEventListener("click", this.close.bind(this))
+    document.removeEventListener("click", this.clickOutsideHandler)
   }
 }

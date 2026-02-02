@@ -24,13 +24,17 @@
       ul.py-1
         li
           = link_to "カレンダー", authenticated_root_path,
-            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
+            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition",
+            data: { action: "click->menu#hide" }
         li
           = link_to "体調記入", health_records_path(date: @date || Date.current),
-            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
+            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition",
+            data: { action: "click->menu#hide" }
         li
           = link_to "日記一覧", records_path(date: Date.current),
-            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
+            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition",
+            data: { action: "click->menu#hide" }
         li
           = link_to "マイページ", mypage_root_path,
-            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
+            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition",
+            data: { action: "click->menu#hide" }
