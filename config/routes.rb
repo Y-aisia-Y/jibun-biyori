@@ -7,13 +7,15 @@ Rails.application.routes.draw do
 
   resources :records do
     collection do
-      get :create_with_activity
-      get :health, to: "records#new_health"
-      get :diary,  to: "records#new_diary"
+      get :dashboard
+      get :new_health
+      get :new_diary
+      post :create_with_activity
+      post :create_diary
     end
-
+    
     member do
-      get   :edit_diary
+      get :edit_diary
       patch :update_diary
     end
   

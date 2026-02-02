@@ -38,33 +38,19 @@ ja:
       checkbox: "チェックボックス"
       time_range: "時間範囲"
 
+  activerecord:
+    models:
+      record: 記録
+    attributes:
+      record:
+        diary_memo: 日記
+    errors:
+      models:
+        record:
+          attributes:
+            diary_memo:
+              blank: を入力してください
+
   devise:
     sign_up: "新規登録はこちら"
     log_in: "ログインはこちら"
-
-    sessions:
-      signed_in: "ログインしました。"
-      signed_out: "ログアウトしました。"
-      user:
-        signed_in: "ログインしました。"
-        signed_out: "ログアウトしました。"
-
-    failure:
-      unauthenticated: "ログインしてください。"
-      invalid: "メールアドレスまたはパスワードが正しくありません"
-      not_found_in_database: "メールアドレスまたはパスワードが正しくありません"
-
-      user:
-        unauthenticated: "ログインしてください。"
-        invalid: "メールアドレスまたはパスワードが正しくありません"
-        not_found_in_database: "メールアドレスまたはパスワードが正しくありません"
-
-  activerecord:
-    attributes:
-      user:
-        email: メールアドレス
-        password: パスワード
-        password_confirmation: パスワード（確認）
-
-
-
