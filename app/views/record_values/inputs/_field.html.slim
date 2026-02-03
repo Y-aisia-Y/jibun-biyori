@@ -1,5 +1,6 @@
 - item = f.object.record_item
 - return unless item
+- return unless item.is_default_visible?
 
 .record-value-field.p-4.bg-gray-50.rounded-lg.shadow-sm.border.border-gray-200.mb-4
   = f.hidden_field :record_item_id

@@ -1,9 +1,11 @@
 / カスタム項目
-li.bg-white.border.border-gray-200.rounded-xl.shadow-sm.p-4
+/ app/views/record_items/_record_item.html.slim (例)
+li.bg-white.border.border-gray-200.rounded-xl.shadow-sm.p-4(data-controller="visibility")
   .flex.items-center.justify-between
     span.text-base.font-medium.text-gray-800
       = item.name
 
+    / ここを JS の .dataset.itemId と .dataset.url に合わせる
     label.toggle-switch.cursor-pointer(
       class=(item.is_default_visible? ? "on" : "")
       data-action="click->visibility#toggle"

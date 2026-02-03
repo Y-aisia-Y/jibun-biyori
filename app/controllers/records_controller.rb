@@ -167,7 +167,7 @@ class RecordsController < ApplicationController
   private
 
   def build_missing_record_values(record)
-    current_user.record_items.each do |item|
+    current_user.record_items.where(is_default_visible: true).each do |item|
       record.record_values.find_or_initialize_by(record_item: item)
     end
   end
