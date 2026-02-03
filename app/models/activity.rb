@@ -4,6 +4,14 @@ class Activity < ApplicationRecord
 
   belongs_to :record
 
+  # バリデーション
+  validates :start_time, presence: true
+  validates :end_time, presence: true
+  validates :content, presence: true, length: { maximum: 500 }
+  
+  # カスタムバリデーション
+  validate :end_time_after_start_time
+
   # タイムライン全体での位置(元のメソッド)
   def top_position
     return 0 unless start_time
@@ -38,5 +46,16 @@ class Activity < ApplicationRecord
     # 次の時間にまたがる場合は、その時間の残り分
     remaining_minutes = 60 - start_time.min
     remaining_minutes * PIXELS_PER_MINUTE
+  end
+
+  private
+
+  def end_time_after_start_time
+    # 開始時刻または終了時刻が空の場合は、presenceバリデーションに任せる
+    return if start_time.blank? || end_time.blank?
+
+    if end_time <= start_time
+      errors.add(:end_time, "は開始時刻よりも後の時刻に設定してください")
+    end
   end
 end

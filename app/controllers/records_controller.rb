@@ -63,12 +63,9 @@ class RecordsController < ApplicationController
     date = params[:date] ? Date.parse(params[:date]) : Date.current
     @record = current_user.records.find_or_initialize_by(recorded_date: date)
 
-    if @record.new_record?
-      @items = current_user.record_items.user_items.visible.ordered
-      prepare_record_values(@items)
-    end
+    build_missing_record_values(@record)
 
-    render 'diary'
+    render :diary
   end
 
   def edit_diary
@@ -168,6 +165,12 @@ class RecordsController < ApplicationController
   end
 
   private
+
+  def build_missing_record_values(record)
+    current_user.record_items.each do |item|
+      record.record_values.find_or_initialize_by(record_item: item)
+    end
+  end
 
   def set_date
     @date = params[:date] ? Date.parse(params[:date]) : Date.current

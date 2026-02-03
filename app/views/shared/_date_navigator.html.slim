@@ -1,16 +1,24 @@
 / 日付ナビゲーター(日記)
 .bg-white.rounded-lg.shadow-sm.border.border-gray-200.p-4
   .flex.items-center.justify-between
-    - prev_record = current_user.records.find_by(recorded_date: @record.recorded_date&.prev_day)
-    - next_record = current_user.records.find_by(recorded_date: @record.recorded_date&.next_day)
+    - current_date = @record.recorded_date || Date.current
 
-    = link_to prev_record ? edit_diary_record_path(prev_record) : new_diary_records_path(date: @record.recorded_date&.prev_day), 
-      class: "flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-800 transition" do
+    / --- 前の日 ---
+    - prev_date = current_date.prev_day
+    - prev_r = current_user.records.find_by(recorded_date: prev_date)
+    - prev_path = prev_r&.diary_memo.to_s.strip.present? ? edit_diary_record_path(prev_r) : new_diary_records_path(date: prev_date)
+
+    = link_to prev_path, class: "flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-800 transition" do
       i.fas.fa-chevron-left
 
+    / --- 中央の日付表示 ---
     .text-lg.font-bold.text-gray-800
-      = (@record.recorded_date || Date.current).strftime('%Y年%m月%d日')
+      = current_date.strftime('%Y年%m月%d日')
 
-    = link_to next_record ? edit_diary_record_path(next_record) : new_diary_records_path(date: @record.recorded_date&.next_day), 
-      class: "flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-800 transition" do
+    / --- 次の日 ---
+    - next_date = current_date.next_day
+    - next_r = current_user.records.find_by(recorded_date: next_date)
+    - next_path = next_r&.diary_memo.to_s.strip.present? ? edit_diary_record_path(next_r) : new_diary_records_path(date: next_date)
+
+    = link_to next_path, class: "flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-800 transition" do
       i.fas.fa-chevron-right
