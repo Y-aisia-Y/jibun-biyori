@@ -41,14 +41,23 @@ ja:
   activerecord:
     models:
       record: 記録
+      record_item: 記録項目
     attributes:
       record:
         diary_memo: 日記
+      record_item:
+        name: 項目名
+        unit: 単位
+        input_type: 入力形式
     errors:
       models:
         record:
           attributes:
             diary_memo:
+              blank: を入力してください
+        record_item:
+          attributes:
+            name:
               blank: を入力してください
 
   devise:
