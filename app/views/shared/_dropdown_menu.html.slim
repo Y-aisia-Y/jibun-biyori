@@ -1,7 +1,11 @@
 .absolute.right-2.top-full.w-48.bg-white.rounded-lg.shadow-lg.border.border-gray-200.hidden.z-50[
   data-menu-target="panel"
 ]
+  - today = Date.current
+  - today_record = current_user.records.find_by(recorded_date: today)
+  - diary_path = today_record&.diary_memo.to_s.strip.present? ? edit_diary_record_path(today_record) : new_diary_records_path(date: today)
+
   ul.py-1
     li
-      = link_to "日記を作成", new_diary_records_path(date: Date.current),
+      = link_to "日記を作成", diary_path, 
         class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
