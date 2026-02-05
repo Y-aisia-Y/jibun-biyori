@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RecordItem < ApplicationRecord
   belongs_to :user
   has_many :record_values, dependent: :destroy
@@ -6,7 +8,7 @@ class RecordItem < ApplicationRecord
     I18n.t("record_items.input_type.#{input_type}")
   end
 
-  enum input_type: {
+  enum :input_type, {
     five_step: 0,
     numeric: 1,
     text: 2,
@@ -14,12 +16,12 @@ class RecordItem < ApplicationRecord
     time_range: 4
   }
 
-  enum category: {
+  enum :category, {
     default: "default",
     custom: "custom"
   }
 
-  enum item_type: {
+  enum :item_type, {
     system: 0,
     user_defined: 1
   }
@@ -36,7 +38,7 @@ class RecordItem < ApplicationRecord
   scope :hidden,       -> { where(is_default_visible: false) }
 
   def move_higher!
-    upper = user.record_items.where("display_order < ?", display_order).order(display_order: :desc).first
+    upper = user.record_items.where(display_order: ...display_order).order(display_order: :desc).first
     return unless upper
 
     swap_display_order!(upper)

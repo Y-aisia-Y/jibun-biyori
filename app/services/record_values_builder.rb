@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RecordValuesBuilder
   def initialize(record, user)
     @record = record
@@ -7,6 +9,7 @@ class RecordValuesBuilder
   def call
     record_items.each do |item|
       next if @record.record_values.any? { |v| v.record_item_id == item.id }
+
       @record.record_values.build(record_item: item)
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -10,8 +12,8 @@ gem "rails", "~> 7.1.3"
 gem "sprockets-rails"
 
 # Database adapters
-gem "sqlite3", "~> 1.6", group: [:development, :test]
 gem "pg", "~> 1.1", group: :production
+gem "sqlite3", "~> 1.6", group: %i[development test]
 
 # Web server
 gem "puma", "~> 6.0"
@@ -56,7 +58,7 @@ gem "jbuilder"
 gem "tailwindcss-rails", "4.4.0"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ windows jruby ]
+gem "tzinfo-data", platforms: %i[windows jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -66,22 +68,22 @@ gem "image_processing", "~> 1.2"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri windows ]
-  
+  gem "debug", platforms: %i[mri windows]
+
   # テストフレームワーク
-  gem 'rails-controller-testing', '~> 1.0.1' 
-  gem 'rspec-rails', '~> 6.0'
   gem 'factory_bot_rails'
   gem 'faker'
+  gem 'rails-controller-testing', '~> 1.0.1'
+  gem 'rspec-rails', '~> 6.0'
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
-  
+
   # デバッグツール
   gem "solargraph"
-  
+
   # コード品質維持
   gem 'rubocop-rails', require: false
 end

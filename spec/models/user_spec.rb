@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-
   it 'は有効な属性を持つ場合、有効であること' do
-    user = build(:user)
+    build(:user)
     user = User.new(
       email: 'test@example.com',
       password: 'password123',

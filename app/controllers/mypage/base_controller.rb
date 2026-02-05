@@ -1,6 +1,9 @@
-class Mypage::BaseController < ApplicationController
-  before_action :authenticate_user!
+# frozen_string_literal: true
 
-  def show
+module Mypage
+  class BaseController < ApplicationController
+    before_action :authenticate_user!
+
+    def show; end
   end
 end

@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe "Users", type: :request do
-
   describe "GET /users/sign_in" do
     it "はログインページを正常に表示すること" do
       get new_user_session_path

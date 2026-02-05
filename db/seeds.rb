@@ -1,11 +1,13 @@
-puts "テストユーザーを作成します"
+# frozen_string_literal: true
+
+Rails.logger.debug "テストユーザーを作成します"
 user = User.find_or_create_by!(email: 'test@example.com') do |u|
   u.password = 'password'
   u.password_confirmation = 'password'
 end
-puts "ユーザー作成完了: #{user.email}"
+Rails.logger.debug { "ユーザー作成完了: #{user.email}" }
 
-puts "system record_items を投入します"
+Rails.logger.debug "system record_items を投入します"
 
 default_items = [
   {
@@ -52,4 +54,4 @@ default_items.each do |item_attrs|
   end
 end
 
-puts "OK!"
+Rails.logger.debug "OK!"

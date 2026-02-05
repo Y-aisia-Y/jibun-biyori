@@ -1,15 +1,19 @@
-class Mypage::RecordItemsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :set_record_item, only: [:toggle_visibility]
+# frozen_string_literal: true
 
-  def toggle_visibility
-    @record_item.update!(is_default_visible: !@record_item.is_default_visible)
-    head :ok
-  end
+module Mypage
+  class RecordItemsController < ApplicationController
+    before_action :authenticate_user!
+    before_action :set_record_item, only: [:toggle_visibility]
 
-  private
+    def toggle_visibility
+      @record_item.update!(is_default_visible: !@record_item.is_default_visible)
+      head :ok
+    end
 
-  def set_record_item
-    @record_item = current_user.record_items.find(params[:id])
+    private
+
+    def set_record_item
+      @record_item = current_user.record_items.find(params[:id])
+    end
   end
 end
