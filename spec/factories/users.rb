@@ -2,12 +2,8 @@
 
 FactoryBot.define do
   factory :user do
-    email { Faker::Internet.unique.email }
+    email { "test-#{SecureRandom.hex(4)}@example.com" }
     password { 'password' }
     password_confirmation { 'password' }
-
-    trait :invalid do
-      email { nil }
-    end
   end
 end

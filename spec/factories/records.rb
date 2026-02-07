@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :record do
-    user { nil }
+    association :user
     recorded_date { "2025-11-25" }
     diary_memo { "MyText" }
   end
