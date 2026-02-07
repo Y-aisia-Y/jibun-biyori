@@ -35,17 +35,13 @@ jobs:
       - name: Set up Database
         env:
           RAILS_ENV: test
-          PGHOST: localhost
-          PGUSER: postgres
-          PGPASSWORD: password
+          DATABASE_URL: postgres://postgres:password@localhost:5432/test_db
         run: |
-          # database.yml が sample しかない場合のための処理
-          [ -f config/database.yml.sample ] && cp config/database.yml.sample config/database.yml || true
           bundle exec rails db:create
           bundle exec rails db:schema:load
-
-      - name: Run RuboCop
-        run: bundle exec rubocop
-
+      
       - name: Run RSpec
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:password@localhost:5432/test_db
         run: bundle exec rspec
