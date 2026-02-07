@@ -39,7 +39,15 @@ jobs:
         run: |
           bundle exec rails db:create
           bundle exec rails db:schema:load
-      
+
+      - name: Build assets
+        env:
+          RAILS_ENV: test
+        run: bundle exec rails tailwindcss:build
+
+      - name: Run RuboCop
+        run: bundle exec rubocop
+
       - name: Run RSpec
         env:
           RAILS_ENV: test
