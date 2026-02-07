@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
@@ -13,12 +15,12 @@ Rails.application.routes.draw do
       post :create_with_activity
       post :create_diary
     end
-    
+
     member do
       get :edit_diary
       patch :update_diary
     end
-  
+
     resources :activities, only: %i[new create edit update destroy]
     resources :record_values, only: %i[create update]
     resource  :mood
@@ -42,7 +44,7 @@ Rails.application.routes.draw do
     resources :record_items, only: [] do
       member do
         patch :toggle_visibility
-        post :toggle_visibility 
+        post :toggle_visibility
       end
     end
   end

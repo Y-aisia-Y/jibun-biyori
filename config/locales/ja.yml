@@ -60,6 +60,49 @@ ja:
             name:
               blank: を入力してください
 
+  profiles:
+    update:
+      success: "プロフィールを更新しました"
+
+  records:
+    create:
+      diary_success: "日記を保存しました"
+      health_success: "記録項目を保存しました"
+      failure: "保存に失敗しました"
+
+    update:
+      diary_success: "日記を更新しました"
+      health_success: "記録項目を更新しました"
+      failure: "更新に失敗しました"
+
+    update_diary:
+      diary_success: "日記を更新しました"
+      failure: "更新に失敗しました"
+
+    destroy:
+      success: "削除しました"
+      failure: "削除に失敗しました"
+
+    authorize:
+      forbidden: "権限がありません"
+
+  activities:
+    create:
+      success: "活動を記録しました"
+    update:
+      success: "活動を更新しました"
+    destroy:
+      success: "活動を削除しました"
+      failure: "削除に失敗しました"
+
+  record_values:
+    create:
+      success: "保存しました"
+      failure: "保存に失敗しました"
+    update:
+      success: "更新しました"
+      failure: "更新に失敗しました"
+
   devise:
     sign_up: "新規登録はこちら"
     log_in: "ログインはこちら"

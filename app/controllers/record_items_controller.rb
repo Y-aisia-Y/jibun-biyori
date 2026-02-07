@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RecordItemsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_record_item, only: %i[edit update destroy move_up move_down toggle_visibility]
@@ -11,6 +13,8 @@ class RecordItemsController < ApplicationController
     @record_item = current_user.record_items.build(category: "custom")
   end
 
+  def edit; end
+
   def create
     max_order = current_user.record_items.maximum(:display_order) || 0
     @record_item = current_user.record_items.build(record_item_params)
@@ -21,18 +25,15 @@ class RecordItemsController < ApplicationController
     if @record_item.save
       redirect_to record_items_path, success: "記録項目を作成しました"
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
-  end
-
-  def edit
   end
 
   def update
     if @record_item.update(record_item_update_params)
       redirect_to record_items_path, success: "カスタム項目を更新しました"
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

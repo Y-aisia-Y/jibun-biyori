@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Record < ApplicationRecord
   belongs_to :user
 
@@ -7,9 +9,8 @@ class Record < ApplicationRecord
 
   accepts_nested_attributes_for :record_values, allow_destroy: true
 
-  validates :recorded_date, presence: true, uniqueness: { scope: :user_id }
-  validates :diary_memo,presence: true,if: :diary_context?
-  
+  validates :diary_memo, presence: true, if: :diary_context?
+
   # バリデーションコンテキストを判定するメソッド
   def diary_context?
     validation_context == :diary
@@ -19,7 +20,7 @@ class Record < ApplicationRecord
   def system_items
     user.record_items.system_items.visible.ordered
   end
-  
+
   # 指定されたシステム項目の値を取得
   def system_value_for(item)
     record_values.find_by(record_item: item)

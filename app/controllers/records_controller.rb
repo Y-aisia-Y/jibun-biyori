@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RecordsController < ApplicationController
   include CurrentTimeSettable
 
@@ -6,15 +8,16 @@ class RecordsController < ApplicationController
   before_action :set_record, only: %i[show edit update destroy edit_diary update_diary]
   before_action :authorize_user!, only: %i[show edit update destroy edit_diary update_diary]
   before_action :set_record_for_date, only: %i[new_health new_diary]
+  before_action :set_current_time, only: %i[index show]
 
   def index
     @records = current_user.records
                            .where.not(diary_memo: [nil, ""])
                            .order(recorded_date: :desc)
 
-    if params[:q].present?
-      @records = @records.where("diary_memo LIKE ?", "%#{params[:q]}%")
-    end
+    return if params[:q].blank?
+
+    @records = @records.where("diary_memo LIKE ?", "%#{params[:q]}%")
   end
 
   def dashboard
@@ -73,75 +76,46 @@ class RecordsController < ApplicationController
   end
 
   def create
-    redirect_to_dashboard = params[:record].delete(:redirect_to_dashboard) == "true"
-    record_params_hash = processed_record_params
+    @record = find_or_build_record
+    assign_attributes_to_record
 
-    @record = current_user.records.find_or_initialize_by(recorded_date: record_params_hash[:recorded_date])
-
-    if @record.persisted?
-      params_without_date = record_params_hash.except(:recorded_date)
-      @record.assign_attributes(params_without_date)
+    if save_record
+      redirect_after_save
     else
-      @record.assign_attributes(record_params_hash)
-    end
-
-    if redirect_to_dashboard
-      save_result = @record.save
-    else
-      save_result = @record.save(context: :diary)
-    end
-
-    if save_result
-      if redirect_to_dashboard
-        redirect_to dashboard_path(date: @record.recorded_date), success: "体調を記録しました"
-      else
-        redirect_to records_path, success: "日記を作成しました"
-      end
-    else
-      if redirect_to_dashboard
-        set_all_visible_items
-        flash.now[:danger] = "保存に失敗しました"
-        render :new, status: :unprocessable_entity
-      else
-        @items = current_user.record_items.user_items.visible.ordered
-        prepare_record_values(@items)
-        @record.recorded_date ||= Date.current
-        flash.now[:danger] = "保存に失敗しました"
-        render :diary, status: :unprocessable_entity
-      end
+      render_after_failure
     end
   end
 
   def update
     @record.assign_attributes(processed_record_params)
 
-    if params[:record][:redirect_to_dashboard] == "true"
-      update_result = @record.save
-    else
-      update_result = @record.save(context: :diary)
-    end
+    update_result = if params[:record][:redirect_to_dashboard] == "true"
+                      @record.save
+                    else
+                      @record.save(context: :diary)
+                    end
 
     if update_result
       if params[:record][:redirect_to_dashboard] == "true"
-        redirect_to dashboard_path(date: @record.recorded_date), success: "体調を更新しました"
+        redirect_to dashboard_path(date: @record.recorded_date), success: t('.health_success')
       else
-        redirect_to records_path, success: "日記を更新しました"
+        redirect_to records_path, success: t('.diary_success')
       end
     else
       set_all_visible_items
-      flash.now[:danger] = "更新に失敗しました"
-      render :edit, status: :unprocessable_entity
+      flash.now[:danger] = t('.failure')
+      render :edit, status: :unprocessable_content
     end
   end
 
   def update_diary
     @record.assign_attributes(processed_record_params)
-    
+
     if @record.save(context: :diary)
-      redirect_to records_path, success: "日記を更新しました"
+      redirect_to records_path, success: t('.diary_success')
     else
-      flash.now[:danger] = "更新に失敗しました"
-      render :edit_diary, status: :unprocessable_entity
+      flash.now[:danger] = t('.failure')
+      render :edit_diary, status: :unprocessable_content
     end
   end
 
@@ -150,11 +124,11 @@ class RecordsController < ApplicationController
 
     if @record.destroy
       redirect_to records_url(date: recorded_date),
-                  danger: "記録を削除しました。",
+                  danger: t('.success'),
                   status: :see_other
     else
       redirect_to records_url(date: recorded_date),
-                  warning: "記録の削除に失敗しました。",
+                  warning: t('.failure'),
                   status: :see_other
     end
   end
@@ -166,8 +140,81 @@ class RecordsController < ApplicationController
 
   private
 
+  def processed_record_params
+    params_hash = record_params.to_h.deep_dup
+    process_time_ranges(params_hash)
+    params_hash
+  end
+
+  def find_or_build_record
+    record_params_hash = processed_record_params
+
+    current_user.records.find_or_initialize_by(
+      recorded_date: record_params_hash[:recorded_date]
+    )
+  end
+
+  def assign_attributes_to_record
+    @record.assign_attributes(processed_record_params)
+  end
+
+  def save_record
+    if params[:record][:redirect_to_dashboard] == "true"
+      @record.save
+    else
+      @record.save(context: :diary)
+    end
+  end
+
+  def redirect_after_save
+    if params[:record][:redirect_to_dashboard] == "true"
+      redirect_to dashboard_path(date: @record.recorded_date),
+                  success: t('.health_success')
+    else
+      redirect_to records_path,
+                  success: t('.diary_success')
+    end
+  end
+
+  def render_after_failure
+    set_all_visible_items
+    flash.now[:danger] = t('.failure')
+    render :new, status: :unprocessable_content
+  end
+
+  def find_record_item(attributes)
+    if attributes["id"].present?
+      RecordValue.find_by(id: attributes["id"])&.record_item
+    elsif attributes["record_item_id"].present?
+      RecordItem.find_by(id: attributes["record_item_id"])
+    end
+  end
+
+  def build_time_range(attributes)
+    sleep_time = Time.zone.parse(
+      "#{attributes['sleep_hour']}:#{attributes['sleep_minute']}"
+    )
+    wake_time = Time.zone.parse(
+      "#{attributes['wake_hour']}:#{attributes['wake_minute']}"
+    )
+
+    wake_time += 1.day if wake_time < sleep_time
+
+    "#{sleep_time.strftime('%H:%M')}-#{wake_time.strftime('%H:%M')}"
+  end
+
+  def process_time_ranges(params_hash)
+    return unless params_hash["record_values_attributes"]
+
+    params_hash["record_values_attributes"].each_value do |attributes|
+      next unless attributes["sleep_hour"].present? && attributes["wake_hour"].present?
+
+      attributes["value"] = build_time_range(attributes)
+    end
+  end
+
   def build_missing_record_values(record)
-    current_user.record_items.where(is_default_visible: true).each do |item|
+    current_user.record_items.where(is_default_visible: true).find_each do |item|
       record.record_values.find_or_initialize_by(record_item: item)
     end
   end
@@ -189,7 +236,7 @@ class RecordsController < ApplicationController
     return if @record && @record.user_id == current_user.id
 
     respond_to do |format|
-      format.html { redirect_to records_path, warning: "権限がありません" }
+      format.html { redirect_to records_path, warning: t('records.authorize.forbidden') }
       format.turbo_stream { head :forbidden }
     end
   end
@@ -202,58 +249,23 @@ class RecordsController < ApplicationController
 
   def prepare_record_values(items)
     items.each do |item|
-      unless @record.record_values.any? { |rv| rv.record_item_id == item.id }
-        @record.record_values.build(record_item: item)
-      end
+      @record.record_values.build(record_item: item) unless @record.record_values.any? { |rv| rv.record_item_id == item.id }
     end
-  end
-
-  def processed_record_params
-    params_hash = record_params.to_h.deep_dup
-
-    if params_hash["record_values_attributes"]
-      params_hash["record_values_attributes"].each_value do |attributes|
-        next unless attributes["sleep_hour"].present?
-
-        record_item =
-          if attributes["id"].present?
-            RecordValue.find_by(id: attributes["id"])&.record_item
-          elsif attributes["record_item_id"].present?
-            RecordItem.find_by(id: attributes["record_item_id"])
-          end
-
-        next unless record_item&.input_type == "time_range"
-
-        sleep_time = Time.zone.parse(
-          "#{attributes["sleep_hour"]}:#{attributes["sleep_minute"]}"
-        )
-        wake_time = Time.zone.parse(
-          "#{attributes["wake_hour"]}:#{attributes["wake_minute"]}"
-        )
-
-        wake_time += 1.day if wake_time < sleep_time
-
-        attributes["value"] =
-          "#{sleep_time.strftime('%H:%M')}-#{wake_time.strftime('%H:%M')}"
-      end
-    end
-
-    params_hash
   end
 
   def record_params
     params.require(:record).permit(
       :recorded_date,
       :diary_memo,
-      record_values_attributes: [
-        :id,
-        :record_item_id,
-        :_destroy,
-        :value,
-        :sleep_hour,
-        :sleep_minute,
-        :wake_hour,
-        :wake_minute
+      record_values_attributes: %i[
+        id
+        record_item_id
+        _destroy
+        value
+        sleep_hour
+        sleep_minute
+        wake_hour
+        wake_minute
       ]
     )
   end

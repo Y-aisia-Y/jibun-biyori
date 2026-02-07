@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe RecordsController, type: :controller do
@@ -21,8 +23,8 @@ RSpec.describe RecordsController, type: :controller do
 
     context "ログイン済みユーザーの場合" do
       # テスト用のユーザーを作成（FactoryBotを使用）
-      let(:user) { create(:user) } 
-      
+      let(:user) { create(:user) }
+
       # テスト実行前にユーザーをログインさせる
       before do
         # Deviseのヘルパーを使ってサインインさせる

@@ -43,7 +43,7 @@ li.border-b.py-4
               / アクティビティがある場合
               - @activities_by_hour[hour].each do |presenter|
                 / 開始時刻のみマーカーを表示
-                - if presenter.is_start?
+                - if presenter.start?
                   - start_hour = presenter.activity.start_time.hour
                   - start_min = presenter.activity.start_time.min
                   - end_hour = presenter.activity.end_time.hour
@@ -66,7 +66,7 @@ li.border-b.py-4
                     .mt-1.text-sm.text-gray-600 = presenter.content
               
               / 継続の時間帯には追加ボタンを表示(開始時刻以外)
-              - if @activities_by_hour[hour].all? { |p| !p.is_start? }
+              - if @activities_by_hour[hour].all? { |p| !p.start? }
                 - if @record.persisted?
                   = link_to new_record_activity_path(@record, date: @date, hour: hour), \
                     class: "flex-1 relative hover:bg-gray-50 transition flex flex-col items-center justify-center group", \

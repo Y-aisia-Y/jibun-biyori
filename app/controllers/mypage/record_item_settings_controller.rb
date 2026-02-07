@@ -1,7 +1,11 @@
-class Mypage::RecordItemSettingsController < ApplicationController
-  before_action :authenticate_user!
+# frozen_string_literal: true
 
-  def show
-    @system_items = current_user.record_items.system_items.ordered
+module Mypage
+  class RecordItemSettingsController < ApplicationController
+    before_action :authenticate_user!
+
+    def show
+      @system_items = current_user.record_items.system_items.ordered
+    end
   end
 end

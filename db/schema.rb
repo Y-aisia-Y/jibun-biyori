@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_02_01_152818) do
+ActiveRecord::Schema[7.1].define(version: 2026_02_05_151409) do
   create_table "activities", force: :cascade do |t|
     t.integer "record_id", null: false
     t.datetime "start_time", null: false
@@ -43,6 +43,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_02_01_152818) do
     t.integer "item_type", default: 0, null: false
     t.index ["display_order"], name: "index_record_items_on_display_order"
     t.index ["item_type"], name: "index_record_items_on_item_type"
+    t.index ["user_id", "name"], name: "index_record_items_on_user_id_and_name", unique: true
     t.index ["user_id"], name: "index_record_items_on_user_id"
   end
 
@@ -65,6 +66,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_02_01_152818) do
     t.text "diary_memo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id", "recorded_date"], name: "index_records_on_user_id_and_recorded_date", unique: true
     t.index ["user_id"], name: "index_records_on_user_id"
   end
 
