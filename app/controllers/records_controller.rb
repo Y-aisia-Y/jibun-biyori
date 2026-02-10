@@ -50,10 +50,12 @@ class RecordsController < ApplicationController
   def new
     @record = current_user.records.build
     set_all_visible_items
+    render :diary
   end
 
   def edit
     set_all_visible_items
+    render :edit_diary
   end
 
   def new_health

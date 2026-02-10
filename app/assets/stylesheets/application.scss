@@ -53,9 +53,16 @@ body {
   }
 }
 
+// ハンバーガー
 #menu-panel {
-  right: 1.5rem;
+  width: 8rem !important;
+  right: 1rem;
   top: 90%;
+  
+  // アコーディオン
+  ul.bg-gray-50 a {
+    padding-left: 1rem !important;
+  }
 }
 
 #menu-panel {
@@ -126,6 +133,60 @@ button[data-action="click->menu#toggle"] {
     background-color: darken($color-danger, 10%);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba($color-danger, 0.2);
+  }
+}
+
+// ========================================
+// 🌿 ハンバーガーメニュー内のカスタム調整
+// ========================================
+
+#menu-panel {
+  border-color: $color-brand-main;
+  overflow: hidden;
+
+  // メニューの各項目
+  a, summary {
+    color: $color-gray-text !important;
+    font-weight: 500;
+    transition: $transition-default;
+
+    &:hover {
+      background-color: rgba($color-brand-main, 0.1) !important;
+      color: $color-brand-dark !important;
+    }
+  }
+
+// アコーディオン　▼
+.menu-arrow {
+  color: $color-brand-dark;
+  display: inline-block;
+  pointer-events: none;
+}
+
+summary:hover {
+  .menu-arrow {
+    color: $color-brand-main;
+  }
+}
+
+  // アコーディオン
+  ul.bg-gray-50 {
+    background-color: rgba($color-brand-bg, 0.5);
+    
+    a {
+      color: lighten($color-gray-text, 10%) !important;
+      font-size: 0.875rem;
+      
+      &:hover {
+        background-color: rgba($color-brand-main, 0.2) !important;
+      }
+    }
+  }
+
+  // 区切り線
+  hr {
+    border-color: $color-brand-main;
+    opacity: 0.3;
   }
 }
 
