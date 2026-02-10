@@ -1,8 +1,8 @@
 / 日記の日付ロジック
 - if user_signed_in?
   - today = Date.current
-  - today_record = current_user.records.find_by(recorded_date: today)
-  - diary_path = today_record&.diary_memo.to_s.strip.present? ? edit_diary_record_path(today_record) : new_diary_records_path(date: today)
+  - display_record = current_user.records.find_by(recorded_date: @display_date)
+  - diary_path = display_record&.diary_memo.to_s.strip.present? ? edit_diary_record_path(display_record) : new_diary_records_path(date: @display_date)
 
 
 .header.custom-header.px-4.py-3.flex.items-center.justify-between.relative[data-controller="menu"]
@@ -41,10 +41,10 @@
               span.menu-arrow.text-xs.transition-transform.group-open:rotate-180 ▼
             ul.bg-gray-50.py-1
               li
-                = link_to "体調記入", new_health_records_path(date: Date.current),
+                = link_to "体調記入", new_health_records_path(date: @display_date),
                   class: "block pl-8 pr-4 py-2 text-sm text-gray-600 hover:bg-gray-200"
               li
-                = link_to "分析グラフ", "charts_path,",
+                = link_to "分析グラフ", charts_path,
                   class: "block pl-8 pr-4 py-2 text-sm text-gray-600 hover:bg-gray-200"
 
         / 日記グループ
@@ -55,7 +55,7 @@
               span.menu-arrow.text-xs.transition-transform.group-open:rotate-180 ▼
             ul.bg-gray-50.py-1
               li
-                = link_to (today_record&.diary_memo.present? ? "日記を編集" : "日記を書く"), diary_path,
+                = link_to (display_record&.diary_memo.to_s.strip.present? ? "日記を編集" : "日記を書く"), diary_path,
                   class: "block pl-8 pr-4 py-2 text-sm text-gray-600 hover:bg-gray-200"
               li
                 = link_to "日記一覧", records_path,

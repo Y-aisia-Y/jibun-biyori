@@ -4,6 +4,7 @@ class RecordsController < ApplicationController
   include CurrentTimeSettable
 
   before_action :authenticate_user!
+  before_action :set_current_display_date
   before_action :set_date, only: %i[dashboard new_health new_diary create_with_activity]
   before_action :set_record, only: %i[show edit update destroy edit_diary update_diary]
   before_action :authorize_user!, only: %i[show edit update destroy edit_diary update_diary]
@@ -50,12 +51,10 @@ class RecordsController < ApplicationController
   def new
     @record = current_user.records.build
     set_all_visible_items
-    render :diary
   end
 
   def edit
     set_all_visible_items
-    render :edit_diary
   end
 
   def new_health
@@ -140,7 +139,89 @@ class RecordsController < ApplicationController
     redirect_to new_record_activity_path(record, date: @date, hour: params[:hour])
   end
 
+  def analytics
+    @records = current_user.records
+                           .order(recorded_date: :desc)
+                           .limit(30)
+
+    sleep_max = @records.joins(:record_values)
+                        .where(record_values: { record_item_id: @items[:sleep].id })
+                        .maximum('record_values.value').to_f
+  
+    @sleep_max = (sleep_max / 2.0).ceil * 2
+    @sleep_max = [@sleep_max, 10].max
+    @sleep_max_ticks = (@sleep_max / 2) + 1
+  
+    # 記録項目を取得
+    @items = {
+      sleep: current_user.record_items.find_by(name: '睡眠時間'),
+      mood: current_user.record_items.find_by(name: '気分'),
+      condition: current_user.record_items.find_by(name: '体調'),
+      motivation: current_user.record_items.find_by(name: '意欲'),
+      fatigue: current_user.record_items.find_by(name: '疲労感')
+    }
+
+    # グラフ用のデータを準備
+    @charts = {
+      sleep: sleep_chart_data,
+      mood: chart_data(@items[:mood]),
+      condition: chart_data(@items[:condition]),
+      motivation: chart_data(@items[:motivation]),
+      fatigue: chart_data(@items[:fatigue])
+    }
+  end
+
   private
+
+  # 睡眠時間のグラフデータ
+  def sleep_chart_data
+    return {} if @items[:sleep].blank?
+  
+    current_user.records
+      .joins(:record_values)
+      .where(record_values: { record_item_id: @items[:sleep].id })
+      .where('recorded_date >= ?', 30.days.ago)
+      .order(recorded_date: :asc)
+      .pluck(:recorded_date, 'record_values.value')
+      .map { |date, value| [date.strftime('%Y-%m-%d'), calculate_sleep_hours(value)] }
+      .to_h
+  end
+
+  # その他の項目のグラフデータ
+  def chart_data(item)
+    return {} if item.blank?
+  
+    current_user.records
+      .joins(:record_values)
+      .where(record_values: { record_item_id: item.id })
+      .where('recorded_date >= ?', 30.days.ago)
+      .order(recorded_date: :asc)
+      .pluck(:recorded_date, 'record_values.value')
+      .map { |date, value| [date.strftime('%Y-%m-%d'), value.to_f] }
+      .to_h
+  end
+
+  # 睡眠時間を時間単位で計算
+  def calculate_sleep_hours(time_range)
+    return 0 if time_range.blank?
+  
+    match = time_range.match(/(\d{2}):(\d{2})-(\d{2}):(\d{2})/)
+    return 0 unless match
+  
+    sleep_hour = match[1].to_i
+    sleep_min = match[2].to_i
+    wake_hour = match[3].to_i
+    wake_min = match[4].to_i
+  
+    sleep_minutes = sleep_hour * 60 + sleep_min
+    wake_minutes = wake_hour * 60 + wake_min
+    wake_minutes += 24 * 60 if wake_minutes < sleep_minutes
+  
+    duration_minutes = wake_minutes - sleep_minutes
+    result = (duration_minutes / 60.0).round(1)
+  
+    result
+  end
 
   def processed_record_params
     params_hash = record_params.to_h.deep_dup
@@ -253,6 +334,12 @@ class RecordsController < ApplicationController
     items.each do |item|
       @record.record_values.build(record_item: item) unless @record.record_values.any? { |rv| rv.record_item_id == item.id }
     end
+  end
+
+  def set_current_display_date
+    @display_date = params[:date] ? Date.parse(params[:date]) : Date.current
+  rescue ArgumentError
+    @display_date = Date.current
   end
 
   def record_params

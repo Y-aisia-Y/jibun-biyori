@@ -1,0 +1,55 @@
+.container.mx-auto.max-w-4xl.px-4.py-8
+  h1.text-3xl.font-bold.text-gray-800.mb-8.text-center 分析グラフ
+
+  / グラフセクション
+  .grid.grid-cols-1.md:grid-cols-2.gap-6.mb-10
+    - if @charts[:sleep].present?
+      .chart-container
+        h2 睡眠時間の推移
+        = column_chart @charts[:sleep], colors: ["#8090C0"], suffix: "時間", min: 0, max: @sleep_max, library: { scales: { y: { ticks: { stepSize: 2, autoSkip: false, maxTicksLimit: @sleep_max_ticks } } } }
+
+    - if @charts[:mood].present?
+      .chart-container
+        h2 気分の推移
+        = line_chart @charts[:mood], colors: ["#A0D0D0"], min: 1, max: 5, library: { scales: { y: { ticks: { stepSize: 1, autoSkip: false, maxTicksLimit: 5 } } } }
+
+    - if @charts[:condition].present?
+      .chart-container
+        h2 体調の推移
+        = line_chart @charts[:condition], colors: ["#90C0E0"], min: 1, max: 5, library: { scales: { y: { ticks: { stepSize: 1, autoSkip: false, maxTicksLimit: 5 } } } }
+
+    - if @charts[:motivation].present?
+      .chart-container
+        h2 意欲の推移
+        = line_chart @charts[:motivation], colors: ["#F0D0A0"], min: 1, max: 5, library: { scales: { y: { ticks: { stepSize: 1, autoSkip: false, maxTicksLimit: 5 } } } }
+
+    - if @charts[:fatigue].present?
+      .chart-container
+        h2 疲労感の推移
+        = line_chart @charts[:fatigue], colors: ["#E0A0A0"], min: 1, max: 5, library: { scales: { y: { ticks: { stepSize: 1, autoSkip: false, maxTicksLimit: 5 } } } }
+
+  / 一覧テーブル
+  .table-container
+    .table-header
+      h2 最近の記録一覧
+    .overflow-x-auto
+      table
+        thead
+          tr
+            th 日付
+            th 睡眠時間
+            th 気分
+            th 体調
+            th 意欲
+            th 疲労感
+        tbody
+          - @records.each do |record|
+            tr(onclick="location.href='#{edit_record_path(record)}'" style="cursor: pointer;")
+              td = l record.recorded_date, format: :short
+              td
+                - sleep_value = record.record_values.find_by(record_item: @items[:sleep])&.value
+                span.sleep-time = format_sleep_duration(sleep_value)
+              td = record.record_values.find_by(record_item: @items[:mood])&.value
+              td = record.record_values.find_by(record_item: @items[:condition])&.value
+              td = record.record_values.find_by(record_item: @items[:motivation])&.value
+              td = record.record_values.find_by(record_item: @items[:fatigue])&.value
