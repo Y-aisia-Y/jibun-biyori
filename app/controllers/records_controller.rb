@@ -246,20 +246,26 @@ class RecordsController < ApplicationController
   end
 
   def save_record
-    if params[:record][:redirect_to_dashboard] == "true"
+    from_page = params[:from]
+
+  # 「グラフから」または「ダッシュボードから」の場合は、日記なし（通常保存）を許可する
+    if from_page == 'charts' || from_page == 'dashboard' || params[:record][:redirect_to_dashboard] == "true"
       @record.save
     else
+    # それ以外（一覧画面など）は日記を必須にする
       @record.save(context: :diary)
     end
   end
 
   def redirect_after_save
-    if params[:record][:redirect_to_dashboard] == "true"
-      redirect_to dashboard_path(date: @record.recorded_date),
-                  success: t('.health_success')
+    from_page = params[:from]
+
+    if from_page == 'charts'
+      redirect_to charts_path, success: t('.health_success')
+    elsif from_page == 'dashboard' || params[:record][:redirect_to_dashboard] == "true"
+      redirect_to dashboard_path(date: @record.recorded_date), success: t('.health_success')
     else
-      redirect_to records_path,
-                  success: t('.diary_success')
+      redirect_to records_path, success: t('.diary_success')
     end
   end
 

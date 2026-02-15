@@ -1,10 +1,11 @@
 / グラフセクション
-.grid.grid-cols-1.md:grid-cols-2.gap-6.mb-10
-  - graph_items.each do |item|
-    - chart_data = @charts[item.name.to_sym]
-    - if chart_data.present?
+= turbo_frame_tag "chart_container" do
+  .grid.grid-cols-1.md:grid-cols-2.gap-6.mb-10
+    - @graph_items.each do |item|
+      - chart_data = @charts[item.name.to_sym] || {}
       .chart-container
         h2 = "#{item.name}の推移"
+        
         - case item.name
         - when "睡眠時間"
           = column_chart chart_data, colors: ["#8090C0"], suffix: "時間", min: 0, max: @sleep_max, library: { scales: { y: { ticks: { stepSize: 2, autoSkip: false, maxTicksLimit: @sleep_max_ticks } } } }
