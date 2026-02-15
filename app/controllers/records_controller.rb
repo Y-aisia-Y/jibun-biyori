@@ -90,8 +90,8 @@ class RecordsController < ApplicationController
   def update
     @record.assign_attributes(processed_record_params)
 
-    from_page = params[:from]
-
+    from_page = params[:from] || session[:from_page]
+  
     update_result = if from_page == 'charts' || from_page == 'dashboard'
                       @record.save
                     else
@@ -100,7 +100,8 @@ class RecordsController < ApplicationController
 
     if update_result
       if from_page == 'charts'
-        redirect_to charts_path, success: t('.health_success')
+        week_start_param = @record.recorded_date.beginning_of_week(:sunday).to_s
+        redirect_to charts_path(week_start: week_start_param), success: t('.health_success')
       elsif from_page == 'dashboard'
         redirect_to dashboard_path(date: @record.recorded_date), success: t('.health_success')
       else
@@ -248,11 +249,9 @@ class RecordsController < ApplicationController
   def save_record
     from_page = params[:from]
 
-  # 「グラフから」または「ダッシュボードから」の場合は、日記なし（通常保存）を許可する
     if from_page == 'charts' || from_page == 'dashboard' || params[:record][:redirect_to_dashboard] == "true"
       @record.save
     else
-    # それ以外（一覧画面など）は日記を必須にする
       @record.save(context: :diary)
     end
   end
@@ -261,7 +260,8 @@ class RecordsController < ApplicationController
     from_page = params[:from]
 
     if from_page == 'charts'
-      redirect_to charts_path, success: t('.health_success')
+      week_start_param = @record.recorded_date.beginning_of_week(:sunday).to_s
+      redirect_to charts_path(week_start: week_start_param), success: t('.health_success')
     elsif from_page == 'dashboard' || params[:record][:redirect_to_dashboard] == "true"
       redirect_to dashboard_path(date: @record.recorded_date), success: t('.health_success')
     else
