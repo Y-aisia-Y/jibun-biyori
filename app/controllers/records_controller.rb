@@ -90,14 +90,18 @@ class RecordsController < ApplicationController
   def update
     @record.assign_attributes(processed_record_params)
 
-    update_result = if params[:record][:redirect_to_dashboard] == "true"
+    from_page = params[:from]
+
+    update_result = if from_page == 'charts' || from_page == 'dashboard'
                       @record.save
                     else
                       @record.save(context: :diary)
                     end
 
     if update_result
-      if params[:record][:redirect_to_dashboard] == "true"
+      if from_page == 'charts'
+        redirect_to charts_path, success: t('.health_success')
+      elsif from_page == 'dashboard'
         redirect_to dashboard_path(date: @record.recorded_date), success: t('.health_success')
       else
         redirect_to records_path, success: t('.diary_success')

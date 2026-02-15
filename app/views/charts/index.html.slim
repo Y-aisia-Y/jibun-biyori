@@ -44,7 +44,7 @@
             th 疲労感
         tbody
           - @records.each do |record|
-            tr(onclick="location.href='#{edit_record_path(record)}'" style="cursor: pointer;")
+            tr(onclick="location.href='#{edit_record_path(record, from: 'charts')}'" style="cursor: pointer;")
               td = l record.recorded_date, format: :short
               td
                 - sleep_value = record.record_values.find_by(record_item: @items[:sleep])&.value
