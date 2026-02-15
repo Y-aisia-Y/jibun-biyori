@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module LoginHelper
   def login_user(user)
-    post user_session_path, params: { 
+    post user_session_path, params: {
       user: {
-        email: user.email, 
+        email: user.email,
         password: 'password'
       }
     }
