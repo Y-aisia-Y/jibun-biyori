@@ -10,7 +10,7 @@ module Mypage
       head :ok
 
       respond_to do |format|
-        format.html { redirect_to mypage_record_item_settings_path, notice: '表示設定を更新しました' }
+        redirect_to mypage_record_item_settings_path, notice: t('.update_success')
         format.turbo_stream
       end
     end
