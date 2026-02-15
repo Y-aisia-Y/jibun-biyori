@@ -1,2 +1,7 @@
+/ トグルボタンの状態を更新
 = turbo_stream.replace "record_item_#{@record_item.id}" do
   = render "mypage/record_items/system_item", item: @record_item
+
+/ グラフコンテナを更新(charts/indexページにいる場合のみ)
+= turbo_stream.replace "chart_container" do
+  = render "charts/chart_container", visible_items: @visible_items

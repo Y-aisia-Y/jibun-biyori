@@ -1,0 +1,18 @@
+/ グラフセクション
+.grid.grid-cols-1.md:grid-cols-2.gap-6.mb-10
+  - graph_items.each do |item|
+    - chart_data = @charts[item.name.to_sym]
+    - if chart_data.present?
+      .chart-container
+        h2 = "#{item.name}の推移"
+        - case item.name
+        - when "睡眠時間"
+          = column_chart chart_data, colors: ["#8090C0"], suffix: "時間", min: 0, max: @sleep_max, library: { scales: { y: { ticks: { stepSize: 2, autoSkip: false, maxTicksLimit: @sleep_max_ticks } } } }
+        - when "気分"
+          = line_chart chart_data, colors: ["#A0D0D0"], min: 1, max: 5, library: { scales: { y: { ticks: { stepSize: 1, autoSkip: false, maxTicksLimit: 5 } } } }
+        - when "体調"
+          = line_chart chart_data, colors: ["#90C0E0"], min: 1, max: 5, library: { scales: { y: { ticks: { stepSize: 1, autoSkip: false, maxTicksLimit: 5 } } } }
+        - when "意欲"
+          = line_chart chart_data, colors: ["#F0D0A0"], min: 1, max: 5, library: { scales: { y: { ticks: { stepSize: 1, autoSkip: false, maxTicksLimit: 5 } } } }
+        - when "疲労感"
+          = line_chart chart_data, colors: ["#E0A0A0"], min: 1, max: 5, library: { scales: { y: { ticks: { stepSize: 1, autoSkip: false, maxTicksLimit: 5 } } } }
