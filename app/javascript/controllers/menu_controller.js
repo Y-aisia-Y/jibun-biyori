@@ -6,15 +6,28 @@ export default class extends Controller {
   toggle(event) {
     event.stopPropagation()
     this.panelTarget.classList.toggle("hidden")
+
+    if (this.panelTarget.classList.contains("hidden")) {
+      this.closeAllAccordions()
+    }
   }
 
   hide() {
     this.panelTarget.classList.add("hidden")
+    this.closeAllAccordions()
+  }
+
+  closeAllAccordions() {
+    const accordions = this.panelTarget.querySelectorAll("details")
+    accordions.forEach((accordion) => {
+      accordion.removeAttribute("open")
+    })
   }
 
   close(event) {
     if (!this.element.contains(event.target)) {
       this.panelTarget.classList.add("hidden")
+      this.closeAllAccordions()
     }
   }
 

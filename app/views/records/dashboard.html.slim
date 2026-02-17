@@ -10,7 +10,7 @@ li.border-b.py-4
         .flex.items-center.justify-between.mb-3
           .text-lg.font-bold.text-gray-800
             | 今日の体調
-          = link_to '編集', edit_record_path(@record), 
+          = link_to '編集', edit_record_path(@record, from: 'dashboard'), 
             class: 'btn-cancel px-3 py-1 text-sm text-gray-600 rounded-lg hover:bg-gray-50 rounded transition'
         
         / 体調情報を中央寄せ

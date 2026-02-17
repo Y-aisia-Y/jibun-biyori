@@ -8,6 +8,11 @@ module Mypage
     def toggle_visibility
       @record_item.update!(is_default_visible: !@record_item.is_default_visible)
       head :ok
+
+      respond_to do |format|
+        redirect_to mypage_record_item_settings_path, notice: t('.update_success')
+        format.turbo_stream
+      end
     end
 
     private

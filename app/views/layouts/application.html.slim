@@ -7,6 +7,12 @@ html
     = csp_meta_tag
     = stylesheet_link_tag "tailwind", "application", "data-turbo-track": "reload", preload: false
     = javascript_importmap_tags
+    / グラフ
+    = javascript_include_tag "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"
+    = javascript_include_tag "https://cdn.jsdelivr.net/npm/chartkick@5.0.1/dist/chartkick.min.js"
+    = javascript_include_tag "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"
+    = javascript_include_tag "https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"
+    = javascript_include_tag "https://cdn.jsdelivr.net/npm/chartkick@5.0.1/dist/chartkick.min.js"
   body
     = render "shared/header"
     = render "shared/flash"

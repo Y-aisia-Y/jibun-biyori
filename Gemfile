@@ -40,6 +40,11 @@ gem 'rails-i18n', '~> 7.0.0'
 # ページドネーション
 gem 'kaminari'
 
+# カレンダー＆グラフ
+gem "chartkick"
+gem "groupdate"
+gem "simple_calendar", "~> 2.4"
+
 # Font Awesome
 gem 'font-awesome-sass', '~> 6.5.0'
 

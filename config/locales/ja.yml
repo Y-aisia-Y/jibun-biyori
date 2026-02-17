@@ -102,6 +102,11 @@ ja:
     update:
       success: "更新しました"
       failure: "更新に失敗しました"
+      
+  mypage:
+    record_items_controller:
+      update:
+        update_success: '表示設定を更新しました'
 
   devise:
     sign_up: "新規登録はこちら"

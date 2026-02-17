@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get 'charts/index'
   get "up" => "rails/health#show", as: :rails_health_check
 
   devise_for :users
@@ -35,6 +36,7 @@ Rails.application.routes.draw do
   end
 
   resource :profile, only: %i[show edit update]
+  resource :calendar, only: [:show]
 
   namespace :mypage do
     root to: "base#show"
@@ -50,6 +52,7 @@ Rails.application.routes.draw do
   end
 
   get "welcome", to: "welcome#index", as: :welcome
+  get 'charts', to: 'charts#index'
 
   unauthenticated do
     root "welcome#index", as: :unauthenticated_root

@@ -1,3 +1,10 @@
+/ 日記の日付ロジック
+- if user_signed_in?
+  - today = Date.current
+  - display_record = current_user.records.find_by(recorded_date: @display_date)
+  - diary_path = display_record&.diary_memo.to_s.strip.present? ? edit_diary_record_path(display_record) : new_diary_records_path(date: @display_date)
+
+
 .header.custom-header.px-4.py-3.flex.items-center.justify-between.relative[data-controller="menu"]
   / ロゴ＋タイトル
   = link_to authenticated_root_path,
@@ -11,7 +18,7 @@
       = link_to mypage_root_path do
         - if current_user.avatar.present?
           = image_tag current_user.avatar.url,
-            class:"w-5 h-5 rounded-full object-cover border border-gray-300 bg-white"
+            class: "w-5 h-5 rounded-full object-cover border hover:opacity-80 transition"
         - else
           = image_tag "default_avatar.png",
             class:"w-5 h-5 rounded-full object-cover border border-gray-300 bg-white"
@@ -23,18 +30,40 @@
     ]
       ul.py-1
         li
-          = link_to "カレンダー", authenticated_root_path,
-            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition",
-            data: { action: "click->menu#hide" }
+          = link_to "ダッシュボード", authenticated_root_path,
+            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
+
+        li 
+          = link_to "月間カレンダー", calendar_path,
+            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
+
+        / 体調・分析グループ
         li
-          = link_to "体調記入", new_health_records_path(date: @date || Date.current),
-            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition",
-            data: { action: "click->menu#hide" }
+          details.group
+            summary.flex.items-center.justify-between.px-4.py-3.cursor-pointer.hover:bg-opacity-50.list-none
+              span 体調・分析
+              span.menu-arrow.text-xs.transition-transform.group-open:rotate-180 ▼
+            ul.bg-gray-50.py-1
+              li
+                = link_to "体調記入", new_health_records_path(date: @display_date),
+                  class: "block pl-8 pr-4 py-2 text-sm text-gray-600 hover:bg-gray-200"
+              li
+                = link_to "分析グラフ", charts_path,
+                  class: "block pl-8 pr-4 py-2 text-sm text-gray-600 hover:bg-gray-200"
+
+        / 日記グループ
         li
-          = link_to "日記一覧", records_path(date: Date.current),
-            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition",
-            data: { action: "click->menu#hide" }
+          details.group
+            summary.flex.items-center.justify-between.px-4.py-3.cursor-pointer.hover:bg-opacity-50.list-none
+              span 日記
+              span.menu-arrow.text-xs.transition-transform.group-open:rotate-180 ▼
+            ul.bg-gray-50.py-1
+              li
+                = link_to (display_record&.diary_memo.to_s.strip.present? ? "日記を編集" : "日記を書く"), diary_path,
+                  class: "block pl-8 pr-4 py-2 text-sm text-gray-600 hover:bg-gray-200"
+              li
+                = link_to "日記一覧", records_path,
+                  class: "block pl-8 pr-4 py-2 text-sm text-gray-600 hover:bg-gray-200"
         li
           = link_to "マイページ", mypage_root_path,
-            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition",
-            data: { action: "click->menu#hide" }
+            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
