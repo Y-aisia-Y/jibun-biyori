@@ -1,0 +1,44 @@
+.container.mx-auto.max-w-4xl.px-4.py-8.space-y-6
+  .w-full.space-y-3
+    = render "calendar_navigator"
+
+  / 月間カレンダーセクション
+  .bg-white.rounded-xl.shadow-sm.p-6.border.border-gray-200
+    = month_calendar events: @calendar_records, attribute: :recorded_date, start_date: @start_date do |date, records|
+      = link_to calendar_path(date: date, start_date: @start_date), class: "block h-full w-full min-h-[60px] sm:min-h-[80px]" do
+        .text-xs.mb-1(class="#{'font-bold text-indigo-600 underline' if date == @selected_date}") 
+          = date.day
+        - if records.any?
+          .flex.justify-center.items-center
+            .w-2.h-2.rounded-full.bg-teal-400.shadow-sm
+
+  / 体調サマリーセクション
+  - if @selected_record
+    .bg-white.rounded-lg.shadow-sm.p-4.border.border-gray-200
+      .flex.items-center.justify-between.mb-3
+        .text-lg.font-bold.text-gray-800 今日の体調
+        = link_to '編集', edit_record_path(@selected_record, from: 'calendar'), 
+                  class: 'btn-cancel px-3 py-1 text-sm text-gray-600 rounded-lg hover:bg-gray-50 transition'
+      
+      = render "records/mood_summary", record: @selected_record
+  - else
+    .bg-white.rounded-lg.shadow-sm.p-6.border.border-gray-200.text-center
+      p.text-gray-500 = "#{l(@selected_date, format: :long)}の記録はまだありません"
+
+  / 今日の活動セクション
+  .bg-white.rounded-lg.shadow-sm.p-4.border.border-gray-200
+    .flex.items-center.justify-between.mb-3
+      .text-lg.font-bold.text-gray-800 今日の活動
+
+    - if @selected_record && @selected_record.activities.any?
+      .space-y-0
+        - @selected_record.activities.order(:start_time).each do |activity|
+          .flex.items-center.py-3.border-b.border-gray-100.last:border-0
+            .w-16.text-sm.text-gray-500 = activity.start_time.strftime('%H:%M')
+            .flex-1.pl-4.border-l-2.border-teal-400
+              .text-sm.font-medium.text-gray-800 = activity.content
+    - else
+      .text-center.py-8.bg-gray-50.rounded-lg
+        p.text-gray-400.text-sm 活動の記録がありません
+        = link_to '活動を追加する', new_record_activity_path(@selected_record || 0, date: @selected_date), 
+                  class: "mt-2 inline-block text-xs text-indigo-500 hover:text-indigo-700"

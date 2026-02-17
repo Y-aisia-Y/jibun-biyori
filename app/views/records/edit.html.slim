@@ -1,6 +1,7 @@
 .max-w-xl.mx-auto.py-6
   h1.text-2xl.font-bold.text-gray-800.mb-4.text-center
-    | 体調を編集
+    = @record.recorded_date.strftime('%Y年%m月%d日')
+    | の体調を編集する
 
   = form_with model: @record, url: record_path(@record, from: params[:from]), method: :patch do |f|
     = f.hidden_field :recorded_date, value: @record.recorded_date

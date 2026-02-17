@@ -1,24 +1,31 @@
 @import 'font-awesome';
 
 // ========================================
-// 🌿 ブランドカラー & 変数定義
+// 🌿 変数定義
 // ========================================
 
-// ブランドカラー（じぶん日和テーマ）
+// ブランドカラー
 $color-brand-main:   #A0D0D0;
-$color-brand-light:  #B8DCDC; // 保存ボタン用
-$color-brand-dark:   #4A7070; // テキスト・タイトル用
-$color-brand-bg:     #F2F7F7; // 背景色
+$color-brand-light:  #B8DCDC;
+$color-brand-dark:   #4A7070;
+$color-brand-bg:     #F2F7F7;
 
 // 状態・アクセントカラー
 $color-success:      #22c55e;
 $color-warning:      #fbbf24;
-$color-danger:       #D64550; // 削除ボタン用
+$color-danger:       #D64550;
 $color-star:         #facc15;
 $color-white:        #FFFFFF;
-$color-gray-text:    #3A4A4A; // 少し緑がかった濃いグレー
-$color-gray-light:   #E2E8E8; // キャンセルボタン・非活性
+$color-gray-text:    #3A4A4A;
+$color-gray-light:   #E2E8E8;
 $color-gray-border:  #e5e7eb;
+
+// グラフカラー
+$color-graph-sleep:      #8090C0;
+$color-graph-mood:       #A0D0D0;
+$color-graph-condition:  #90C0E0;
+$color-graph-motivation: #F0D0A0;
+$color-graph-fatigue:    #E0A0A0;
 
 // タイムライン設定
 $timeline-hour-height: 80px;
@@ -53,30 +60,72 @@ body {
   }
 }
 
-// ハンバーガー
+// ========================================
+// 🍔 ハンバーガーメニュー
+// ========================================
+
 #menu-panel {
   width: 8rem !important;
   right: 1rem;
   top: 90%;
-  
-  // アコーディオン
-  ul.bg-gray-50 a {
-    padding-left: 1rem !important;
+  z-index: 9999 !important;
+  border-color: $color-brand-main;
+  overflow: hidden;
+
+  // メニュー項目
+  a, summary {
+    color: $color-gray-text !important;
+    font-weight: 500;
+    transition: $transition-default;
+
+    &:hover {
+      background-color: rgba($color-brand-main, 0.1) !important;
+      color: $color-brand-dark !important;
+    }
+  }
+
+  // アコーディオン内
+  ul.bg-gray-50 {
+    background-color: rgba($color-brand-bg, 0.5);
+    
+    a {
+      color: lighten($color-gray-text, 10%) !important;
+      font-size: 0.875rem;
+      padding-left: 1rem !important;
+      
+      &:hover {
+        background-color: rgba($color-brand-main, 0.2) !important;
+      }
+    }
+  }
+
+  // 区切り線
+  hr {
+    border-color: $color-brand-main;
+    opacity: 0.3;
   }
 }
 
-#menu-panel {
-  z-index: 9999 !important; 
+// アコーディオン矢印
+.menu-arrow {
+  color: $color-brand-dark;
+  display: inline-block;
+  pointer-events: none;
 }
+
+summary:hover .menu-arrow {
+  color: $color-brand-main;
+}
+
 .relative.mb-6[data-controller="menu"] {
-  z-index: 40; 
+  z-index: 40;
 }
 
 // ========================================
-// 🔘 ボタン（じぶん日和スタイル）
+// 🔘 ボタン
 // ========================================
 
-// 記録する・保存する
+// 保存ボタン
 .btn-save {
   background-color: $color-brand-light;
   color: darken($color-brand-dark, 10%);
@@ -91,25 +140,7 @@ body {
   }
 }
 
-// ハンバーガー(☰)
-button[data-action="click->menu#toggle"] {
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
-  transition: $transition-default;
-  color: $color-brand-dark;
-
-  &:hover {
-
-    background-color: rgba($color-brand-dark, 0.1); 
-  }
-
-  &:active {
-    background-color: rgba($color-brand-dark, 0.2);
-    transform: scale(0.92);
-  }
-}
-
-// キャンセル
+// キャンセルボタン
 .btn-cancel {
   background-color: $color-gray-light;
   color: #64748B;
@@ -121,7 +152,7 @@ button[data-action="click->menu#toggle"] {
   }
 }
 
-// 削除
+// 削除ボタン
 .btn-delete {
   background-color: $color-danger;
   color: $color-white;
@@ -136,57 +167,20 @@ button[data-action="click->menu#toggle"] {
   }
 }
 
-// ========================================
-// 🌿 ハンバーガーメニュー内のカスタム調整
-// ========================================
-
-#menu-panel {
-  border-color: $color-brand-main;
-  overflow: hidden;
-
-  // メニューの各項目
-  a, summary {
-    color: $color-gray-text !important;
-    font-weight: 500;
-    transition: $transition-default;
-
-    &:hover {
-      background-color: rgba($color-brand-main, 0.1) !important;
-      color: $color-brand-dark !important;
-    }
-  }
-
-// アコーディオン　▼
-.menu-arrow {
+// ハンバーガートグル
+button[data-action="click->menu#toggle"] {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: $transition-default;
   color: $color-brand-dark;
-  display: inline-block;
-  pointer-events: none;
-}
 
-summary:hover {
-  .menu-arrow {
-    color: $color-brand-main;
-  }
-}
-
-  // アコーディオン
-  ul.bg-gray-50 {
-    background-color: rgba($color-brand-bg, 0.5);
-    
-    a {
-      color: lighten($color-gray-text, 10%) !important;
-      font-size: 0.875rem;
-      
-      &:hover {
-        background-color: rgba($color-brand-main, 0.2) !important;
-      }
-    }
+  &:hover {
+    background-color: rgba($color-brand-dark, 0.1);
   }
 
-  // 区切り線
-  hr {
-    border-color: $color-brand-main;
-    opacity: 0.3;
+  &:active {
+    background-color: rgba($color-brand-dark, 0.2);
+    transform: scale(0.92);
   }
 }
 
@@ -280,7 +274,9 @@ input[type="radio"]:checked + .star-label ~ .star-label .star {
   display: inline-block;
   transition: background-color 0.2s ease;
 
-  &.on { background-color: $color-success; }
+  &.on { 
+    background-color: $color-success; 
+  }
 
   .toggle-thumb {
     width: 20px;
@@ -293,41 +289,15 @@ input[type="radio"]:checked + .star-label ~ .star-label .star {
     transition: transform 0.2s ease;
   }
 
-  &.on .toggle-thumb { transform: translateX(20px); }
-}
-
-// ========================================
-// 🛠 Utilities
-// ========================================
-
-@layer utilities {
-  .w-5 { width: 30px; }
-  .h-5 { height: 30px; }
-}
-
-// ========================================
-// 📱 スマホ向けの微調整
-// ========================================
-
-@media (max-width: 640px) {
-  .max-w-2xl, .max-w-xl {
-    width: 100%;
-    padding-left: 1rem;
-    padding-right: 1rem;
+  &.on .toggle-thumb { 
+    transform: translateX(20px); 
   }
 }
 
 // ========================================
-// 📊 グラフカラー（じぶん日和テーマ）
+// 📊 グラフカラー & コンテナ
 // ========================================
 
-$color-graph-sleep:      #8090C0; // 睡眠時間
-$color-graph-mood:       #A0D0D0; // 気分
-$color-graph-condition:  #90C0E0; // 体調
-$color-graph-motivation: #F0D0A0; // 意欲
-$color-graph-fatigue:    #E0A0A0; // 疲労感
-
-// グラフ全体の背景・枠線
 .chart-container {
   background-color: $color-white;
   border: 1px solid $color-gray-border;
@@ -349,7 +319,7 @@ $color-graph-fatigue:    #E0A0A0; // 疲労感
 }
 
 // ========================================
-// 📋 テーブルスタイル（じぶん日和テーマ）
+// 📋 テーブルスタイル
 // ========================================
 
 .table-container {
@@ -466,10 +436,156 @@ $color-graph-fatigue:    #E0A0A0; // 疲労感
 }
 
 // ========================================
+// 📅 カレンダー全体のスタイル
+// ========================================
+
+.simple-calendar {
+  max-width: 100%;
+  margin: 0 auto;
+  
+  .calendar-heading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+
+    a {
+      color: #4f46e5;
+      font-weight: 600;
+      text-decoration: none;
+      transition: $transition-default;
+      
+      &:hover {
+        color: #3730a3;
+      }
+    }
+
+    .calendar-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: $color-brand-dark;
+    }
+  }
+
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    table-layout: fixed !important;
+    margin: 0 auto;
+    border: none !important;
+  }
+
+  thead th {
+    padding: 0.75rem;
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $color-gray-text;
+    border-bottom: 1px solid $color-gray-border;
+  }
+
+  tbody td {
+    border: 1px solid rgba($color-brand-main, 0.15);
+    padding: 0;
+    height: 80px;
+    vertical-align: top;
+    text-align: center;
+    
+    &:hover {
+      background-color: rgba($color-brand-main, 0.05);
+    }
+  }
+
+  // 当日の強調
+  .today {
+    background-color: rgba(79, 70, 229, 0.08);
+    
+    a .text-xs {
+      color: $color-brand-dark;
+      font-weight: 700;
+    }
+  }
+
+  // 前月・次月の日付を薄くする
+  .prev-month, 
+  .next-month {
+    color: #d1d5db;
+    background-color: #fafafa;
+  }
+
+  // リンクエリアをマスいっぱいに広げる
+  td a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0.5rem;
+    width: 100%;
+    height: 100%;
+    min-height: 80px;
+    text-decoration: none;
+    transition: $transition-default;
+
+    &:hover {
+      background-color: rgba($color-brand-main, 0.08);
+    }
+
+    // 日付番号
+    .text-xs {
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: $color-gray-text;
+      
+      &.font-bold {
+        color: $color-brand-dark;
+        font-weight: 700;
+      }
+    }
+
+    // 記録ありのドット
+    .flex.justify-center.items-center {
+      margin-top: auto;
+    }
+  }
+}
+
+// ========================================
+// 📋 セクションタイトルの統一
+// ========================================
+
+.bg-white.rounded-xl.shadow-sm.p-6.border.border-gray-200,
+.bg-white.rounded-lg.shadow-sm.p-4.border.border-gray-200 {
+  .text-lg.font-bold.text-gray-800 {
+    color: $color-brand-dark;
+    font-weight: 700;
+    font-size: 1.125rem !important;
+  }
+}
+
+// ========================================
+// 🛠 Utilities
+// ========================================
+
+@layer utilities {
+  .w-5 { width: 30px; }
+  .h-5 { height: 30px; }
+}
+
+// ========================================
 // 📱 スマホ対応
 // ========================================
 
 @media (max-width: 640px) {
+  .max-w-2xl, 
+  .max-w-xl {
+    width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  // 週ナビゲーター
   .bg-white.rounded-lg.shadow-sm.border.border-gray-200.p-4 {
     padding: 0.75rem;
 
@@ -485,6 +601,23 @@ $color-graph-fatigue:    #E0A0A0; // 疲労感
 
       .text-lg.font-bold.text-gray-800 {
         font-size: 0.875rem;
+      }
+    }
+  }
+
+  // カレンダー
+  .simple-calendar {
+    tbody td {
+      height: 60px;
+    }
+
+    td a {
+      min-height: 60px;
+      padding: 0.25rem;
+
+      .text-xs {
+        font-size: 0.75rem;
+        margin-bottom: 0.25rem;
       }
     }
   }

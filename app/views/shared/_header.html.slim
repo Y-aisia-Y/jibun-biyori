@@ -33,6 +33,10 @@
           = link_to "ダッシュボード", authenticated_root_path,
             class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
 
+        li 
+          = link_to "月間カレンダー", calendar_path,
+            class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
+
         / 体調・分析グループ
         li
           details.group

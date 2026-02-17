@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   end
 
   resource :profile, only: %i[show edit update]
+  resource :calendar, only: [:show]
 
   namespace :mypage do
     root to: "base#show"
