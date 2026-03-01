@@ -6,7 +6,7 @@
   .bg-white.rounded-xl.shadow-sm.p-6.border.border-gray-200
     = month_calendar events: @calendar_records, attribute: :recorded_date, start_date: @start_date do |date, records|
       = link_to calendar_path(date: date, start_date: @start_date), 
-                class: "block h-full w-full min-h-[60px] sm:min-h-[80px] #{'bg-teal-50' if records.any?}" do
+                class: "block h-full w-full min-h-[60px] sm:min-h-[80px]" do
         .text-xs.mb-1(class="#{'font-bold text-indigo-600 underline' if date == @selected_date}") 
           = date.day
         - if records.any?
