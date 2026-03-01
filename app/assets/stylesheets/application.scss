@@ -507,6 +507,11 @@ input[type="radio"]:checked + .star-label ~ .star-label .star {
     }
   }
 
+  // 記録がある日の背景色
+  .has-events {
+    background-color: rgba(160, 208, 208, 0.2); 
+  }
+
   // 前月・次月の日付を薄くする
   .prev-month, 
   .next-month {
