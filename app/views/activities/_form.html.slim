@@ -1,4 +1,7 @@
 = form_with(model: [record, activity], class: "space-y-4 max-w-2xl mx-auto", data: { controller: "datetime-sync" }) do |form|
+  = form.hidden_field :from, value: local_assigns[:from]
+  = form.hidden_field :start_date_param, value: local_assigns[:start_date]
+
   - if activity.errors.any?
     .bg-red-100.border.border-red-400.text-red-700.px-4.py-3.rounded.relative.mb-4
       p.font-bold = "エラーが #{activity.errors.count} 件あります。"
@@ -9,32 +12,26 @@
   / 開始日時
   .field
     = form.label :start_date, "開始日時", class: "block text-sm font-medium text-gray-700 mb-2"
-    / flex-wrap を追加し、中央寄せにする
     .flex.flex-wrap.gap-2.items-center.justify-center
-      / 日付入力
       = form.date_field :start_date, \
         value: (form.object.start_time || Time.current).strftime('%Y-%m-%d'), \
         required: true, \
         class: "w-40 rounded-md border-gray-300 shadow-sm focus:border-brand-main", \
         data: { datetime_sync_target: "startDate", action: "change->datetime-sync#updateEndTime" }
-      
-      / 時・分をひとまとめの .flex にして「時と分の間」では改行されないようにする
       .flex.items-center.gap-2
         = form.select :start_hour, \
           (0..23).map { |h| [sprintf("%02d", h), h] }, \
           { selected: (form.object.start_time || Time.current).hour }, \
           { class: "w-20 rounded-md border-gray-300 shadow-sm focus:border-brand-main", \
             data: { datetime_sync_target: "startHour", action: "change->datetime-sync#updateEndTime" } }
-        
         span.text-gray-600.font-medium = ":"
-        
         = form.select :start_minute, \
           (0..11).map { |m| [sprintf("%02d", m * 5), m * 5] }, \
           { selected: ((form.object.start_time || Time.current).min / 5) * 5 }, \
           { class: "w-20 rounded-md border-gray-300 shadow-sm focus:border-brand-main", \
             data: { datetime_sync_target: "startMinute", action: "change->datetime-sync#updateEndTime" } }
 
-  / 終了日時（同様に修正）
+  / 終了日時
   .field.mt-4
     = form.label :end_date, "終了日時", class: "block text-sm font-medium text-gray-700 mb-2"
     .flex.flex-wrap.gap-2.items-center.justify-center
@@ -43,31 +40,35 @@
         required: true, \
         class: "w-40 rounded-md border-gray-300 shadow-sm focus:border-brand-main", \
         data: { datetime_sync_target: "endDate" }
-      
       .flex.items-center.gap-2
         = form.select :end_hour, \
           (0..23).map { |h| [sprintf("%02d", h), h] }, \
           { selected: (form.object.end_time || (form.object.start_time || Time.current) + 1.hour).hour }, \
           { class: "w-20 rounded-md border-gray-300 shadow-sm focus:border-brand-main", \
             data: { datetime_sync_target: "endHour" } }
-        
         span.text-gray-600.font-medium = ":"
-        
         = form.select :end_minute, \
           (0..11).map { |m| [sprintf("%02d", m * 5), m * 5] }, \
           { selected: ((form.object.end_time || (form.object.start_time || Time.current) + 1.hour).min / 5) * 5 }, \
           { class: "w-20 rounded-md border-gray-300 shadow-sm focus:border-brand-main", \
             data: { datetime_sync_target: "endMinute" } }
 
-  / 活動内容の入力
+  / 活動内容
   .field.mt-4
     = form.label :content, "活動内容", class: "block text-sm font-medium text-gray-700 mb-2"
     = form.text_area :content, rows: 3, required: true, \
       class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-4"
 
-  / 送信ボタン
+  / 送信・キャンセルボタン
   .actions.mt-6.flex.justify-center.items-center.gap-4
     = form.submit activity.new_record? ? "活動を記録" : "活動を更新", \
       class: "btn-save px-6 py-2 rounded-lg cursor-pointer shadow-sm"
-    = link_to "キャンセル", authenticated_root_path(date: record.recorded_date), \
-      class: "btn-cancel px-6 py-2 rounded-lg shadow-sm"
+
+    - cancel_from = local_assigns[:from]
+    - cancel_start_date = local_assigns[:start_date]
+    - if cancel_from == 'calendar'
+      = link_to "キャンセル", calendar_path(date: record.recorded_date, start_date: cancel_start_date || record.recorded_date), \
+        class: "btn-cancel px-6 py-2 rounded-lg shadow-sm"
+    - else
+      = link_to "キャンセル", authenticated_root_path(date: record.recorded_date), \
+        class: "btn-cancel px-6 py-2 rounded-lg shadow-sm"

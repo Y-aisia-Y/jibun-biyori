@@ -3,4 +3,4 @@
     = @record.recorded_date.strftime('%Y年%m月%d日')
     | の活動を記録
 
-  = render 'form', record: @record, activity: @activity
+  = render 'form', record: @record, activity: @activity, from: params[:from], start_date: params[:start_date]

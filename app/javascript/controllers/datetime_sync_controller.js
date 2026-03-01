@@ -1,31 +1,20 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Connects to data-controller="datetime-sync"
 export default class extends Controller {
-  static targets = ["startTime", "endTime"]
+  static targets = ["startDate", "startHour", "startMinute", "endDate", "endHour", "endMinute"]
 
-  // 開始時刻
   updateEndTime() {
-    const startTimeValue = this.startTimeTarget.value
-    
-    if (!startTimeValue) {
-      return
-    }
+    const date = this.startDateTarget.value
+    const hour = parseInt(this.startHourTarget.value)
+    const minute = parseInt(this.startMinuteTarget.value)
 
-    const startDate = new Date(startTimeValue)
-    
-    // 1時間後の時刻
+    if (!date) return
+
+    const startDate = new Date(`${date}T${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`)
     const endDate = new Date(startDate.getTime() + 60 * 60 * 1000)
-    
-    const year = endDate.getFullYear()
-    const month = String(endDate.getMonth() + 1).padStart(2, '0')
-    const day = String(endDate.getDate()).padStart(2, '0')
-    const hours = String(endDate.getHours()).padStart(2, '0')
-    const minutes = String(endDate.getMinutes()).padStart(2, '0')
-    
-    const formattedEndTime = `${year}-${month}-${day}T${hours}:${minutes}`
-    
-    // 終了時刻
-    this.endTimeTarget.value = formattedEndTime
+
+    this.endDateTarget.value = `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(endDate.getDate()).padStart(2, '0')}`
+    this.endHourTarget.value = String(endDate.getHours())
+    this.endMinuteTarget.value = String(Math.round(endDate.getMinutes() / 5) * 5)
   }
 }

@@ -1,15 +1,9 @@
 / システム項目
-li.bg-white.border.border-gray-200.rounded-xl.shadow-sm.p-4(
-  data-controller="toggle-switch"
-  data-toggle-switch-item-id-value=item.id
-  data-toggle-switch-url-value=toggle_visibility_mypage_record_item_path(item)
-)
+li.bg-white.border.border-gray-200.rounded-xl.shadow-sm.p-4 id="record_item_#{item.id}"
   .flex.items-center.justify-between
-    span.text-base.font-medium.text-gray-800
-      = item.name
+    span.text-base.font-medium.text-gray-800 = item.name
 
-    label.toggle-switch.cursor-pointer(
-      class=(item.is_default_visible? ? "on" : "")
-      data-action="click->toggle-switch#toggle"
-    )
-      span.toggle-thumb
+    = form_with url: toggle_visibility_mypage_record_item_path(item), method: :post, data: { controller: "toggle-switch", toggle_switch_url_value: toggle_visibility_mypage_record_item_path(item), action: "submit->toggle-switch#toggle" } do |f|
+      label.toggle-switch.cursor-pointer class=(item.is_default_visible? ? "on" : "") data-toggle-switch-target="label"
+        = f.submit "", style: "display: none;", data: { toggle_switch_target: "submitButton" }
+        span.toggle-thumb

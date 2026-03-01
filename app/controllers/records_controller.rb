@@ -2,8 +2,10 @@
 
 class RecordsController < ApplicationController
   include CurrentTimeSettable
+  include AnalyticsConcern
 
   before_action :authenticate_user!
+  before_action :set_current_display_date
   before_action :set_date, only: %i[dashboard new_health new_diary create_with_activity]
   before_action :set_record, only: %i[show edit update destroy edit_diary update_diary]
   before_action :authorize_user!, only: %i[show edit update destroy edit_diary update_diary]
@@ -88,23 +90,39 @@ class RecordsController < ApplicationController
 
   def update
     @record.assign_attributes(processed_record_params)
+    from_page = params[:from] || session[:from_page]
 
-    update_result = if params[:record][:redirect_to_dashboard] == "true"
+    update_result = if %w[charts dashboard calendar].include?(from_page)
                       @record.save
                     else
                       @record.save(context: :diary)
                     end
 
     if update_result
-      if params[:record][:redirect_to_dashboard] == "true"
-        redirect_to dashboard_path(date: @record.recorded_date), success: t('.health_success')
-      else
-        redirect_to records_path, success: t('.diary_success')
-      end
+      redirect_after_update(from_page)
     else
       set_all_visible_items
       flash.now[:danger] = t('.failure')
       render :edit, status: :unprocessable_content
+    end
+  end
+
+  def destroy
+    recorded_date = @record.recorded_date
+    from_page = params[:from]
+
+    if @record.destroy
+      case from_page
+      when 'calendar'
+        redirect_to calendar_path(date: recorded_date, start_date: params[:start_date] || recorded_date),
+                    danger: t('.success'), status: :see_other
+      else
+        redirect_to records_url(date: recorded_date),
+                    danger: t('.success'), status: :see_other
+      end
+    else
+      redirect_to records_url(date: recorded_date),
+                  warning: t('.failure'), status: :see_other
     end
   end
 
@@ -119,26 +137,55 @@ class RecordsController < ApplicationController
     end
   end
 
-  def destroy
-    recorded_date = @record.recorded_date
+  def create_with_activity
+    @date = params[:date] ? Date.parse(params[:date]) : Date.current
+    @record = current_user.records.find_or_create_by!(recorded_date: @date)
 
-    if @record.destroy
-      redirect_to records_url(date: recorded_date),
-                  danger: t('.success'),
-                  status: :see_other
+    if params[:from] == 'calendar'
+      redirect_to new_record_activity_path(@record, date: @date, from: 'calendar')
     else
-      redirect_to records_url(date: recorded_date),
-                  warning: t('.failure'),
-                  status: :see_other
+      redirect_to authenticated_root_path(date: @date)
     end
   end
 
-  def create_with_activity
-    record = current_user.records.find_or_create_by!(recorded_date: @date)
-    redirect_to new_record_activity_path(record, date: @date, hour: params[:hour])
+  def analytics
+    @records = fetch_recent_records
+    @items = fetch_record_items
+    @charts = build_analytics_charts
+    calculate_sleep_chart_settings
   end
 
   private
+
+  def redirect_after_update(from_page)
+    case from_page
+    when 'charts'
+      week_start_param = @record.recorded_date.beginning_of_week(:sunday).to_s
+      redirect_to charts_path(week_start: week_start_param), success: t('.health_success')
+    when 'calendar'
+      redirect_to calendar_path(date: @record.recorded_date, start_date: params[:start_date] || @record.recorded_date),
+                  success: t('.health_success')
+    when 'dashboard'
+      redirect_to dashboard_path(date: @record.recorded_date), success: t('.health_success')
+    else
+      redirect_to records_path, success: t('.diary_success')
+    end
+  end
+
+  def cancel_back_path
+    case params[:from]
+    when 'charts'
+      week_start_param = @record.recorded_date.beginning_of_week(:sunday).to_s
+      charts_path(week_start: week_start_param)
+    when 'calendar'
+      calendar_path(date: @record.recorded_date, start_date: @record.recorded_date)
+    when 'dashboard'
+      dashboard_path(date: @record.recorded_date)
+    else
+      records_path
+    end
+  end
+  helper_method :cancel_back_path
 
   def processed_record_params
     params_hash = record_params.to_h.deep_dup
@@ -159,7 +206,9 @@ class RecordsController < ApplicationController
   end
 
   def save_record
-    if params[:record][:redirect_to_dashboard] == "true"
+    from_page = params[:from]
+
+    if %w[charts dashboard].include?(from_page) || params[:record][:redirect_to_dashboard] == "true"
       @record.save
     else
       @record.save(context: :diary)
@@ -167,12 +216,18 @@ class RecordsController < ApplicationController
   end
 
   def redirect_after_save
-    if params[:record][:redirect_to_dashboard] == "true"
-      redirect_to dashboard_path(date: @record.recorded_date),
+    from_page = params[:from]
+    case from_page
+    when 'charts'
+      week_start_param = @record.recorded_date.beginning_of_week(:sunday).to_s
+      redirect_to charts_path(week_start: week_start_param), success: t('.health_success')
+    when 'calendar'
+      redirect_to calendar_path(date: @record.recorded_date, start_date: params[:start_date] || @record.recorded_date),
                   success: t('.health_success')
+    when 'dashboard'
+      redirect_to dashboard_path(date: @record.recorded_date), success: t('.health_success')
     else
-      redirect_to records_path,
-                  success: t('.diary_success')
+      redirect_to records_path, success: t('.diary_success')
     end
   end
 
@@ -251,6 +306,12 @@ class RecordsController < ApplicationController
     items.each do |item|
       @record.record_values.build(record_item: item) unless @record.record_values.any? { |rv| rv.record_item_id == item.id }
     end
+  end
+
+  def set_current_display_date
+    @display_date = params[:date] ? Date.parse(params[:date]) : Date.current
+  rescue ArgumentError
+    @display_date = Date.current
   end
 
   def record_params

@@ -3,7 +3,7 @@
     = @record.recorded_date.strftime('%Y年%m月%d日')
     | の体調
 
-  = form_with model: @record do |f|
+  = form_with model: @record, url: records_path(from: params[:from]) do |f|
     = f.hidden_field :recorded_date, value: @record.recorded_date
     = f.hidden_field :redirect_to_dashboard, value: true
 
@@ -13,5 +13,14 @@
     .flex.justify-center.gap-4.mt-6
       = f.submit "記録する",
         class: "btn-save inline-flex justify-center py-2 px-6 rounded-md bg-indigo-600 text-white hover:bg-indigo-700"
-      = link_to "キャンセル", authenticated_root_path(date: @record.recorded_date), 
-        class: "btn-cancel px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
+
+      - if params[:from] == 'charts'
+        - target_week = @record.recorded_date.beginning_of_week(:sunday).to_s
+        = link_to "キャンセル", charts_path(week_start: target_week),
+          class: "btn-cancel px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
+      - elsif params[:from] == 'calendar'
+        = link_to "キャンセル", calendar_path(date: @record.recorded_date, start_date: params[:start_date] || @record.recorded_date),
+          class: "btn-cancel px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
+      - else
+        = link_to "キャンセル", authenticated_root_path(date: @record.recorded_date),
+          class: "btn-cancel px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
