@@ -13,8 +13,11 @@
 
       - if params[:from] == 'charts'
         - target_week = @record.recorded_date.beginning_of_week(:sunday).to_s
-        = link_to "キャンセル", charts_path(week_start: target_week), 
+        = link_to "キャンセル", charts_path(week_start: target_week),
+          class: "btn-cancel px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
+      - elsif params[:from] == 'calendar'
+        = link_to "キャンセル", calendar_path(date: @record.recorded_date, start_date: params[:start_date] || @record.recorded_date),
           class: "btn-cancel px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
       - else
-        = link_to "キャンセル", authenticated_root_path(date: @record.recorded_date), 
+        = link_to "キャンセル", authenticated_root_path(date: @record.recorded_date),
           class: "btn-cancel px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"

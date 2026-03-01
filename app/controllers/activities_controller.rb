@@ -22,7 +22,7 @@ class ActivitiesController < ApplicationController
     @activity = @record.activities.build(activity_params)
 
     if @activity.save
-      redirect_to dashboard_path(date: @record.recorded_date), success: t('.success')
+      redirect_to redirect_after_activity, success: t('.success')
     else
       render :new, status: :unprocessable_content
     end
@@ -30,7 +30,7 @@ class ActivitiesController < ApplicationController
 
   def update
     if @activity.update(activity_params)
-      redirect_to dashboard_path(date: @record.recorded_date), success: t('.success')
+      redirect_to redirect_after_activity, success: t('.success')
     else
       render :edit, status: :unprocessable_content
     end
@@ -38,7 +38,7 @@ class ActivitiesController < ApplicationController
 
   def destroy
     @activity.destroy!
-    redirect_to dashboard_path(date: @record.recorded_date), danger: t('.success')
+    redirect_to redirect_after_activity, danger: t('.success')
   rescue ActiveRecord::RecordNotDestroyed
     redirect_to edit_record_activity_path(@record, @activity), warning: t('.failure')
   end
@@ -55,6 +55,19 @@ class ActivitiesController < ApplicationController
   end
 
   private
+
+  def redirect_after_activity
+    from = params[:from] || params.dig(:activity, :from)
+    start_date_str = params[:start_date].presence || params.dig(:activity, :start_date_param).presence
+
+    case from
+    when 'calendar'
+      start_date = start_date_str ? Date.parse(start_date_str) : @record.recorded_date
+      calendar_path(date: @record.recorded_date, start_date: start_date)
+    else
+      dashboard_path(date: @record.recorded_date)
+    end
+  end
 
   def assign_default_times
     date = params[:date] || @record.recorded_date
