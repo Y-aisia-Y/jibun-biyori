@@ -4,7 +4,6 @@
   - display_record = current_user.records.find_by(recorded_date: @display_date)
   - diary_path = display_record&.diary_memo.to_s.strip.present? ? edit_diary_record_path(display_record) : new_diary_records_path(date: @display_date)
 
-
 .header.custom-header.px-4.py-3.flex.items-center.justify-between.relative[data-controller="menu"]
   / ロゴ＋タイトル
   = link_to authenticated_root_path,

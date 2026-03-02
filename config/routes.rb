@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get 'terms', to: 'static_pages#terms'
+  get 'privacy', to: 'static_pages#privacy'
   get 'charts/index'
   get "up" => "rails/health#show", as: :rails_health_check
 
@@ -56,6 +58,7 @@ Rails.application.routes.draw do
 
   unauthenticated do
     root "welcome#index", as: :unauthenticated_root
+    root "welcome#index", as: :root
   end
 
   authenticated :user do

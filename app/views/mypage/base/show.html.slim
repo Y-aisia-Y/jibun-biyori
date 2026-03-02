@@ -15,6 +15,14 @@
       h2.font-semibold プロフィール設定
       p.text-sm.text-gray-500 名前や画像を編集します
 
+    = link_to terms_path, class: 'block p-4 rounded-lg border bg-white hover:bg-gray-50' do
+      h2.font-semibold 利用規約
+      p.text-sm.text-gray-500 サービス利用のルールや権利・義務の確認
+
+    = link_to privacy_path, class: 'block p-4 rounded-lg border bg-white hover:bg-gray-50' do
+      h2.font-semibold プライバシーポリシー
+      p.text-sm.text-gray-500 個人情報の取得、利用、管理、第三者提供するかを定めた文書
+
   .mt-8.pt-6.border-t.border-gray-200
     = button_to destroy_user_session_path, method: :delete, class: 'btn-delete w-full py-3 px-4 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition shadow-sm' do
       | ログアウト
