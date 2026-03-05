@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    - meta_tags = { site: 'じぶん日和', title: 'My Daily Pace', description: '体調・活動・気分を記録して、自分のリズムを取り戻すWebアプリです。休職中の方や復職を目指す方の生活記録をサポートします。', og: { title: :title, description: :description, type: 'website', url: request.url, image: asset_url('ogp.png'), site_name: 'じぶん日和' }, twitter: { card: 'summary_large_image', image: asset_url('ogp.png') } }
+    - meta_tags = { site: 'じぶん日和', title: 'My Daily Pace', description: '体調・活動・気分を記録して、自分のリズムを取り戻すWebアプリです。休職中の方や復職を目指す方の生活記録をサポートします。', og: { title: :title, description: :description, type: 'website', url: request.url, image: image_url('ogp.png'), site_name: 'じぶん日和' }, twitter: { card: 'summary_large_image', image: image_url('ogp.png') } }
     = display_meta_tags(meta_tags)
     meta name="viewport" content="width=device-width,initial-scale=1"
     = csrf_meta_tags
