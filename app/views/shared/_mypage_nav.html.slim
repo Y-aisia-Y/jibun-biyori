@@ -3,7 +3,9 @@
   - today = Date.current
   - display_record = current_user.records.find_by(recorded_date: @display_date)
   - diary_path = display_record&.diary_memo.to_s.strip.present? ? edit_diary_record_path(display_record) : new_diary_records_path(date: @display_date)
-
+  - health_path = display_record ? edit_record_path(display_record, from: 'dashboard') : new_health_records_path(date: @display_date)
+  - health_label = display_record ? "体調を編集" : "体調記入"
+  
 .header.custom-header.px-4.py-3.flex.items-center.justify-between.relative[data-controller="menu"]
   / ロゴ＋タイトル
   = link_to authenticated_root_path,
@@ -44,7 +46,7 @@
               span.menu-arrow.text-xs.transition-transform.group-open:rotate-180 ▼
             ul.bg-gray-50.py-1
               li
-                = link_to "体調記入", new_health_records_path(date: @display_date),
+                = link_to health_label, health_path,
                   class: "block pl-8 pr-4 py-2 text-sm text-gray-600 hover:bg-gray-200"
               li
                 = link_to "分析グラフ", charts_path,

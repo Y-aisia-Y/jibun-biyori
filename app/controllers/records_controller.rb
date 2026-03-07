@@ -217,6 +217,7 @@ class RecordsController < ApplicationController
 
   def redirect_after_save
     from_page = params[:from]
+
     case from_page
     when 'charts'
       week_start_param = @record.recorded_date.beginning_of_week(:sunday).to_s
@@ -227,7 +228,11 @@ class RecordsController < ApplicationController
     when 'dashboard'
       redirect_to dashboard_path(date: @record.recorded_date), success: t('.health_success')
     else
-      redirect_to records_path, success: t('.diary_success')
+      if params[:record][:redirect_to_dashboard] == "true"
+        redirect_to dashboard_path(date: @record.recorded_date), success: t('.health_success')
+      else
+        redirect_to records_path, success: t('.diary_success')
+      end
     end
   end
 
