@@ -1,18 +1,16 @@
 doctype html
 html
   head
-    title じぶん日和 | My Daily Pace
+    - meta_tags = { site: 'じぶん日和', title: 'My Daily Pace', description: '体調・活動・気分を記録して、自分のリズムを取り戻すWebアプリです。休職中の方や復職を目指す方の生活記録をサポートします。', og: { title: :title, description: :description, type: 'website', url: request.url, image: asset_url('ogp.png'), site_name: 'じぶん日和' }, twitter: { card: 'summary_large_image', image: asset_url('ogp.png') } }
+    = display_meta_tags(meta_tags)
     meta name="viewport" content="width=device-width,initial-scale=1"
     = csrf_meta_tags
     = csp_meta_tag
     = stylesheet_link_tag "tailwind", "application", "data-turbo-track": "reload", preload: false
     = javascript_importmap_tags
-    / グラフ
     = javascript_include_tag "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"
     = javascript_include_tag "https://cdn.jsdelivr.net/npm/chartkick@5.0.1/dist/chartkick.min.js"
-    = javascript_include_tag "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"
     = javascript_include_tag "https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"
-    = javascript_include_tag "https://cdn.jsdelivr.net/npm/chartkick@5.0.1/dist/chartkick.min.js"
   body
     = render "shared/header"
     = render "shared/flash"

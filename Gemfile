@@ -45,6 +45,9 @@ gem "chartkick"
 gem "groupdate"
 gem "simple_calendar", "~> 2.4"
 
+# OGP設定
+gem 'meta-tags'
+
 # Font Awesome
 gem 'font-awesome-sass', '~> 6.5.0'
 

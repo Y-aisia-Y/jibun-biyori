@@ -9,11 +9,19 @@
 
     = link_to record_items_path, class: 'block p-4 rounded-lg border bg-white hover:bg-gray-50' do
       h2.font-semibold カスタム項目
-      p.text-sm.text-gray-500 個人で作った項目の管理・作成・並び替え
+      p.text-sm.text-gray-500 個人で作った項目の管理・作成・並び替えができます
 
     = link_to profile_path, class: 'block p-4 rounded-lg border bg-white hover:bg-gray-50' do
       h2.font-semibold プロフィール設定
       p.text-sm.text-gray-500 名前や画像を編集します
+
+    = link_to terms_path, class: 'block p-4 rounded-lg border bg-white hover:bg-gray-50' do
+      h2.font-semibold 利用規約
+      p.text-sm.text-gray-500 サービス利用のルールや権利・義務の確認できます
+
+    = link_to privacy_path, class: 'block p-4 rounded-lg border bg-white hover:bg-gray-50' do
+      h2.font-semibold プライバシーポリシー
+      p.text-sm.text-gray-500 個人情報の取り扱いについて確認できます
 
   .mt-8.pt-6.border-t.border-gray-200
     = button_to destroy_user_session_path, method: :delete, class: 'btn-delete w-full py-3 px-4 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition shadow-sm' do
