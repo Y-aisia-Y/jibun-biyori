@@ -14,15 +14,16 @@ html
     
     - if Rails.env.production?
       script async=true src="https://www.googletagmanager.com/gtag/js?id=G-5MX5K1GFS0"
-        javascript:
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          document.addEventListener('turbo:load', function(event) {
-            gtag('config', 'G-5MX5K1GFS0', {
-              'page_location': event.detail.url
-            });
+      javascript:
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        document.addEventListener('turbo:load', function(event) {
+          gtag('config', 'G-5MX5K1GFS0', {
+            'page_location': event.detail.url
           });
+        });
   body
     = render "shared/header"
     = render "shared/flash"
