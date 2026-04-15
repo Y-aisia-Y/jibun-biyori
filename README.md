@@ -1,6 +1,6 @@
-![じぶん日和](https://i.gyazo.com/0c3b3850622e0110cdebbbe00467f078.png)
+![じぶん日和](https://i.gyazo.com/bf41f3b26110070f9446a52c20814921.png)
 
-![URL](https://jibun-biyori.onrender.com)
+じぶん日和：https://jibun-biyori.onrender.com
 
 ## サービス概要
 日々の体調管理を行いたい方、復職を目指す方のためのWebアプリケーションです。
