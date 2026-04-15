@@ -19,6 +19,20 @@ class User < ApplicationRecord
   validates :first_name, length: { maximum: 50 }, allow_blank: true
   validates :last_name, length: { maximum: 50 }, allow_blank: true
 
+  # ゲストユーザー判定
+  def guest?
+    guest == true
+  end
+
+  # ゲストユーザーはメール・パスワード変更不可
+  def update_without_password(params, *options)
+    if guest?
+      errors.add(:base, "ゲストユーザーは変更できません")
+      return false
+    end
+    super
+  end
+
   private
 
   def create_default_record_items

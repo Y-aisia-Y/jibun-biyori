@@ -106,8 +106,13 @@ ja:
   mypage:
     record_items_controller:
       update:
-        update_success: '表示設定を更新しました'
+        update_success: "表示設定を更新しました"
 
   devise:
     sign_up: "新規登録はこちら"
     log_in: "ログインはこちら"
+
+  users:
+    sessions:
+      guest_signed_in: "ゲストユーザーとしてログインしました"
+      guest_signed_out: "ゲストログアウトしました。続けて新規登録を行ってください"
