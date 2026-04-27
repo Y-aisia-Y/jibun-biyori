@@ -68,5 +68,5 @@
         p じぶん日和 運営 (Y-aisia-Y)
 
   .text-center.mt-12
-    = link_to "戻る", authenticated_root_path,
+    = link_to "戻る", user_signed_in? ? mypage_root_path : welcome_path,
       class: "px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"

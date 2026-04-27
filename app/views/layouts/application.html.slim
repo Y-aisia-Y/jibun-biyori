@@ -33,6 +33,16 @@ html
       div class="bg-amber-50 border-b border-amber-200 text-amber-800 text-sm text-center py-2 px-4"
         | ゲストアカウントでログイン中です。ログアウトすると同じアカウントには戻れません。データは定期的に削除されます。
         = button_to "ログアウトして登録する", guest_sign_out_path, method: :delete, class: "underline font-medium ml-2 bg-transparent border-none cursor-pointer text-amber-800 transition duration-200 transform hover:scale-105 active:scale-95"
-    main.min-h-screen
 
-      = yield
+    main.min-h-screen
+      .flex-grow
+        = yield
+
+      footer.text-center.py-4.text-xs.text-gray-400
+        .flex.items-center.justify-center.gap-4.mb-2
+          = link_to "https://github.com/Y-aisia-Y", target: "_blank", rel: "noopener", class: "hover:text-gray-600 transition text-xl" do
+            i.fa-brands.fa-github
+          = link_to "https://x.com/Y_aisia_Y", target: "_blank", rel: "noopener", class: "hover:text-sky-500 transition text-xl" do
+            i.fa-brands.fa-x-twitter
+
+        p v1.1.0 / © 2026 jibun-biyori
