@@ -60,6 +60,7 @@ Rails.application.routes.draw do
 
   get "welcome", to: "welcome#index", as: :welcome
   get 'charts', to: 'charts#index'
+  get 'updates', to: 'static_pages#updates'
 
   unauthenticated do
     root "welcome#index", as: :unauthenticated_root

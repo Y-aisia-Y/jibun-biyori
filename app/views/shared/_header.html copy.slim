@@ -73,6 +73,9 @@
         / 未ログイン画面
         - else
           li
+            = link_to "リリース情報", updates_path,
+              class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
+          li
             = link_to "利用規約", terms_path,
               class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
           li
