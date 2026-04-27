@@ -8,11 +8,13 @@
 
 / ヘッダー本体
 .header.custom-header.px-4.py-3.flex.items-center.justify-between.relative[data-controller="menu"]
-  = link_to (user_signed_in? ? authenticated_root_path : unauthenticated_root_path),
+  / ロゴ＋タイトル
+  = link_to authenticated_root_path,
     class: "header-title flex items-center gap-2 font-bold text-lg transition" do
-    span.text-2xl 🌿
+    = image_tag "header_icon.png", style: "width: 32px; height: 32px;", class: "object-contain"
     span じぶん日和
 
+  / プロフィール画像＋トグル
   .flex.items-center.gap-2
     - if user_signed_in?
       = link_to mypage_root_path do
@@ -70,6 +72,9 @@
               class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
         / 未ログイン画面
         - else
+          li
+            = link_to "リリース情報", updates_path,
+              class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
           li
             = link_to "利用規約", terms_path,
               class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"

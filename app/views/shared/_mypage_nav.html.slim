@@ -5,12 +5,13 @@
   - diary_path = display_record&.diary_memo.to_s.strip.present? ? edit_diary_record_path(display_record) : new_diary_records_path(date: @display_date)
   - health_path = display_record ? edit_record_path(display_record, from: 'dashboard') : new_health_records_path(date: @display_date)
   - health_label = display_record ? "体調を編集" : "体調記入"
-  
+
+/ ヘッダー本体
 .header.custom-header.px-4.py-3.flex.items-center.justify-between.relative[data-controller="menu"]
   / ロゴ＋タイトル
   = link_to authenticated_root_path,
     class: "header-title flex items-center gap-2 font-bold text-lg transition" do
-    span.text-2xl 🌿
+    = image_tag "header_icon.png", style: "width: 32px; height: 32px;", class: "object-contain"
     span じぶん日和
 
   / プロフィール画像＋トグル

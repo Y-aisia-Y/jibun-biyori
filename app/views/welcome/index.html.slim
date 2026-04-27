@@ -14,3 +14,11 @@
         
       = link_to new_user_registration_path, class: 'btn-cancel w-full block text-center px-6 py-3 btn-brand-outline font-semibold rounded-lg shadow-md transition duration-150 transform hover:scale-105' do
         | 新規登録
+
+    section.mt-10
+      p.text-gray-600.text.mb-2
+        | 登録なしですべての機能をお試しいただけます。
+
+      .space-y-4
+       = link_to guest_sign_in_path, data: { turbo_method: :post },class: 'btn-guest w-full block text-center px-6 py-3 btn-brand-outline font-semibold rounded-lg shadow-md transition duration-150 transform hover:scale-105' do
+          | ゲストアカウントでログイン

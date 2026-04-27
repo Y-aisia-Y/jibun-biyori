@@ -5,10 +5,15 @@ Rails.application.routes.draw do
   get 'privacy', to: 'static_pages#privacy'
   get 'charts/index'
   get "up" => "rails/health#show", as: :rails_health_check
-
-  devise_for :users
-
   get "dashboard", to: "records#dashboard", as: :dashboard
+
+  devise_for :users, controllers: {
+    sessions: "users/sessions"
+  }
+
+  devise_scope :user do
+    post "guest_sign_in", to: "users/sessions#guest_sign_in"
+  end
 
   resources :records do
     collection do
@@ -55,10 +60,16 @@ Rails.application.routes.draw do
 
   get "welcome", to: "welcome#index", as: :welcome
   get 'charts', to: 'charts#index'
+  get 'updates', to: 'static_pages#updates'
 
   unauthenticated do
     root "welcome#index", as: :unauthenticated_root
     root "welcome#index", as: :root
+  end
+
+  devise_scope :user do
+    post "guest_sign_in", to: "users/sessions#guest_sign_in"
+    delete "guest_sign_out", to: "users/sessions#guest_sign_out"
   end
 
   authenticated :user do

@@ -1,0 +1,39 @@
+.min-h-screen.bg-brand-light.py-12.px-4
+  .max-w-2xl.mx-auto
+    h1.text-3xl.font-bold.text-brand-dark.mb-8.text-center リリース情報
+
+    .space-y-6
+      / v1.1.0 
+      .bg-white.rounded-xl.shadow-sm.p-8.md:p-16.border.border-gray-200
+        .flex.items-center.justify-between.mb-4
+          span.text-xl.font-bold.text-indigo-600 v1.1.0
+          span.text-sm.text-gray-400 2026.04.16
+        ul.list-disc.list-outside.pl-5.space-y-2.text-gray-600
+          li
+            | ゲストログイン機能を追加
+            p.mt-1.text-sm.text-gray-500
+              | 新規登録やログインなしで「じぶん日和」の全機能を体験できます。
+          li アプリロゴをリニューアル🌿
+          li アップデート情報ページを新設
+          li 内部処理の最適化（RuboCop対応など））
+          li フッターにGitHubおよびX(Twitter)へのリンクアイコンを配置
+
+    .space-y-6.pt-12.mt-12
+      / v1.0.0
+      .bg-white.rounded-xl.shadow-sm.p-8.border.border-gray-200
+        .flex.items-center.justify-between.mb-4
+          span.text-xl.font-bold.text-indigo-600 v1.0.0
+          span.text-sm.text-gray-400 2026.03.07
+        ul.list-disc.list-outside.pl-5.space-y-2.text-gray-600
+          li ユーザー登録・ログイン機能
+          li バーチカルカレンダーでの体調・活動記録機能
+          li 記録項目のカスタマイズ機能
+          li 日誌機能
+          li 分析グラフ表示（週次）
+          li 月間カレンダー表示
+          li 利用規約・プライバシーポリシーページ
+          li OGP設定
+
+      .text-center.mt-12
+        = link_to "戻る", authenticated_root_path,
+          class: "px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
