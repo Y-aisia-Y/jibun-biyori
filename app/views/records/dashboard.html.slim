@@ -54,16 +54,23 @@ li.border-b.py-4
                   - duration_minutes = end_min - start_min
                   - total_minutes = duration_hours * 60 + duration_minutes
                   - height_px = (total_minutes / 60.0) * 80
+                  - top_px = (start_min / 60.0) * 80
                   
                   / 時間表示の条件分岐(40分以上は時間表示、35分以下はメモのみ)
                   - show_time = total_minutes >= 40
                   
+                  / 15分以下はテキスト非表示、ブロックのみ表示
+                  - padding_class = total_minutes >= 40 ? "px-3 py-2" : total_minutes >= 20 ? "px-2 py-1" : "px-1 py-0"
+                  - show_content = total_minutes >= 20
+
                   = link_to edit_record_activity_path(@record, presenter.activity), \
-                    class: "activity-marker activity-marker-start block no-underline absolute left-0 right-0 bg-blue-100 hover:bg-blue-200 border-l-4 border-blue-500 px-3 py-2 transition", \
-                    style: "top: 0; height: #{height_px}px; z-index: 10;"
+                    class: "activity-marker activity-marker-start block no-underline absolute left-0 right-0 bg-teal-100 hover:bg-teal-200 border-l-4 border-teal-400 #{padding_class} transition overflow-hidden", \
+                    style: "top: #{top_px}px; height: #{height_px}px; z-index: 10;", \
+                    title: "#{presenter.time_range} #{presenter.content}"
                     - if show_time
-                      .font-medium.text-sm.text-gray-700 = presenter.time_range
-                    .mt-1.text-sm.text-gray-600 = presenter.content
+                      .font-medium.text-sm.text-gray-700.truncate = presenter.time_range
+                    - if show_content
+                      div class="text-xs text-gray-600 truncate" = presenter.content
               
               / 継続の時間帯には追加ボタンを表示(開始時刻以外)
               - if @activities_by_hour[hour].all? { |p| !p.start? }
